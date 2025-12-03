@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
     
     // Redirect back to login page
-    header('Location: /auth/login.php');
+    header('Location: /login.php');
     exit;
 }
 
@@ -118,7 +118,7 @@ unset($_SESSION['form_data']);
                         <p class="text-muted">Sign in to access your account</p>
                     </div>
                     
-                    <form action="/auth/login.php" method="POST" class="needs-validation" novalidate>
+                    <form action="/login.php" method="POST" class="needs-validation" novalidate>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
                             <div class="input-group">
@@ -137,7 +137,7 @@ unset($_SESSION['form_data']);
                         <div class="mb-3">
                             <div class="d-flex justify-content-between">
                                 <label for="password" class="form-label">Password</label>
-                                <a href="/auth/forgot-password.php" class="small">Forgot password?</a>
+                                <a href="/forgot-password.php" class="small">Forgot password?</a>
                             </div>
                             <div class="input-group">
                                 <span class="input-group-text">
@@ -167,7 +167,7 @@ unset($_SESSION['form_data']);
                         
                         <div class="text-center mt-4">
                             <p class="mb-0">Don't have an account? 
-                                <a href="/auth/register.php">Create one</a>
+                                <a href="/register.php">Create one</a>
                             </p>
                         </div>
                     </form>

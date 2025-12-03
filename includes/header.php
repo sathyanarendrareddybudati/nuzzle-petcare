@@ -277,7 +277,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                 <li><a class="dropdown-item" href="/profile"><i class="fas fa-user-edit me-2"></i>Edit Profile</a></li>
                                 <li><a class="dropdown-item" href="/settings"><i class="fas fa-cog me-2"></i>Settings</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="/auth/logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                                <li><a class="dropdown-item text-danger" href="/logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                             </ul>
                         </div>
                         <a href="add-pet.php" class="btn btn-primary ms-2">
@@ -286,10 +286,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <?php else: ?>
                         <!-- User is not logged in - show login/register buttons -->
                         <div class="btn-group ms-3">
-                            <a href="/auth/login.php" class="btn btn-outline-primary">
+                            <a href="/login.php" class="btn btn-outline-primary">
                                 <i class="fas fa-sign-in-alt me-1"></i>Login
                             </a>
-                            <a href="/auth/register.php" class="btn btn-primary">
+                            <a href="/register.php" class="btn btn-primary">
                                 <i class="fas fa-user-plus me-1"></i>Register
                             </a>
                         </div>
