@@ -190,8 +190,8 @@
             <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
                 <h5 class="mb-4">Contact Us</h5>
                 <ul class="list-unstyled contact-info">
-                    <li class="mb-3 d-flex"><i class="fas fa-map-marker-alt me-3 mt-1"></i><span>123 Pet Street, City, Country</span></li>
-                    <li class="mb-3 d-flex"><i class="fas fa-phone me-3 mt-1"></i><a href="tel:+1234567890" class="text-decoration-none">+1 234 567 890</a></li>
+                    <li class="mb-3 d-flex"><i class="fas fa-map-marker-alt me-3 mt-1"></i><span>28, rue Notre des Champs ,Paris, France</span></li>
+                    <li class="mb-3 d-flex"><i class="fas fa-phone me-3 mt-1"></i><a href="tel:+33 78965432" class="text-decoration-none">+33 78965432</a></li>
                     <li class="mb-3 d-flex"><i class="fas fa-envelope me-3 mt-1"></i><a href="mailto:info@petcare.com" class="text-decoration-none">info@petcare.com</a></li>
                 </ul>
             </div>
