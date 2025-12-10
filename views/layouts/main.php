@@ -113,6 +113,7 @@
                 <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/pets"><i class="fas fa-paw"></i> Browse Pets</a></li>
                 <li class="nav-item"><a class="nav-link" href="/contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="/aboutus"><i class="fas fa-envelope"></i> About Us</a></li>
             </ul>
             <div class="d-flex align-items-center">
                 <?php if (!empty($_SESSION['user_id'])): ?>
