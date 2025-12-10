@@ -10,7 +10,7 @@ if (isset($_SESSION['user_id'])) {
     exit;
 }
 
-$pageTitle = 'Create Account - PetCare';
+$pageTitle = 'Create Account - NUZZLE PetCare';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once __DIR__ . '/../config/database.php';
@@ -74,12 +74,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             if ($userId) {
                 // Log the user in
-                $authUser = $user->getById($userId);
+                $User = $user->getById($userId);
                 
-                if ($authUser) {
-                    $_SESSION['user_id'] = $authUser['id'];
-                    $_SESSION['user_name'] = $authUser['name'];
-                    $_SESSION['user_email'] = $authUser['email'];
+                if ($auhUser) {
+                    $_SESSION['user_id'] = $User['id'];
+                    $_SESSION['user_name'] = $User['name'];
+                    $_SESSION['user_email'] = $User['email'];
                     
                     $_SESSION['success'] = 'Your account has been created successfully!';
                     header('Location: /');

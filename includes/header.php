@@ -12,7 +12,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetCare - Find Your Perfect Pet</title>
+    <title>NUZZLE PetCare - Find Your Perfect Pet</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -228,7 +228,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">
-                <i class="fas fa-paw me-2"></i>PetCare
+                <i class="fas fa-paw me-2"></i>NUZZLE PetCare
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -277,7 +277,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                 <li><a class="dropdown-item" href="/profile"><i class="fas fa-user-edit me-2"></i>Edit Profile</a></li>
                                 <li><a class="dropdown-item" href="/settings"><i class="fas fa-cog me-2"></i>Settings</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="/auth/logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                                <li><a class="dropdown-item text-danger" href="/logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                             </ul>
                         </div>
                         <a href="add-pet.php" class="btn btn-primary ms-2">
@@ -286,10 +286,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <?php else: ?>
                         <!-- User is not logged in - show login/register buttons -->
                         <div class="btn-group ms-3">
-                            <a href="/auth/login.php" class="btn btn-outline-primary">
+                            <a href="/login.php" class="btn btn-outline-primary">
                                 <i class="fas fa-sign-in-alt me-1"></i>Login
                             </a>
-                            <a href="/auth/register.php" class="btn btn-primary">
+                            <a href="/register.php" class="btn btn-primary">
                                 <i class="fas fa-user-plus me-1"></i>Register
                             </a>
                         </div>

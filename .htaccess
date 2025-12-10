@@ -6,7 +6,7 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     
     # Redirect /auth/logout to /auth/logout.php
-    RewriteRule ^auth/logout$ auth/logout.php [L]
+    RewriteRule ^/logout$ /logout.php [L]
     
     # Remove .php extension from URLs
     RewriteCond %{REQUEST_FILENAME} !-d

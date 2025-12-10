@@ -9,7 +9,7 @@ if (isset($_SESSION['user_id'])) {
     exit;
 }
 
-$pageTitle = 'Login - PetCare';
+$pageTitle = 'Login - NUZZLE PetCare';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -167,7 +167,7 @@ unset($_SESSION['form_data']);
                         
                         <div class="text-center mt-4">
                             <p class="mb-0">Don't have an account? 
-                                <a href="/auth/register.php">Create one</a>
+                                <a href="/register.php">Create one</a>
                             </p>
                         </div>
                     </form>

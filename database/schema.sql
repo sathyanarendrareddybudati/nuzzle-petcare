@@ -1,21 +1,24 @@
 -- Database schema for PetCare
 
 CREATE DATABASE IF NOT EXISTS petcare;
-USE petcare;
+USE sys;
 
 CREATE TABLE IF NOT EXISTS pets (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL,            
+    owner_name VARCHAR(255),
     species VARCHAR(50) NOT NULL,
     breed VARCHAR(100),
     age INT,
     gender ENUM('Male', 'Female', 'Other') NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,         
+    care_duration VARCHAR(50),             
     description TEXT,
+    special_requirements TEXT,            
     location VARCHAR(255) NOT NULL,
     contact_phone VARCHAR(20) NOT NULL,
     contact_email VARCHAR(100),
-    image_url VARCHAR(255),
+    image_url VARCHAR(2083),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

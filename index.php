@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$pageTitle = 'PetCare - Find Your Perfect Pet';
+$pageTitle = 'NUZZLE PetCare - Find Your Perfect Pet';
 require_once __DIR__ . '/includes/header.php';
 ?>
 
@@ -116,7 +116,7 @@ require_once __DIR__ . '/includes/header.php';
     <div class="container text-center">
         <h2 class="mb-4">Ready to Find Your New Best Friend?</h2>
         <p class="lead mb-4">Join thousands of happy pet owners who found their perfect match with us.</p>
-        <a href="/auth/register.php" class="btn btn-light btn-lg px-4 me-2">Get Started</a>
+        <a href="/register.php" class="btn btn-light btn-lg px-4 me-2">Get Started</a>
         <a href="/about" class="btn btn-outline-light btn-lg px-4">Learn More</a>
     </div>
 </div>

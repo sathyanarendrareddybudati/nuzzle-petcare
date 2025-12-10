@@ -12,9 +12,9 @@ class Database {
 
     private function __construct() {
         $this->host = $_ENV['MASTER_DB_HOST'] ?? 'localhost';
-        $this->db_name = $_ENV['MASTER_DB_NAME'] ?? 'petcare';
+        $this->db_name = $_ENV['MASTER_DB_NAME'] ?? 'sys';
         $this->username = $_ENV['MASTER_DB_USER'] ?? 'root';
-        $this->password = $_ENV['MASTER_DB_PASSWORD'] ?? '';
+        $this->password = $_ENV['MASTER_DB_PASSWORD'] ?? 'Reddy.anshul011';
         $this->connect();
     }
 

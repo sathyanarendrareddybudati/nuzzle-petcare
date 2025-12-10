@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$pageTitle = 'Contact Us - PetCare';
+$pageTitle = 'Contact Us - NUZZLE PetCare';
 require_once __DIR__ . '/includes/header.php';
 ?>
 
@@ -66,14 +66,14 @@ require_once __DIR__ . '/includes/header.php';
                     <i class="fas fa-map-marker-alt fa-2x text-primary"></i>
                 </div>
                 <h4>Our Location</h4>
-                <p class="text-muted mb-0">123 Pet Street<br>New York, NY 10001</p>
+                <p class="text-muted mb-0">ISEP<br>28 Rue Notre Dame des Champs, 75006 Paris</p>
             </div>
             <div class="col-md-4 text-center">
                 <div class="p-4 rounded-circle bg-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
                     <i class="fas fa-phone-alt fa-2x text-primary"></i>
                 </div>
                 <h4>Phone</h4>
-                <p class="text-muted mb-0">+1 (123) 456-7890<br>Mon - Fri, 9:00 AM - 6:00 PM</p>
+                <p class="text-muted mb-0">+33 45 67 89 01<br>Mon - Fri, 9:00 AM - 6:00 PM</p>
             </div>
             <div class="col-md-4 text-center">
                 <div class="p-4 rounded-circle bg-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
@@ -89,12 +89,13 @@ require_once __DIR__ . '/includes/header.php';
 <!-- Google Map -->
 <div class="map-container">
     <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215209179347!2d-73.98784492404432!3d40.74844097138992!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1620000000000!5m2!1sen!2sus" 
         width="100%" 
         height="450" 
         style="border:0;" 
-        allowfullscreen="" 
-        loading="lazy">
+        loading="lazy" 
+        allowfullscreen 
+        referrerpolicy="no-referrer-when-downgrade"
+        src="https://maps.google.com/maps?q=ISEP%2028%20Rue%20Notre%20Dame%20des%20Champs%2C%2075006%20Paris&t=&z=15&ie=UTF8&iwloc=&output=embed">
     </iframe>
 </div>
 

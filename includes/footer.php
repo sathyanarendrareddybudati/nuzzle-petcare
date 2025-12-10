@@ -5,7 +5,7 @@
                 <!-- About Section -->
                 <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                     <div class="footer-about">
-                        <h5 class="mb-4">About PetCare</h5>
+                        <h5 class="mb-4">About NUZZLE PetCare</h5>
                         <p class="mb-4">Connecting loving homes with wonderful pets. We help you find your perfect furry companion and provide the best care for your pets.</p>
                         <div class="social-links d-flex">
                             <a href="#" class="d-flex align-items-center justify-content-center me-3" aria-label="Facebook">
@@ -62,11 +62,11 @@
                     <ul class="list-unstyled contact-info">
                         <li class="mb-3 d-flex">
                             <i class="fas fa-map-marker-alt me-3 mt-1"></i>
-                            <span>123 Pet Street, City, Country</span>
+                            <span>ISEP ,28 Rue Notre Dame des Champs, 75006 Paris</span>
                         </li>
                         <li class="mb-3 d-flex">
                             <i class="fas fa-phone me-3 mt-1"></i>
-                            <a href="tel:+1234567890" class="text-decoration-none">+1 234 567 890</a>
+                            <a href="tel:++33 45 67 89 01" class="text-decoration-none">+33 45 67 89 01</a>
                         </li>
                         <li class="mb-3 d-flex">
                             <i class="fas fa-envelope me-3 mt-1"></i>
