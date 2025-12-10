@@ -2,7 +2,7 @@
 
 CREATE DATABASE IF NOT EXISTS petcare;
 USE petcare;
-
+-- Table pets
 CREATE TABLE IF NOT EXISTS pets (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
