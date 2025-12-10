@@ -1,12 +1,6 @@
 <?php
 
 if (!function_exists('dd')) {
-    /**
-     * Dump the passed variables and end the script.
-     *
-     * @param  mixed  $args
-     * @return void
-     */
     function dd(...$args)
     {
         foreach ($args as $x) {
@@ -19,27 +13,30 @@ if (!function_exists('dd')) {
 }
 
 if (!function_exists('config')) {
-    /**
-     * Get / set the specified configuration value.
-     *
-     * @param  string  $key
-     * @param  mixed  $default
-     * @return mixed
-     */
     function config($key = null, $default = null)
     {
         static $config = null;
-        
+
         if (is_null($config)) {
             $config = require __DIR__ . '/../config/app.php';
         }
-        
+
         if (is_null($key)) {
             return $config;
         }
-        
+
         return $config[$key] ?? $default;
     }
 }
 
-// Add other helper functions as needed
+if (!function_exists('env')) {
+    function env(string $key, $default = null) {
+        return $_ENV[$key] ?? $default;
+    }
+}
+
+if (!function_exists('e')) {
+    function e($value): string {
+        return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+    }
+}

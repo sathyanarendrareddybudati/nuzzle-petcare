@@ -1,25 +1,14 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
-    # Handle front controller
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    
-    # Redirect /auth/logout to /auth/logout.php
-    RewriteRule ^auth/logout$ auth/logout.php [L]
-    
-    # Remove .php extension from URLs
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME}.php -f
-    RewriteRule ^(.*)$ $1.php [L]
-    
-    # Remove trailing slash
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)/$ /$1 [L,R=301]
+    RewriteBase /
+
+    # Serve existing files/directories directly
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Front controller
+    RewriteRule ^ index.php [L]
 </IfModule>
 
-# Prevent directory listing
 Options -Indexes
-
-# Handle errors
-ErrorDocument 404 /404.php
