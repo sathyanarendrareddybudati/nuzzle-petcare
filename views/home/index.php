@@ -1,7 +1,7 @@
 <section class="hero-section bg-primary text-white py-5">
   <div class="container">
     <div class="row align-items-center">
-      <div class="col-lg-6">
+      <div class="col-lg-7">
         <h1 class="display-4 fw-bold mb-4">Find Your Perfect Pet Companion</h1>
         <p class="lead mb-4">Browse our selection of adorable pets waiting for their forever homes.</p>
         <div class="d-grid gap-2 d-md-flex">
@@ -9,8 +9,8 @@
           <a href="/about" class="btn btn-outline-light btn-lg px-4">Learn More</a>
         </div>
       </div>
-      <div class="col-lg-6 d-none d-lg-block">
-        <img src="/assets/images/hero-pets.png" alt="Pets" class="img-fluid">
+      <div class="col-lg-5 d-none d-lg-block text-center">
+        <img src="/assets/images/pets.png" alt="Pets" class="img-fluid rounded-4">
       </div>
     </div>
   </div>
@@ -25,10 +25,10 @@
     <div class="row g-4">
       <div class="col-md-4">
         <div class="card h-100 shadow-sm">
-          <img src="/assets/images/pet1.jpg" class="card-img-top" alt="Pet 1">
+          <img src="/assets/images/PET1.jpg" class="card-img-top" alt="Pet 1">
           <div class="card-body">
             <h5 class="card-title">Max</h5>
-            <p class="text-muted">Golden Retriever • 2 years</p>
+            <p class="text-muted">Boxer • 2 years</p>
             <p class="card-text">Friendly and energetic, Max loves playing fetch and going for long walks.</p>
             <a href="/pets/1" class="btn btn-primary">View Details</a>
           </div>
@@ -36,7 +36,7 @@
       </div>
       <div class="col-md-4">
         <div class="card h-100 shadow-sm">
-          <img src="/assets/images/pet2.jpg" class="card-img-top" alt="Pet 2">
+          <img src="/assets/images/PET2.jpg" class="card-img-top" alt="Pet 2">
           <div class="card-body">
             <h5 class="card-title">Luna</h5>
             <p class="text-muted">Siamese Cat • 1.5 years</p>
@@ -47,10 +47,10 @@
       </div>
       <div class="col-md-4">
         <div class="card h-100 shadow-sm">
-          <img src="/assets/images/pet3.jpg" class="card-img-top" alt="Pet 3">
+          <img src="/assets/images/PET3.jpg" class="card-img-top" alt="Pet 3">
           <div class="card-body">
             <h5 class="card-title">Buddy</h5>
-            <p class="text-muted">Labrador • 3 years</p>
+            <p class="text-muted">Golden Retriever • 3 years</p>
             <p class="card-text">Gentle and well-trained, Buddy is great with kids and other pets.</p>
             <a href="/pets/3" class="btn btn-primary">View Details</a>
           </div>
@@ -102,4 +102,4 @@
     <a href="/register" class="btn btn-light btn-lg px-4 me-2">Get Started</a>
     <a href="/about" class="btn btn-outline-light btn-lg px-4">Learn More</a>
   </div>
-</div>
+</div> 
