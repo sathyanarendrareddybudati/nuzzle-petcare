@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controllers;
 
 use App\Core\Controller;
@@ -10,42 +9,17 @@ class AdminController extends Controller
     public function __construct()
     {
         parent::__construct();
-        // Ensure only admins can access this controller
-        if (!Session::isAdmin()) {
+        // This is a basic security check. In a real application, you would have a more robust role-based access control system.
+        if (Session::get('user_role') !== 'admin') {
             Session::flash('error', 'You are not authorized to access this page.');
             redirect('/');
         }
     }
 
-    /**
-     * Display the admin dashboard.
-     */
     public function index(): void
     {
-        $this->render('admin/dashboard', [
-            'pageTitle' => 'Admin Dashboard'
-        ]);
+        $this->render('admin/index', ['pageTitle' => 'Admin Dashboard']);
     }
 
-    /**
-     * Placeholder for managing users.
-     */
-    public function users(): void
-    {
-        // In a real application, you would fetch users from the database.
-        $this->render('admin/users', [
-            'pageTitle' => 'Manage Users'
-        ]);
-    }
-
-    /**
-     * Placeholder for managing ads.
-     */
-    public function ads(): void
-    {
-        // In a real application, you would fetch ads from the database.
-        $this->render('admin/ads', [
-            'pageTitle' => 'Manage Ads'
-        ]);
-    }
+    // Add methods for user, pet, and content management here.
 }

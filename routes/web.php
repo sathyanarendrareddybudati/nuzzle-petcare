@@ -27,6 +27,10 @@ $router->get('/aboutus', [AboutUsController::class, 'index']);
 $router->get('/contact', [ContactController::class, 'index']);
 $router->post('/contact', [ContactController::class, 'submit']);
 
+// Forgot Password
+$router->get('/forgot-password', [AuthController::class, 'showForgotPasswordForm']);
+$router->post('/forgot-password', [AuthController::class, 'handleForgotPasswordRequest']);
+
 // Admin Routes
 $router->get('/admin', [AdminController::class, 'index']);
 $router->get('/admin/dashboard', [AdminController::class, 'index']);

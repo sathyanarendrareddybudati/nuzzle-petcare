@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controllers;
 
 use App\Core\Controller;
@@ -10,7 +9,7 @@ class DashboardController extends Controller
     public function __construct()
     {
         parent::__construct();
-        if (!Session::isAuthenticated()) {
+        if (!Session::get('user_id')) {
             Session::flash('error', 'You must be logged in to view the dashboard.');
             redirect('/login');
         }
@@ -18,11 +17,11 @@ class DashboardController extends Controller
 
     public function index(): void
     {
-        $role = Session::getUserRole();
+        $role = Session::get('user_role');
 
         switch ($role) {
             case 'admin':
-                redirect('/admin/dashboard');
+                redirect('/admin');
                 break;
             case 'owner':
                 $this->render('dashboard/owner', ['pageTitle' => 'Owner Dashboard']);
@@ -33,6 +32,7 @@ class DashboardController extends Controller
             default:
                 Session::flash('error', 'Invalid user role.');
                 redirect('/');
+                break;
         }
     }
 }

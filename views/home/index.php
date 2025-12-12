@@ -1,102 +1,249 @@
-<?php
-$pageTitle = 'Welcome to Nuzzle - Your Trusted Pet Care Connection';
-?>
-
 <style>
+    /* Custom CSS for the new hero section */
     .hero-section {
-        background: url('https://images.unsplash.com/photo-1556955112-28cde3817b0a?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
-        background-size: cover;
-        color: white;
-        padding: 100px 0;
-        text-align: center;
+        background-color: #f0f4ff; /* A light, welcoming blue */
+        padding: 6rem 0;
+        position: relative;
+        overflow: hidden;
     }
+
     .hero-section h1 {
-        font-weight: 800;
         font-size: 3.5rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        font-weight: 800;
+        color: #2c3e50; /* Charcoal */
     }
-    .hero-section p {
+
+    .hero-section .text-primary {
+        color: #2e59d9 !important; /* Primary blue from the original CSS */
+    }
+
+    .hero-section p.lead {
         font-size: 1.25rem;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        color: #5a5c69; /* Dark gray from original CSS */
+        max-width: 500px;
     }
-    .feature-icon {
-        font-size: 3rem;
-        color: var(--primary-color);
+
+    .search-bar-wrapper {
+        background: #fff;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        margin-top: 3rem;
     }
-    .card.feature-card:hover {
+
+    .search-bar-wrapper .form-control, .search-bar-wrapper .form-select {
+        border-radius: 0.75rem;
+        border: 1px solid #e3e6f0;
+        padding: 0.75rem 1rem;
+    }
+    
+    .search-bar-wrapper .form-control:focus, .search-bar-wrapper .form-select:focus {
+        box-shadow: 0 0 0 0.25rem rgba(46, 89, 217, 0.25);
+        border-color: #2e59d9;
+    }
+
+    .hero-image-container {
+        position: relative;
+    }
+
+    .hero-image {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+        border-radius: 1.5rem;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .floating-card {
+        position: absolute;
+        bottom: -20px;
+        left: -20px;
+        background: white;
+        padding: 1rem;
+        border-radius: 1rem;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .floating-card .icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 0.75rem;
+        background: #fdf2e9; /* Peach color */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .featured-pets {
+        padding: 6rem 0;
+    }
+
+    .pet-card {
+        border: none;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .pet-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15) !important;
-        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.1);
     }
+
+    .pet-card-img {
+        height: 250px;
+        object-fit: cover;
+    }
+    
+    .how-it-works {
+        background: #f8f9fc; /* Light color from original CSS */
+    }
+
 </style>
 
-<!-- Hero Section -->
-<div class="hero-section">
+<section class="hero-section">
     <div class="container">
-        <h1 class="display-4">More Than Care, We Give Love.</h1>
-        <p class="lead my-4">Connecting pet owners with a community of trusted and passionate caretakers. <br> Find the perfect match for your furry friend.</p>
-        <a href="/register" class="btn btn-primary btn-lg me-2"><i class="fas fa-user-plus me-2"></i>Join as a Caretaker</a>
-        <a href="/pets/create" class="btn btn-secondary btn-lg"><i class="fas fa-paw me-2"></i>Post a Pet Ad</a>
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="mb-4">
+                    <span class="badge bg-primary bg-opacity-10 text-primary py-2 px-3 rounded-pill fw-medium">
+                        Trusted by 10,000+ Pet Owners
+                    </span>
+                </div>
+                <h1 class="display-3 fw-bolder text-charcoal mb-4">
+                    More Than Care,<br>
+                    <span class="text-primary">We Give Love</span>
+                </h1>
+                <p class="lead mb-4">
+                    Connect with trusted pet caretakers in your area. Whether you need pet sitting, walking, boarding, or fostering — we\'ve got your furry friends covered.
+                </p>
+                <div class="d-flex gap-2">
+                    <a href="#featured-pets" class="btn btn-primary btn-lg px-4">Find a Caretaker</a>
+                    <a href="/pets/create" class="btn btn-outline-secondary btn-lg px-4">Post an Ad</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image-container">
+                    <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&h=700&fit=crop" 
+                         alt="Happy dog with caretaker" 
+                         class="hero-image">
+                    <div class="floating-card">
+                         <div class="icon">
+                            <span>🐕</span>
+                         </div>
+                         <div>
+                            <p class="fw-bold mb-0">Max is Happy!</p>
+                            <p class="text-muted small mb-0">Walked by Sarah</p>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-bar-wrapper">
+             <form action="/pets" method="GET">
+                <div class="row g-3 align-items-center">
+                    <div class="col-lg-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-0"><i class="fas fa-map-marker-alt text-muted"></i></span>
+                            <input type="text" name="location" class="form-control border-0" placeholder="Location">
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                         <div class="input-group">
+                            <span class="input-group-text bg-transparent border-0"><i class="fas fa-calendar-alt text-muted"></i></span>
+                            <input type="text" name="date" class="form-control border-0" placeholder="Date (optional)">
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <select name="service" class="form-select border-0">
+                            <option value="">Select Service Type</option>
+                            <option value="walking">Dog Walking</option>
+                            <option value="sitting">Pet Sitting</option>
+                            <option value="boarding">Boarding</option>
+                            <option value="fostering">Fostering</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <button class="btn btn-primary w-100 btn-lg" type="submit">
+                            <i class="fas fa-search me-1"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+</section>
+
+<!-- Featured Pets Section -->
+<section class="featured-pets" id="featured-pets">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Featured Caretakers & Pets</h2>
+            <p class="text-muted">Meet some of our amazing pets and their caretakers.</p>
+        </div>
+        <div class="row g-4">
+            <?php if (!empty($pets)): ?>
+                <?php foreach (array_slice($pets, 0, 3) as $pet): ?>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card pet-card h-100">
+                            <img src="<?= e($pet['image_url'] ?? 'https://via.placeholder.com/400x300') ?>" class="card-img-top pet-card-img" alt="<?= e($pet['name']) ?>">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title fw-bold"><?= e($pet['name']) ?></h5>
+                                <p class="card-text text-muted small mb-2"><i class="fas fa-map-marker-alt me-2"></i><?= e($pet['location'] ?? 'Location unknown') ?></p>
+                                <p class="card-text flex-grow-1"><?= e(substr($pet['description'], 0, 80)) ?>...</p>
+                                <a href="/pets/<?= $pet['id'] ?>" class="btn btn-primary mt-auto">View Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col">
+                    <p class="text-center text-muted">No featured pets available at the moment.</p>
+                </div>
+            <?php endif; ?>
+        </div>
+        <div class="text-center mt-5">
+            <a href="/pets" class="btn btn-outline-primary btn-lg">Browse All Pets</a>
+        </div>
+    </div>
+</section>
 
 <!-- How It Works Section -->
-<section class="py-5">
+<section class="py-5 how-it-works">
     <div class="container">
-        <h2 class="text-center mb-5">How It Works</h2>
-        <div class="row g-4 text-center">
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm p-4 feature-card">
-                    <i class="fas fa-bullhorn feature-icon mb-3"></i>
-                    <h5>1. Post an Ad</h5>
-                    <p>Pet owners post ads detailing their pet's needs, from daily walks to long-term boarding.</p>
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">How It Works</h2>
+            <p class="text-muted">Finding pet care is simple with our easy 3-step process.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4 text-center">
+                <div class="p-4 rounded-circle bg-white d-inline-block mb-3 shadow-sm">
+                    <i class="fas fa-search fa-2x text-primary"></i>
                 </div>
+                <h4>1. Search for Care</h4>
+                <p class="text-muted">Use our search to find the perfect pet caretaker by service, location, and date.</p>
             </div>
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm p-4 feature-card">
-                    <i class="fas fa-search-location feature-icon mb-3"></i>
-                    <h5>2. Find a Match</h5>
-                    <p>Caretakers browse ads and apply for jobs. Owners can also search for and invite local caretakers.</p>
+            <div class="col-md-4 text-center">
+                <div class="p-4 rounded-circle bg-white d-inline-block mb-3 shadow-sm">
+                    <i class="fas fa-calendar-check fa-2x text-primary"></i>
                 </div>
+                <h4>2. Book & Connect</h4>
+                <p class="text-muted">Send a request. The caretaker will approve and you can connect directly.</p>
             </div>
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm p-4 feature-card">
-                    <i class="fas fa-handshake feature-icon mb-3"></i>
-                    <h5>3. Connect & Relax</h5>
-                    <p>Connect securely, arrange details, and relax knowing your pet is in great hands.</p>
+            <div class="col-md-4 text-center">
+                <div class="p-4 rounded-circle bg-white d-inline-block mb-3 shadow-sm">
+                    <i class="fas fa-heart fa-2x text-primary"></i>
                 </div>
+                <h4>3. Enjoy Peace of Mind</h4>
+                <p class="text-muted">Your pet receives loving care, and you get updates. It\'s that simple!</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Testimonials Section -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-5">What Our Users Say</h2>
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <blockquote class="blockquote mb-0">
-                            <p>"Nuzzle made it so easy to find a reliable dog walker for Buddy. The platform is user-friendly and I love the peace of mind it gives me."
-                            </p>
-                            <footer class="blockquote-footer">Sarah J., <cite title="Source Title">Pet Owner</cite></footer>
-                        </blockquote>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <blockquote class="blockquote mb-0">
-                            <p>"As a part-time student, becoming a pet caretaker on Nuzzle has been a joy. I get to spend time with animals and earn money on my own schedule."
-                            </p>
-                            <footer class="blockquote-footer">Mike R., <cite title="Source Title">Caretaker</cite></footer>
-                        </blockquote>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>

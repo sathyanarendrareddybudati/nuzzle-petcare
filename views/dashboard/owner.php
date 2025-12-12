@@ -1,48 +1,37 @@
 <?php
 // Owner Dashboard View
-$pageTitle = 'Owner Dashboard';
-
-// Mock data for the owner's dashboard
-$activeAds = 2;
-$pendingRequests = 3;
-$confirmedBookings = 1;
-
 ?>
 
-<div class="container my-5">
-    <h1 class="mb-4"><i class="fas fa-tachometer-alt me-2"></i>Owner Dashboard</h1>
+<div class="container py-5">
+    <h1 class="fw-bold">Owner Dashboard</h1>
+    <p class="text-muted">Manage your pets and view applications from caretakers.</p>
 
-    <!-- Dashboard Widgets -->
-    <div class="row g-4">
-        <!-- Active Ads -->
+    <div class="row g-4 mt-4">
+        <!-- Quick Stats -->
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm border-0">
-                <div class="card-body text-center">
-                    <h5 class="card-title text-muted">Active Ads</h5>
-                    <p class="display-4 fw-bold"><?= $activeAds ?></p>
-                    <a href="/my-ads" class="btn btn-outline-primary">Manage Ads</a>
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Active Listings</h5>
+                    <p class="fs-1 fw-bold">2</p>
+                    <a href="/my-pets" class="btn btn-primary">Manage Pets</a>
                 </div>
             </div>
         </div>
-
-        <!-- Pending Requests -->
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm border-0">
-                <div class="card-body text-center">
-                    <h5 class="card-title text-muted">Pending Requests</h5>
-                    <p class="display-4 fw-bold text-warning"><?= $pendingRequests ?></p>
-                    <a href="/requests" class="btn btn-warning">View Requests</a>
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">New Applications</h5>
+                    <p class="fs-1 fw-bold">5</p>
+                    <a href="/applications" class="btn btn-primary">View Applications</a>
                 </div>
             </div>
         </div>
-
-        <!-- Confirmed Bookings -->
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm border-0">
-                <div class="card-body text-center">
-                    <h5 class="card-title text-muted">Confirmed Bookings</h5>
-                    <p class="display-4 fw-bold text-success"><?= $confirmedBookings ?></p>
-                    <a href="/bookings" class="btn btn-success">View Bookings</a>
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Messages</h5>
+                    <p class="fs-1 fw-bold">3</p>
+                    <a href="/messages" class="btn btn-primary">Read Messages</a>
                 </div>
             </div>
         </div>
@@ -50,11 +39,11 @@ $confirmedBookings = 1;
 
     <!-- Recent Activity -->
     <div class="mt-5">
-        <h3 class="mb-3">Recent Activity</h3>
-        <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action">A caretaker showed interest in your ad for 'Buddy'.</a>
-            <a href="#" class="list-group-item list-group-item-action">You have a new message from a caretaker.</a>
-            <a href="#" class="list-group-item list-group-item-action">Your ad 'Walk needed for Max' is now live.</a>
+        <h3 class="fw-bold">Recent Activity</h3>
+        <div class="list-group mt-3">
+            <a href="#" class="list-group-item list-group-item-action">A new caretaker applied to care for <strong>Max</strong>.</a>
+            <a href="#" class="list-group-item list-group-item-action">You received a new message about <strong>Bella</strong>.</a>
+            <a href="#" class="list-group-item list-group-item-action">Your listing for <strong>Max</strong> was viewed 25 times today.</a>
         </div>
     </div>
 </div>

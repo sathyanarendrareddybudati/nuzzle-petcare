@@ -18,30 +18,27 @@ class AuthController extends Controller
         $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'] ?? '';
 
-        $errors = [];
-        if (!$email) $errors[] = 'Please enter a valid email.';
-        if ($password === '') $errors[] = 'Please enter your password.';
-
-        if ($errors) {
-            Session::flash('error', implode('<br>', $errors));
-            $this->redirect('/login');
+        if (empty($email) || empty($password)) {
+            Session::flash('error', 'Please enter both email and password.');
+            redirect('/login');
+            return;
         }
 
-        $user = (new User())->verifyCredentials($email, $password);
-        if (!$user) {
+        $userModel = new User();
+        $user = $userModel->verifyCredentials($email, $password);
+
+        if ($user) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['name'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_role'] = $user['role']; // Set user role
+
+            Session::flash('success', 'Welcome back, ' . e($user['name']) . '!');
+            redirect('/dashboard');
+        } else {
             Session::flash('error', 'Invalid email or password.');
-            $this->redirect('/login');
+            redirect('/login');
         }
-
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['name'];
-        $_SESSION['user_email'] = $user['email'];
-
-        $redirect = $_SESSION['redirect_after_login'] ?? '/';
-        unset($_SESSION['redirect_after_login']);
-
-        Session::flash('success', 'You have been logged in successfully!');
-        $this->redirect($redirect);
     }
 
     public function showRegister(): void
@@ -55,48 +52,84 @@ class AuthController extends Controller
         $name = trim($_POST['name'] ?? '');
         $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'] ?? '';
-        $confirm = $_POST['confirm_password'] ?? '';
-        $roleId = (int)($_POST['role_id'] ?? 0);
-        $phone = trim($_POST['phone'] ?? '');
+        $role = $_POST['role'] ?? ''; // owner or caretaker
 
         $errors = [];
-        if ($name === '') $errors[] = 'Please enter your name.';
-        if (!$email) $errors[] = 'Please enter a valid email.';
-        if (strlen($password) < 8) $errors[] = 'Password must be at least 8 characters.';
-        if ($password !== $confirm) $errors[] = 'Passwords do not match.';
-        if (!in_array($roleId, [2,3], true)) $errors[] = 'Please select a valid role.';
+        if (empty($name)) $errors[] = 'Name is required.';
+        if (empty($email)) $errors[] = 'A valid email is required.';
+        if (strlen($password) < 8) $errors[] = 'Password must be at least 8 characters long.';
+        if (!in_array($role, ['owner', 'caretaker'])) $errors[] = 'Please select a valid role.';
 
-        $model = new User();
-        if ($email && $model->emailExists($email)) {
+        $userModel = new User();
+        if ($userModel->emailExists($email)) {
             $errors[] = 'An account with this email already exists.';
         }
 
-        if ($errors) {
+        if (!empty($errors)) {
             Session::flash('error', implode('<br>', $errors));
-            $this->redirect('/register');
+            redirect('/register');
+            return;
         }
 
-        $userId = $model->create([
+        $userId = $userModel->create([
             'name' => $name,
             'email' => $email,
             'password' => $password,
-            'phone' => $phone,
-            'role_id' => $roleId,
+            'role' => $role,
         ]);
 
-        $user = $model->getById($userId);
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['name'];
-        $_SESSION['user_email'] = $user['email'];
+        if ($userId) {
+            $user = $userModel->getById($userId);
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['name'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_role'] = $user['role'];
 
-        Session::flash('success', 'Your account has been created successfully!');
-        $this->redirect('/');
+            Session::flash('success', 'Account created successfully! Welcome!');
+            redirect('/dashboard');
+        } else {
+            Session::flash('error', 'There was a problem creating your account.');
+            redirect('/register');
+        }
     }
+    
+    public function showForgotPasswordForm(): void
+    {
+        $this->render('auth/forgot-password', ['pageTitle' => 'Forgot Password']);
+    }
+
+    public function handleForgotPasswordRequest(): void
+    {
+        Session::start();
+        $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
+
+        if (empty($email)) {
+            Session::flash('error', 'Please enter your email address.');
+            redirect('/forgot-password');
+            return;
+        }
+
+        $userModel = new User();
+        if (!$userModel->emailExists($email)) {
+            Session::flash('success', 'If an account with that email exists, a password reset link has been sent.');
+            redirect('/forgot-password');
+            return;
+        }
+
+        // In a real application, you would generate a secure token, save it to the database with an expiry date,
+        // and send an email with a link containing the token.
+        // For this example, we'll just show a success message.
+
+        Session::flash('success', 'If an account with that email exists, a password reset link has been sent.');
+        redirect('/forgot-password');
+    }
+
 
     public function logout(): void
     {
         Session::start();
+        session_unset();
         session_destroy();
-        $this->redirect('/');
+        redirect('/');
     }
 }
