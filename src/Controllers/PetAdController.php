@@ -22,7 +22,7 @@ class PetAdController extends Controller
         $petAdModel = new PetAd();
         $ads = $petAdModel->getAdsByUserId($userId);
 
-        $this->render('pets/my-ads', [
+        $this->render('pet-ads/my-ads', [
             'pageTitle' => 'My Ads',
             'ads' => $ads,
         ]);
@@ -44,7 +44,7 @@ class PetAdController extends Controller
             return;
         }
 
-        $this->render('pets/ad-details', [
+        $this->render('pet-ads/ad-details', [
             'pageTitle' => $ad['title'],
             'ad' => $ad,
         ]);
@@ -58,7 +58,7 @@ class PetAdController extends Controller
         $services = $serviceModel->getAllServices();
         $locations = $locationModel->getAllLocations();
 
-        $this->render('pets/create-ad', [
+        $this->render('pet-ads/create-ad', [
             'pageTitle' => 'Create Ad',
             'services' => $services,
             'locations' => $locations,

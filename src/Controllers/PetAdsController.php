@@ -10,7 +10,7 @@ class PetAdsController extends Controller
     {
         $petAdModel = new PetAd();
         $ads = $petAdModel->all();
-        $this->render('pets/index', ['ads' => $ads, 'pageTitle' => 'Browse Pet Ads']);
+        $this->render('pet-ads/index', ['ads' => $ads, 'pageTitle' => 'Browse Pet Ads']);
     }
 
     public function show($id): void
@@ -22,6 +22,6 @@ class PetAdsController extends Controller
             $this->redirect('/pets');
         }
 
-        $this->render('pets/show', ['ad' => $ad, 'pageTitle' => $ad['title']]);
+        $this->render('pet-ads/show', ['ad' => $ad, 'pageTitle' => $ad['title']]);
     }
 }
