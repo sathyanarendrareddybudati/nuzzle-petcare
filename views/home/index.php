@@ -187,9 +187,9 @@
                 foreach (array_slice($pets, 0, 3) as $pet): ?>
                     <div class="col-lg-4 col-md-6">
                         <div class="card pet-card h-100">
-                            <img src="<?= e($pet['image_url'] ?? 'https://via.placeholder.com/400x300') ?>" class="card-img-top pet-card-img" alt="<?= e($pet['name']) ?>">
+                            <img src="<?= e($pet['image_url'] ?? 'https://via.placeholder.com/400x300') ?>" class="card-img-top pet-card-img" alt="<?= e($pet['title'] ?? 'Pet') ?>">
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title fw-bold"><?= e($pet['name']) ?></h5>
+                                <h5 class="card-title fw-bold"><?= e($pet['title'] ?? 'Untitled Pet') ?></h5>
                                 <p class="card-text text-muted small mb-2"><i class="fas fa-map-marker-alt me-2"></i><?= e($pet['location'] ?? 'Location unknown') ?></p>
                                 <p class="card-text flex-grow-1"><?= e(substr($pet['description'], 0, 80)) ?>...</p>
                                 <a href="/pets/<?= $pet['id'] ?>" class="btn btn-primary mt-auto">View Profile</a>
@@ -340,7 +340,7 @@
 }
 .cta-card {
     position: relative;
-    background: linear-gradient(135deg, #ff7e5f, #feb47b); /* Coral gradient */
+    background: #2e59d9;
     border-radius: 1.5rem; /* rounded-3xl */
     padding: 4rem;
     overflow: hidden;

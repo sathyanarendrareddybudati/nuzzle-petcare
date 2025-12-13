@@ -142,11 +142,11 @@ if (isset($_SESSION['user_id'])) {
                                 <li><a class="dropdown-item" href="/admin/dashboard"><i class="fas fa-user-shield me-2"></i>Admin Panel</a></li>
                                 <li><a class="dropdown-item" href="/admin/users"><i class="fas fa-users-cog me-2"></i>Manage Users</a></li>
                                 <li><a class="dropdown-item" href="/admin/ads"><i class="fas fa-list-alt me-2"></i>Manage Ads</a></li>
-                            <?php elseif ($userRole === 'owner'): ?>
+                            <?php elseif ($userRole === 'pet_owner'): ?>
                                 <li><a class="dropdown-item" href="/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
                                 <li><a class="dropdown-item" href="/my-ads"><i class="fas fa-list me-2"></i>My Ads</a></li>
                                 <li><a class="dropdown-item" href="/messages"><i class="fas fa-inbox me-2"></i>Messages</a></li>
-                            <?php elseif ($userRole === 'caretaker'): ?>
+                            <?php elseif ($userRole === 'service_provider'): ?>
                                 <li><a class="dropdown-item" href="/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
                                 <li><a class="dropdown-item" href="/my-schedule"><i class="fas fa-calendar-alt me-2"></i>My Schedule</a></li>
                                 <li><a class="dropdown-item" href="/messages"><i class="fas fa-inbox me-2"></i>Messages</a></li>

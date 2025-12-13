@@ -105,12 +105,12 @@ function sort_url($key, $currentFilters) {
                             <div class="col-md-6 col-lg-4">
                                 <div class="card pet-card h-100">
                                     <a href="/pets/<?= (int)$pet['id'] ?>" class="text-decoration-none">
-                                        <img src="<?= e($pet['image_url'] ?? 'https://via.placeholder.com/400x300') ?>" class="card-img-top pet-card-img" alt="<?= e($pet['name']) ?>">
+                                        <img src="<?= e($pet['image_url'] ?? 'https://via.placeholder.com/400x300') ?>" class="card-img-top pet-card-img" alt="<?= e($pet['title'] ?? 'Pet') ?>">
                                     </a>
                                     <div class="card-body d-flex flex-column">
                                         <div class="d-flex justify-content-between align-items-start mb-1">
-                                            <h5 class="card-title fw-bold text-dark"><?= e($pet['name']) ?></h5>
-                                            <span class="badge bg-info-light text-info rounded-pill"><?= e($pet['species']) ?></span>
+                                            <h5 class="card-title fw-bold text-dark"><?= e($pet['title'] ?? 'Untitled Pet') ?></h5>
+                                            <span class="badge bg-info-light text-info rounded-pill"><?= e($pet['category_id'] ?? 'Category') ?></span>
                                         </div>
                                         <p class="card-text text-muted small flex-grow-1">
                                             <i class="fas fa-map-marker-alt me-2"></i><?= e($pet['location'] ?? 'Location unknown') ?>
