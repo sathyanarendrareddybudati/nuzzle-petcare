@@ -26,4 +26,33 @@ class CaretakerProfile extends Model
             return $this->db->query($sql, $data);
         }
     }
+
+    public function findAllWithFilters(array $filters)
+    {
+        $sql = "SELECT cp.*, u.username FROM {$this->table} cp JOIN users u ON cp.user_id = u.id WHERE 1=1";
+        $params = [];
+
+        if (!empty($filters['location'])) {
+            $sql .= " AND cp.location LIKE :location";
+            $params['location'] = '%' . $filters['location'] . '%';
+        }
+
+        if (!empty($filters['availability'])) {
+            $sql .= " AND cp.availability LIKE :availability";
+            $params['availability'] = '%' . $filters['availability'] . '%';
+        }
+
+        $sort = $filters['sort'] ?? 'newest';
+        switch ($sort) {
+            case 'oldest':
+                $sql .= " ORDER BY cp.created_at ASC";
+                break;
+            case 'newest':
+            default:
+                $sql .= " ORDER BY cp.created_at DESC";
+                break;
+        }
+
+        return $this->db->query($sql, $params)->findAll();
+    }
 }

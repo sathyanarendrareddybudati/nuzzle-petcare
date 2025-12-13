@@ -30,17 +30,28 @@
 
 <section class="py-5">
     <div class="container">
-        <div class="row g-4">
-            <!-- Search and Filters -->
-            <div class="col-12 mb-4">
-                <form method="GET" action="/pets">
-                    <div class="input-group input-group-lg">
-                        <input type="text" name="q" class="form-control" placeholder="Search for services, locations, etc." value="">
-                        <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Search</button>
-                    </div>
-                </form>
+        <form method="get" class="row g-3 mb-4 align-items-center">
+            <div class="col-md-4">
+                <label for="location" class="visually-hidden">Location</label>
+                <input type="text" class="form-control" id="location" name="location" placeholder="Location (e.g., city)" value="<?= e($filters['location'] ?? '') ?>">
             </div>
+            <div class="col-md-3">
+                <label for="pet_type" class="visually-hidden">Pet Type</label>
+                <input type="text" class="form-control" id="pet_type" name="pet_type" placeholder="Pet Type (e.g., dog)" value="<?= e($filters['pet_type'] ?? '') ?>">
+            </div>
+            <div class="col-md-3">
+                <label for="sort" class="visually-hidden">Sort by</label>
+                <select class="form-select" id="sort" name="sort">
+                    <option value="newest" <?= ($filters['sort'] ?? '') === 'newest' ? 'selected' : '' ?>>Newest</option>
+                    <option value="oldest" <?= ($filters['sort'] ?? '') === 'oldest' ? 'selected' : '' ?>>Oldest</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Filter</button>
+            </div>
+        </form>
 
+        <div class="row g-4">
             <!-- Ad Listings -->
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -64,22 +75,4 @@
                                             <span><i class="fas fa-map-marker-alt me-2"></i><?= e($ad['location_name']) ?></span>
                                             <span><i class="fas fa-dollar-sign me-2"></i><?= e(number_format($ad['cost'], 2)) ?></span>
                                         </div>
-                                         <a href="/pets/<?= (int)$ad['id'] ?>" class="btn btn-primary stretched-link mt-auto">View Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="col-12">
-                            <div class="text-center p-5 bg-light rounded">
-                                <i class="fas fa-bullhorn fa-3x text-muted mb-3"></i>
-                                <h4 class="fw-bold">No Ads Found</h4>
-                                <p class="text-muted">There are currently no pet service ads available. Please check back later.</p>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+                                         <a href="/pets/<?= (int)$ad['id'] ?>" class="btn btn-primary stretched-link mt-.phpinfo();?>

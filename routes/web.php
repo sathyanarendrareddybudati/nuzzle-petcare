@@ -9,6 +9,7 @@ use App\Controllers\AdminController;
 use App\Controllers\DashboardController;
 use App\Controllers\PetAdController;
 use App\Controllers\CaretakerProfileController;
+use App\Controllers\CaretakerProfilesController;
 
 /** @var \App\Core\Router $router */
 
@@ -18,6 +19,8 @@ $router->get('/pets', [PetAdsController::class, 'index']);
 $router->get('/pets/create', [PetAdsController::class, 'create']);
 $router->post('/pets', [PetAdsController::class, 'store']);
 $router->get('/pets/{id}', [PetAdsController::class, 'show']);
+
+$router->get('/caretakers', [CaretakerProfilesController::class, 'index']);
 
 $router->get('/login', [AuthController::class, 'showLogin']);
 $router->post('/login', [AuthController::class, 'login']);
