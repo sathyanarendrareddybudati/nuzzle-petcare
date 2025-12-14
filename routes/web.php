@@ -7,9 +7,9 @@ use App\Controllers\ContactController;
 use App\Controllers\AboutUsController;
 use App\Controllers\AdminController;
 use App\Controllers\DashboardController;
-use App\Controllers\PetAdController;
 use App\Controllers\CaretakerProfileController;
 use App\Controllers\CaretakerProfilesController;
+use App\Controllers\MessageController;
 
 /** @var \App\Core\Router $router */
 
@@ -46,11 +46,10 @@ $router->get('/admin/ads', [AdminController::class, 'ads']);
 $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->get('/dashboard/caretaker', [DashboardController::class, 'caretaker']);
 
-// My Ads
-$router->get('/my-ads', [PetAdController::class, 'index']);
-$router->get('/my-ads/create', [PetAdController::class, 'create']);
-$router->post('/my-ads/store', [PetAdController::class, 'store']);
-$router->get('/my-ads/show', [PetAdController::class, 'show']);
+// Messages
+$router->get('/messages', [MessageController::class, 'index']);
+$router->get('/messages/chat', [MessageController::class, 'chat']);
+$router->post('/messages/send', [MessageController::class, 'send']);
 
 // Caretaker Profile
 $router->get('/caretaker/profile', [CaretakerProfileController::class, 'create']);

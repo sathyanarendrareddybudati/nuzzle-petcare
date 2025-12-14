@@ -9,17 +9,18 @@ class PetAdsController extends Controller
     public function index(): void
     {
         $filters = [
-            'location' => $_GET['location'] ?? null,
-            'pet_type' => $_GET['pet_type'] ?? null,
+            'species' => $_GET['species'] ?? '',
+            'gender' => $_GET['gender'] ?? '',
+            'q' => $_GET['q'] ?? '',
             'sort' => $_GET['sort'] ?? 'newest',
         ];
 
         $petAdModel = new PetAd();
-        $ads = $petAdModel->findAllWithFilters($filters);
+        $pets = $petAdModel->findAllWithFilters($filters);
 
         $this->render('pet-ads/index', [
-            'ads' => $ads,
-            'pageTitle' => 'Browse Pet Ads',
+            'pets' => $pets,
+            'pageTitle' => 'Browse Pets',
             'filters' => $filters,
         ]);
     }

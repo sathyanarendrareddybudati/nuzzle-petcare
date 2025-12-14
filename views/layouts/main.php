@@ -117,7 +117,7 @@ $userRole = $_SESSION['user_role'] ?? null;
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-home me-1"></i>Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/pets"><i class="fas fa-search me-1"></i>Browse Ads</a></li>
+                <li class="nav-item"><a class="nav-link" href="/pets"><i class="fas fa-search me-1"></i>Browse Pets</a></li>
                 <li class="nav-item"><a class="nav-link" href="/caretakers"><i class="fas fa-search-plus me-1"></i>Find a Caretaker</a></li>
                 <li class="nav-item"><a class="nav-link" href="/aboutus"><i class="fas fa-info-circle me-1"></i>About Us</a></li>
                 <li class="nav-item"><a class="nav-link" href="/contact"><i class="fas fa-envelope me-1"></i>Contact</a></li>
@@ -126,7 +126,7 @@ $userRole = $_SESSION['user_role'] ?? null;
             <ul class="navbar-nav align-items-center">
                 <?php if ($userRole): ?>
                     <?php if ($userRole === 'pet_owner'): ?>
-                        <li class="nav-item me-2"><a href="/my-ads/create" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Post an Ad</a></li>
+                        <li class="nav-item me-2"><a href="/pets/create" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Post a Pet Ad</a></li>
                     <?php endif; ?>
 
                     <li class="nav-item dropdown">
@@ -140,7 +140,7 @@ $userRole = $_SESSION['user_role'] ?? null;
                             <?php else: ?>
                                 <li><a class="dropdown-item" href="/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
                                 <?php if ($userRole === 'pet_owner'): ?>
-                                    <li><a class="dropdown-item" href="/my-ads"><i class="fas fa-list me-2"></i>My Ads</a></li>
+                                    <li><a class="dropdown-item" href="/pets"><i class="fas fa-list me-2"></i>My Pet Ads</a></li>
                                 <?php endif; ?>
                                 <?php if ($userRole === 'service_provider'): ?>
                                     <li><a class="dropdown-item" href="/caretaker/profile"><i class="fas fa-user-circle me-2"></i>My Profile</a></li>

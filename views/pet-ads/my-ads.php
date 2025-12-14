@@ -3,7 +3,7 @@
 <div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0">My Ads</h1>
-        <a href="/my-ads/create" class="btn btn-primary">
+        <a href="/pets/create" class="btn btn-primary">
             <i class="fas fa-plus me-2"></i> Create Ad
         </a>
     </div>
@@ -11,7 +11,7 @@
     <?php if (empty($ads)): ?>
         <div class="text-center py-5">
             <p class="lead">You haven't posted any ads yet.</p>
-            <a href="/my-ads/create" class="btn btn-lg btn-success">Post Your First Ad</a>
+            <a href="/pets/create" class="btn btn-lg btn-success">Post Your First Ad</a>
         </div>
     <?php else: ?>
         <div class="row">
@@ -22,11 +22,11 @@
                             <h5 class="card-title"><?= e($ad['title']) ?></h5>
                             <p class="card-text"><?= e(substr($ad['description'], 0, 100)) ?>...</p>
                             <ul class="list-unstyled text-muted">
-                                <li><strong>Service:</strong> <?= e($ad['service_name']) ?></li>
-                                <li><strong>Location:</strong> <?= e($ad['location_name']) ?></li>
-                                <li><strong>Cost:</strong> $<?= e($ad['cost']) ?></li>
+                                <li><strong>Species:</strong> <?= e($ad['species']) ?></li>
+                                <li><strong>Location:</strong> <?= e($ad['location']) ?></li>
+                                <li><strong>Price:</strong> $<?= e(number_format((float)($ad['price'] ?? 0), 2)) ?></li>
                             </ul>
-                            <a href="/my-ads/show?id=<?= e($ad['id']) ?>" class="btn btn-info">View Details</a>
+                            <a href="/pets/<?= e($ad['id']) ?>" class="btn btn-info">View Details</a>
                         </div>
                     </div>
                 </div>

@@ -8,7 +8,7 @@ class PetAd extends Model
 {
     public function all(): array
     {
-        $sql = "SELECT pa.*, s.name as service_name, l.name as location_name, u.name as user_name
+        $sql = "SELECT pa.*, s.name as species, l.name as location, u.name as user_name
                 FROM pet_ads pa
                 JOIN services s ON pa.service_id = s.id
                 JOIN locations l ON pa.location_id = l.id
@@ -20,7 +20,7 @@ class PetAd extends Model
 
     public function findAllWithFilters(array $filters): array
     {
-        $sql = "SELECT pa.*, s.name as service_name, l.name as location_name, u.name as user_name
+        $sql = "SELECT pa.*, s.name as species, l.name as location, u.name as user_name
                 FROM pet_ads pa
                 JOIN services s ON pa.service_id = s.id
                 JOIN locations l ON pa.location_id = l.id
@@ -28,19 +28,25 @@ class PetAd extends Model
                 WHERE 1=1";
         $params = [];
 
-        if (!empty($filters['location'])) {
-            $sql .= " AND l.name LIKE :location";
-            $params['location'] = '%' . $filters['location'] . '%';
+        if (!empty($filters['q'])) {
+            $sql .= " AND (pa.title LIKE :q OR pa.description LIKE :q OR l.name LIKE :q)";
+            $params['q'] = '%' . $filters['q'] . '%';
         }
 
-        if (!empty($filters['pet_type'])) {
-            $sql .= " AND s.name LIKE :pet_type";
-            $params['pet_type'] = '%' . $filters['pet_type'] . '%';
+        if (!empty($filters['species'])) {
+            $sql .= " AND s.name = :species";
+            $params['species'] = $filters['species'];
+        }
+
+        if (!empty($filters['gender'])) {
+            $sql .= " AND pa.gender = :gender";
+            $params['gender'] = $filters['gender'];
         }
 
         $sort = $filters['sort'] ?? 'newest';
         $sql .= match ($sort) {
-            'oldest' => " ORDER BY pa.created_at ASC",
+            'price_asc' => " ORDER BY pa.price ASC",
+            'price_desc' => " ORDER BY pa.price DESC",
             default => " ORDER BY pa.created_at DESC",
         };
 
@@ -63,7 +69,7 @@ class PetAd extends Model
 
     public function getAdById(int $adId): ?array
     {
-        $sql = "SELECT pa.*, s.name as service_name, l.name as location_name, u.name as user_name, u.email as user_email
+        $sql = "SELECT pa.*, s.name as species, l.name as location, u.name as user_name, u.email as user_email
                 FROM pet_ads pa
                 JOIN services s ON pa.service_id = s.id
                 JOIN locations l ON pa.location_id = l.id
@@ -77,15 +83,15 @@ class PetAd extends Model
 
     public function create(array $data): ?int
     {
-        $sql = "INSERT INTO pet_ads (service_id, user_id, title, description, cost, status, start_date, end_date, location_id) 
-                VALUES (:service_id, :user_id, :title, :description, :cost, :status, :start_date, :end_date, :location_id)";
+        $sql = "INSERT INTO pet_ads (service_id, user_id, title, description, price, status, start_date, end_date, location_id) 
+                VALUES (:service_id, :user_id, :title, :description, :price, :status, :start_date, :end_date, :location_id)";
         $stmt = $this->db->prepare($sql);
         $success = $stmt->execute([
             'service_id' => $data['service_id'],
             'user_id' => $data['user_id'],
             'title' => $data['title'],
             'description' => $data['description'],
-            'cost' => $data['cost'],
+            'price' => $data['price'],
             'status' => $data['status'] ?? 'pending',
             'start_date' => $data['start_date'],
             'end_date' => $data['end_date'],

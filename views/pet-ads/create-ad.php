@@ -39,8 +39,8 @@
 
             <div class="row g-3 mb-4">
                 <div class="col-md-4">
-                    <label for="cost" class="form-label fs-5">Compensation ($)</label>
-                    <input type="number" class="form-control form-control-lg" id="cost" name="cost" step="0.01" required placeholder="e.g., 50.00">
+                    <label for="price" class="form-label fs-5">Compensation ($)</label>
+                    <input type="number" class="form-control form-control-lg" id="price" name="price" step="0.01" required placeholder="e.g., 50.00">
                 </div>
                 <div class="col-md-4">
                     <label for="start_date" class="form-label fs-5">Start Date</label>
@@ -50,6 +50,16 @@
                     <label for="end_date" class="form-label fs-5">End Date</label>
                     <input type="date" class="form-control form-control-lg" id="end_date" name="end_date" required>
                 </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="gender" class="form-label fs-5">Gender</label>
+                <select class="form-select form-select-lg" id="gender" name="gender" required>
+                    <option value="" disabled selected>Select a gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
             </div>
 
             <div class="d-grid">
