@@ -86,8 +86,8 @@ class PetAd extends Model
 
     public function create(array $data): ?int
     {
-        $sql = "INSERT INTO pet_ads (service_id, user_id, pet_id, title, description, price, status, start_date, end_date, location_id) 
-                VALUES (:service_id, :user_id, :pet_id, :title, :description, :price, :status, :start_date, :end_date, :location_id)";
+        $sql = "INSERT INTO pet_ads (service_id, user_id, pet_id, title, description, price, status, start_date, end_date, location_id, ad_type) 
+                VALUES (:service_id, :user_id, :pet_id, :title, :description, :price, :status, :start_date, :end_date, :location_id, :ad_type)";
         $stmt = $this->db->prepare($sql);
         $success = $stmt->execute([
             'service_id' => $data['service_id'],
@@ -100,6 +100,7 @@ class PetAd extends Model
             'start_date' => $data['start_date'],
             'end_date' => $data['end_date'],
             'location_id' => $data['location_id'],
+            'ad_type' => $data['ad_type'],
         ]);
 
         return $success ? (int)$this->db->lastInsertId() : null;
