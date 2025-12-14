@@ -1,9 +1,8 @@
 <?php
 use App\Core\Session;
 
-Session::start();
-
-$userRole = $_SESSION['user_role'] ?? null;
+$user = Session::get('user');
+$userRole = $user['role'] ?? null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,44 +65,11 @@ $userRole = $_SESSION['user_role'] ?? null;
             padding: 4rem 0 2rem;
             margin-top: auto;
         }
-        .footer h5 { color: white; font-weight: 600; margin-bottom: 1.5rem; }
-        .footer p { color: rgba(255, 255, 255, 0.8); margin-bottom: 1.5rem; }
-        .footer .social-links a {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 36px; height: 36px; background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%; color: white; margin-right: 0.75rem; transition: all 0.3s;
-        }
-        .footer .social-links a:hover { background: var(--primary-color); transform: translateY(-3px); }
-        .footer ul.list-unstyled li { margin-bottom: 0.75rem; }
-        .footer ul.list-unstyled a {
-            color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: all 0.3s; display: inline-block;
-        }
-        .footer ul.list-unstyled a:hover { color: white; transform: translateX(5px); }
-        .footer .form-control {
-            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white;
-        }
-        .footer .form-control:focus {
-            background: rgba(255, 255, 255, 0.15); border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25); color: white;
-        }
-        .footer .form-control::placeholder { color: rgba(255, 255, 255, 0.5); }
-        .footer .btn-primary { background: var(--primary-color); border-color: var(--primary-color); }
-        .footer .btn-primary:hover { background: #2e59d9; border-color: #2e59d9; }
-        .footer hr { border-color: rgba(255, 255, 255, 0.1); }
-        .footer .text-muted { color: rgba(255, 255, 255, 0.5) !important; }
         .dropdown-menu {
             border: none; box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.2);
             border-radius: 0.5rem; padding: 0.5rem 0;
         }
         .dropdown-item { padding: 0.5rem 1.5rem; font-weight: 500; color: var(--dark-color); }
-        .dropdown-item:hover { background-color: #f8f9fa; color: var(--primary-color); }
-        .dropdown-divider { margin: 0.5rem 0; border-top: 1px solid #e3e6f0; }
-        @media (max-width: 991.98px) {
-            .navbar-collapse { padding: 1rem 0; }
-            .navbar-nav { margin-bottom: 1rem; }
-            .d-flex.align-items-center { flex-direction: column; width: 100%; }
-            .ms-3, .ms-2 { margin-left: 0 !important; margin-top: 0.5rem; }
-        }
     </style>
 </head>
 <body>
@@ -116,46 +82,45 @@ $userRole = $_SESSION['user_role'] ?? null;
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-home me-1"></i>Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/pets"><i class="fas fa-search me-1"></i>Browse Pets</a></li>
-                <li class="nav-item"><a class="nav-link" href="/caretakers"><i class="fas fa-search-plus me-1"></i>Find a Caretaker</a></li>
-                <li class="nav-item"><a class="nav-link" href="/aboutus"><i class="fas fa-info-circle me-1"></i>About Us</a></li>
-                <li class="nav-item"><a class="nav-link" href="/contact"><i class="fas fa-envelope me-1"></i>Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/pets">Browse Pets</a></li>
+                <li class="nav-item"><a class="nav-link" href="/caretakers">Find a Caretaker</a></li>
+                <li class="nav-item"><a class="nav-link" href="/aboutus">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
             </ul>
 
             <ul class="navbar-nav align-items-center">
-                <?php if ($userRole): ?>
+                <?php if ($user): ?>
                     <?php if ($userRole === 'pet_owner'): ?>
                         <li class="nav-item me-2"><a href="/pets/create" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Post a Pet Ad</a></li>
                     <?php endif; ?>
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://i.pravatar.cc/40?u=<?= e($_SESSION['user_id']) ?>" class="rounded-circle me-2" height="30" alt="User"/>
-                            <?= e($_SESSION['user_name'] ?? 'Account') ?>
+                            <img src="https://i.pravatar.cc/40?u=<?= e($user['id']) ?>" class="rounded-circle me-2" height="30" alt="User"/>
+                            <?= e($user['name'] ?? 'Account') ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <?php if ($userRole === 'admin'): ?>
-                                <li><a class="dropdown-item" href="/admin/dashboard"><i class="fas fa-user-shield me-2"></i>Admin Panel</a></li>
+                                <li><a class="dropdown-item" href="/admin/dashboard">Admin Panel</a></li>
                             <?php else: ?>
-                                <li><a class="dropdown-item" href="/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                                <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
                                 <?php if ($userRole === 'pet_owner'): ?>
-                                    <li><a class="dropdown-item" href="/pets"><i class="fas fa-list me-2"></i>My Pet Ads</a></li>
+                                    <li><a class="dropdown-item" href="/my-pets">My Pets</a></li>
+                                    <li><a class="dropdown-item" href="/my-ads">My Pet Ads</a></li>
                                 <?php endif; ?>
                                 <?php if ($userRole === 'service_provider'): ?>
-                                    <li><a class="dropdown-item" href="/caretaker/profile"><i class="fas fa-user-circle me-2"></i>My Profile</a></li>
-                                    <li><a class="dropdown-item" href="/my-schedule"><i class="fas fa-calendar-alt me-2"></i>My Schedule</a></li>
+                                    <li><a class="dropdown-item" href="/caretaker/profile">My Profile</a></li>
                                 <?php endif; ?>
-                                <li><a class="dropdown-item" href="/messages"><i class="fas fa-inbox me-2"></i>Messages</a></li>
+                                <li><a class="dropdown-item" href="/messages">Messages</a></li>
                             <?php endif; ?>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/profile"><i class="fas fa-user-edit me-2"></i>Edit Profile</a></li>
-                            <li><a class="dropdown-item text-danger" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
                         </ul>
                     </li>
                 <?php else: ?>
                     <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
-                    <li class="nav-item"><a href="/register" class="btn btn-primary"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                    <li class="nav-item"><a href="/register" class="btn btn-primary">Register</a></li>
                 <?php endif; ?>
             </ul>
         </div>
@@ -164,16 +129,10 @@ $userRole = $_SESSION['user_role'] ?? null;
 
 <div class="container my-4">
     <?php if ($m = Session::flash('success')): ?>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i><?= $m ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert"><?= $m ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
     <?php endif; ?>
     <?php if ($m = Session::flash('error')): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-triangle me-2"></i><?= $m ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert"><?= $m ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
     <?php endif; ?>
 </div>
 

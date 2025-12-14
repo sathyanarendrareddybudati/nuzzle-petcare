@@ -1,6 +1,11 @@
 <?php
 declare(strict_types=1);
 
+// Start the session if it hasn't been started already
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require __DIR__ . '/vendor/autoload.php';
 
 // Load helpers
