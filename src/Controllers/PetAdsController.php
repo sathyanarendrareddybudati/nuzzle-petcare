@@ -53,8 +53,7 @@ class PetAdsController extends Controller
         $locationModel = new Location();
 
         $userId = Session::get('user')['id'];
-        // The following line assumes a getPetsByUserId method exists in your Pet model
-        $pets = $petModel->getPetsByUserId($userId); 
+        $pets = $petModel->getPetsByUserId($userId);
         $services = $serviceModel->all();
         $locations = $locationModel->all();
 
@@ -88,7 +87,6 @@ class PetAdsController extends Controller
         ];
 
         if (empty($data['title']) || empty($data['description']) || empty($data['price'])) {
-            // In a real application, you would re-render the form with error messages
             $this->redirect('/pets/create');
             return;
         }
@@ -99,8 +97,61 @@ class PetAdsController extends Controller
         if ($adId) {
             $this->redirect('/pets/' . $adId);
         } else {
-            // Handle failure, perhaps with an error message
             $this->redirect('/pets/create');
         }
+    }
+
+    public function edit($id): void
+    {
+        $id = (int)$id;
+        $petAdModel = new PetAd();
+        $ad = $petAdModel->find($id);
+
+        if (!$ad || $ad['user_id'] !== Session::get('user')['id']) {
+            $this->redirect('/my-ads');
+            return;
+        }
+
+        $this->render('pet-ads/edit', [
+            'pageTitle' => 'Edit Pet Ad',
+            'ad' => $ad,
+        ]);
+    }
+
+    public function update($id): void
+    {
+        $id = (int)$id;
+        $petAdModel = new PetAd();
+        $ad = $petAdModel->find($id);
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !$ad || $ad['user_id'] !== Session::get('user')['id']) {
+            $this->redirect('/my-ads');
+            return;
+        }
+
+        $data = [
+            'title' => $_POST['title'],
+            'description' => $_POST['description'],
+            'price' => $_POST['price'],
+        ];
+
+        if ($petAdModel->update($id, $data)) {
+            $this->redirect('/my-ads');
+        } else {
+            $this->redirect("/pets/{$id}/edit");
+        }
+    }
+
+    public function destroy($id): void
+    {
+        $id = (int)$id;
+        $petAdModel = new PetAd();
+        $ad = $petAdModel->find($id);
+
+        if ($ad && $ad['user_id'] === Session::get('user')['id']) {
+            $petAdModel->delete($id);
+        }
+
+        $this->redirect('/my-ads');
     }
 }

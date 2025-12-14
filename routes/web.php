@@ -16,22 +16,28 @@ use App\Controllers\MyPetsController;
 
 $router->get('/', [HomeController::class, 'index']);
 
+// Pet Ads
 $router->get('/pets', [PetAdsController::class, 'index']);
 $router->get('/pets/create', [PetAdsController::class, 'create']);
 $router->post('/pets', [PetAdsController::class, 'store']);
 $router->get('/pets/{id}', [PetAdsController::class, 'show']);
+$router->get('/pets/{id}/edit', [PetAdsController::class, 'edit']);
+$router->post('/pets/{id}', [PetAdsController::class, 'update']);
+$router->post('/pets/{id}/delete', [PetAdsController::class, 'destroy']);
 
 $router->get('/my-pets', [MyPetsController::class, 'index']);
 
 $router->get('/caretakers', [CaretakerProfilesController::class, 'index']);
 
+// Auth
 $router->get('/login', [AuthController::class, 'showLogin']);
 $router->post('/login', [AuthController::class, 'login']);
 $router->get('/register', [AuthController::class, 'showRegister']);
 $router->post('/register', [AuthController::class, 'register']);
 $router->get('/logout', [AuthController::class, 'logout']);
-$router->get('/aboutus', [AboutUsController::class, 'index']);
 
+// Static Pages
+$router->get('/aboutus', [AboutUsController::class, 'index']);
 $router->get('/contact', [ContactController::class, 'index']);
 $router->post('/contact', [ContactController::class, 'submit']);
 
