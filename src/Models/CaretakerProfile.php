@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use App\Core\Model;
+use PDO;
 
 class CaretakerProfile extends Model
 {
@@ -9,7 +10,9 @@ class CaretakerProfile extends Model
 
     public function getProfileByUserId(int $userId)
     {
-        return $this->db->query("SELECT * FROM {$this->table} WHERE user_id = :user_id", ['user_id' => $userId])->findOne();
+        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE user_id = :user_id");
+        $stmt->execute(['user_id' => $userId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function createOrUpdate(array $data)
@@ -19,11 +22,13 @@ class CaretakerProfile extends Model
         if ($profile) {
             // Update
             $sql = "UPDATE {$this->table} SET title = :title, description = :description, location = :location, availability = :availability WHERE user_id = :user_id";
-            return $this->db->query($sql, $data);
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute($data);
         } else {
             // Create
             $sql = "INSERT INTO {$this->table} (user_id, title, description, location, availability) VALUES (:user_id, :title, :description, :location, :availability)";
-            return $this->db->query($sql, $data);
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute($data);
         }
     }
 
@@ -53,6 +58,8 @@ class CaretakerProfile extends Model
                 break;
         }
 
-        return $this->db->query($sql, $params)->findAll();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

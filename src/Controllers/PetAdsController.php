@@ -43,6 +43,7 @@ class PetAdsController extends Controller
 
     public function create(): void
     {
+        Session::start();
         if (!Session::get('user')) {
             $this->redirect('/login');
             return;
@@ -54,7 +55,7 @@ class PetAdsController extends Controller
 
         $userId = Session::get('user')['id'];
         $pets = $petModel->getPetsByUserId($userId);
-        $services = $serviceModel->all();
+        $services = $serviceModel->getAllServices();
         $locations = $locationModel->all();
 
         $this->render('pet-ads/create', [
@@ -67,6 +68,7 @@ class PetAdsController extends Controller
 
     public function store(): void
     {
+        Session::start();
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !Session::get('user')) {
             $this->redirect('/login');
             return;
@@ -76,8 +78,8 @@ class PetAdsController extends Controller
             'user_id' => Session::get('user')['id'],
             'pet_id' => $_POST['pet_id'],
             'service_id' => $_POST['service_id'],
-            'title' => $_POST['title'],
-            'description' => $_POST['description'],
+            'title' => trim($_POST['title']),
+            'description' => trim($_POST['description']),
             'price' => $_POST['price'],
             'location_id' => $_POST['location_id'],
             'start_date' => $_POST['start_date'],
@@ -87,7 +89,8 @@ class PetAdsController extends Controller
         ];
 
         if (empty($data['title']) || empty($data['description']) || empty($data['price'])) {
-            $this->redirect('/pets/create');
+            Session::flash('error', 'All fields are required.');
+            $this->redirect('/my-pets/create');
             return;
         }
 
@@ -95,9 +98,11 @@ class PetAdsController extends Controller
         $adId = $petAdModel->create($data);
 
         if ($adId) {
+            Session::flash('success', 'Pet ad created successfully!');
             $this->redirect('/pets/' . $adId);
         } else {
-            $this->redirect('/pets/create');
+            Session::flash('error', 'Failed to create pet ad.');
+            $this->redirect('/my-pets/create');
         }
     }
 

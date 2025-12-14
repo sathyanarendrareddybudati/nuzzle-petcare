@@ -23,8 +23,8 @@ class User extends Model
         return null;
     }
 
-    // Updated to join with roles table
-    public function getById(int $id): ?array
+    // Renamed from getById for consistency
+    public function findById(int $id): ?array
     {
         $sql = "SELECT u.*, r.name as role_name
                 FROM users u
@@ -43,15 +43,15 @@ class User extends Model
         return $stmt->fetch() !== false;
     }
 
-    // Updated to hash passwords before saving
+    // Updated to hash passwords and use username
     public function create(array $data): ?int
     {
         $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO users (name, email, password, role_id) VALUES (:name, :email, :password, :role_id)";
+        $sql = "INSERT INTO users (username, email, password, role_id) VALUES (:username, :email, :password, :role_id)";
         $stmt = $this->db->prepare($sql);
         $success = $stmt->execute([
-            'name' => $data['name'],
+            'username' => $data['username'],
             'email' => $data['email'],
             'password' => $hashedPassword,
             'role_id' => $data['role_id'],

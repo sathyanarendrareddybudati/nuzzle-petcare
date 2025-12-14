@@ -11,14 +11,15 @@ class DashboardController extends Controller
     public function index(): void
     {
         Session::start();
-        $userId = Session::get('user_id');
-        if (!$userId) {
+        $user = Session::get('user');
+        if (!$user) {
             Session::flash('error', 'You must be logged in to view the dashboard.');
             $this->redirect('/login');
             return;
         }
 
-        $role = Session::get('user_role');
+        $userId = $user['id'];
+        $role = $user['role'];
         $petAdModel = new PetAd();
 
         switch ($role) {
@@ -45,13 +46,14 @@ class DashboardController extends Controller
     public function caretaker(): void
     {
         Session::start();
-        $userId = Session::get('user_id');
-        if (!$userId || Session::get('user_role') !== 'service_provider') {
+        $user = Session::get('user');
+        if (!$user || $user['role'] !== 'service_provider') {
             Session::flash('error', 'You do not have permission to access this page.');
             $this->redirect('/login');
             return;
         }
 
+        $userId = $user['id'];
         $petAdModel = new PetAd();
         $recentAds = $petAdModel->getRecentAds(); // Or a more specific method for providers
 

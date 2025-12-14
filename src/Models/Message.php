@@ -8,7 +8,7 @@ class Message extends Model
 {
     public function getConversations(int $userId): array
     {
-        $sql = "SELECT u.id as participant_id, u.name as participant_name, c.body_content as last_message, c.sent_at as last_message_date
+        $sql = "SELECT u.id as participant_id, u.username as participant_name, c.body_content as last_message, c.sent_at as last_message_date
                 FROM communication_log c
                 JOIN users u ON u.id = c.sender_user_id OR u.id = c.recipient_user_id
                 WHERE (c.sender_user_id = :user_id1 OR c.recipient_user_id = :user_id2)
@@ -44,7 +44,7 @@ class Message extends Model
     public function create(array $data): bool
     {
         $sql = "INSERT INTO communication_log (sender_user_id, recipient_user_id, subject, body_content, communication_type) 
-                VALUES (:sender_user_id, :recipient_user_id, :subject, :body_content, 'email')";
+                VALUES (:sender_user_id, :recipient_user_id, :subject, :body_content, 'message')";
 
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([

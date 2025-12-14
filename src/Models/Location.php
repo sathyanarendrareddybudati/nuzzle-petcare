@@ -11,4 +11,9 @@ class Location extends Model
         $stmt = $this->db->query("SELECT id, name FROM locations");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function all(): array
+    {
+        return $this->getAllLocations();
+    }
 }
