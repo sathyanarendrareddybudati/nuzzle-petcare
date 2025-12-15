@@ -33,6 +33,7 @@ $router->get('/caretakers', [CaretakerProfilesController::class, 'index']);
 $router->get('/login', [AuthController::class, 'showLogin']);
 $router->post('/login', [AuthController::class, 'login']);
 $router->get('/register', [AuthController::class, 'showRegister']);
+$router->get('/register/admin', [AuthController::class, 'showAdminRegisterForm']);
 $router->post('/register', [AuthController::class, 'register']);
 $router->get('/logout', [AuthController::class, 'logout']);
 

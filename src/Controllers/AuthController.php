@@ -103,6 +103,11 @@ class AuthController extends Controller
             $this->redirect('/register');
         }
     }
+
+    public function showAdminRegisterForm(): void
+    {
+        $this->render('auth/register_admin', ['pageTitle' => 'Admin Registration']);
+    }
     
     public function showForgotPasswordForm(): void
     {

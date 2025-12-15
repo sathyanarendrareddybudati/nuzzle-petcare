@@ -156,6 +156,7 @@ $userRole = $user['role'] ?? null;
                         <li class="mb-2"><a href="/" class="d-flex align-items-center"><i class="fas fa-chevron-right me-2 small"></i> Home</a></li>
                         <li class="mb-2"><a href="/pets" class="d-flex align-items-center"><i class="fas fa-chevron-right me-2 small"></i> Browse Pets</a></li>
                         <li class="mb-2"><a href="/contact" class="d-flex align-items-center"><i class="fas fa-chevron-right me-2 small"></i> Contact</a></li>
+                        <li class="mb-2"><a href="/register/admin" class="d-flex align-items-center"><i class="fas fa-chevron-right me-2 small"></i> Admin Registration</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
