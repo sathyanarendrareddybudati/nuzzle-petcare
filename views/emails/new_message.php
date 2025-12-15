@@ -1,15 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Message from Nuzzle</title>
     <style>
-        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
-        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
-        img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
-        table { border-collapse: collapse !important; }
-        body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
+        body,
+        table,
+        td,
+        a {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        table,
+        td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+
+        table {
+            border-collapse: collapse !important;
+        }
+
+        body {
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+        }
+
         a[x-apple-data-detectors] {
             color: inherit !important;
             text-decoration: none !important;
@@ -18,6 +48,7 @@
             font-weight: inherit !important;
             line-height: inherit !important;
         }
+
         @media screen and (max-width: 600px) {
             .responsive-table {
                 width: 100% !important;
@@ -32,7 +63,7 @@
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;" class="responsive-table">
                     <tr>
                         <td bgcolor="#ffffff" align="center" style="padding: 20px; border-radius: 10px 10px 0 0;">
-                            <a href="https://nuzzle.pet" target="_blank"><img src="https://i.imgur.com/4qX3gI8.png" alt="Nuzzle Logo" width="150" style="display: block; margin: 0 auto;"></a>
+                            <img src="<?= $_ENV['APP_URL'] ?>/assets/images/logo.jpg" alt="Nuzzle Logo" width="150">
                         </td>
                     </tr>
                     <tr>
@@ -63,4 +94,5 @@
         </tr>
     </table>
 </body>
+
 </html>

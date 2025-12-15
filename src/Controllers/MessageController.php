@@ -51,7 +51,7 @@ class MessageController extends Controller
         $participant = $userModel->findById((int)$participantId);
 
         $this->render('messages/chat', [
-            'pageTitle' => 'Chat with ' . e($participant['username']),
+            'pageTitle' => 'Chat with ' . e($participant['name']),
             'messages' => $messages,
             'participant' => $participant,
         ]);
@@ -91,15 +91,19 @@ class MessageController extends Controller
         $sender = $userModel->findById($userId);
 
         if ($recipient && $sender) {
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+            $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+            $siteUrl = $protocol . $host;
+
             $emailService = new EmailService();
             $emailBody = $emailService->renderTemplate(__DIR__ . '/../../views/emails/new_message.php', [
-                'recipientName' => $recipient['username'],
-                'senderName' => $sender['username'],
+                'recipientName' => $recipient['name'],
+                'senderName' => $sender['name'],
                 'messageContent' => $body,
-                'loginLink' => get_site_url() . '/login'
+                'loginLink' => $siteUrl . '/login'
             ]);
 
-            $emailService->sendEmail($recipient['email'], 'You have a new message from ' . $sender['username'], $emailBody);
+            $emailService->sendEmail($recipient['email'], 'You have a new message from ' . $sender['name'], $emailBody);
         }
 
         $this->redirect("/messages/chat?participant_id={$recipientId}");

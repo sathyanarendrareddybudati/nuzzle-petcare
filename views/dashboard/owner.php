@@ -46,7 +46,7 @@
             </a>
         </div>
 
-        <?php if (empty($recentAds)):
+        <?php if (empty($recentAds)): ?>
             <div class="text-center py-5 bg-light rounded">
                 <p class="lead">You haven't posted any ads yet.</p>
                 <a href="/my-pets/create" class="btn btn-lg btn-primary">Post Your First Ad</a>
@@ -54,13 +54,23 @@
         <?php else: ?>
             <div class="list-group">
                 <?php foreach ($recentAds as $ad): ?>
-                    <a href="/pets/<?= e($ad['id']) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    <a href="/pets/<?= e($ad['id']) ?>"
+                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                         <div>
                             <h5 class="mb-1"><?= e($ad['title']) ?></h5>
                             <p class="mb-1 text-muted">
-                                <span class="me-3"><i class="fas fa-concierge-bell me-2"></i>Service: <?= e($ad['service_name']) ?></span>
-                                <span class="me-3"><i class="fas fa-map-marker-alt me-2"></i>Location: <?= e($ad['location_name']) ?></span>
-                                <span><i class="fas fa-dollar-sign me-2"></i>Cost: <?= e($ad['cost']) ?></span>
+                                <span class="me-3">
+                                    <i class="fas fa-concierge-bell me-2"></i>
+                                    Service: <?= e($ad['service_name']) ?>
+                                </span>
+                                <span class="me-3">
+                                    <i class="fas fa-map-marker-alt me-2"></i>
+                                    Location: <?= e($ad['location_name']) ?>
+                                </span>
+                                <span>
+                                    <i class="fas fa-dollar-sign me-2"></i>
+                                    Cost: <?= e($ad['cost']) ?>
+                                </span>
                             </p>
                         </div>
                         <span class="badge bg-primary rounded-pill">View</span>
@@ -68,5 +78,6 @@
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
+
     </div>
 </div>

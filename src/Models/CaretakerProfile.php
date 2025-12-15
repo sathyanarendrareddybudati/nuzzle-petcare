@@ -34,7 +34,7 @@ class CaretakerProfile extends Model
 
     public function findAllWithFilters(array $filters)
     {
-        $sql = "SELECT cp.*, u.username FROM {$this->table} cp JOIN users u ON cp.user_id = u.id WHERE 1=1";
+        $sql = "SELECT cp.*, u.name FROM {$this->table} cp JOIN users u ON cp.user_id = u.id WHERE 1=1";
         $params = [];
 
         if (!empty($filters['location'])) {

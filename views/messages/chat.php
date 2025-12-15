@@ -1,5 +1,3 @@
-<?php require __DIR__ . '/../layouts/main.php'; ?>
-
 <div class="container py-5">
     <div class="row">
         <div class="col-md-12">
@@ -10,7 +8,11 @@
                 </div>
                 <div class="card-body" style="height: 400px; overflow-y: auto;">
                     <?php foreach ($messages as $message): ?>
-                        <div class="d-flex justify-content-<?= ($message['sender_user_id'] == $_SESSION['user_id']) ? 'end' : 'start' ?> mb-3">
+                        <?php
+                        $isMine = ($message['sender_user_id'] == $_SESSION['user']['id']);
+                        $justify = $isMine ? 'end' : 'start';
+                        ?>
+                        <div class="d-flex justify-content-<?= $justify ?> mb-3">
                             <div class="card" style="width: 70%;">
                                 <div class="card-body">
                                     <p class="card-text"><?= e($message['body_content']) ?></p>
@@ -21,6 +23,7 @@
                             </div>
                         </div>
                     <?php endforeach; ?>
+
                 </div>
                 <div class="card-footer">
                     <form action="/messages/send" method="post">

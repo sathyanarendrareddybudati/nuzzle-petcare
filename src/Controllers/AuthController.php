@@ -88,7 +88,7 @@ class AuthController extends Controller
         ]);
 
         if ($userId) {
-            $user = $userModel->getById($userId);
+            $user = $userModel->findById($userId);
             Session::set('user', [
                 'id' => $user['id'],
                 'name' => $user['name'],
