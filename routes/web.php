@@ -48,10 +48,10 @@ $router->get('/forgot-password', [AuthController::class, 'showForgotPasswordForm
 $router->post('/forgot-password', [AuthController::class, 'handleForgotPasswordRequest']);
 
 // Admin Routes
-$router->get('/admin', [AdminController::class, 'index']);
-$router->get('/admin/dashboard', [AdminController::class, 'index']);
-$router->get('/admin/users', [AdminController::class, 'users']);
-$router->get('/admin/ads', [AdminController::class, 'ads']);
+$router->get('/admin', [AdminController::class, 'index'])->middleware('AdminMiddleware');
+$router->get('/admin/dashboard', [AdminController::class, 'index'])->middleware('AdminMiddleware');
+$router->get('/admin/users', [AdminController::class, 'users'])->middleware('AdminMiddleware');
+$router->get('/admin/ads', [AdminController::class, 'ads'])->middleware('AdminMiddleware');
 
 // Dashboard Route
 $router->get('/dashboard', [DashboardController::class, 'index']);

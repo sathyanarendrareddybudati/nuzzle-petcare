@@ -3,44 +3,63 @@ namespace App\Core;
 
 class Router
 {
-    private array $routes = [
-        'GET' => [],
-        'POST' => [],
-        'PUT' => [],
-        'DELETE' => [],
-    ];
+    private array $routes = [];
     private $fallback;
+    private array $middleware = [];
 
-    public function get(string $pattern, $handler): void { $this->add('GET', $pattern, $handler); }
-    public function post(string $pattern, $handler): void { $this->add('POST', $pattern, $handler); }
+    public function get(string $pattern, $handler): self
+    {
+        $this->add('GET', $pattern, $handler);
+        return $this;
+    }
 
-    public function fallback(callable $handler): void { $this->fallback = $handler; }
+    public function post(string $pattern, $handler): self
+    {
+        $this->add('POST', $pattern, $handler);
+        return $this;
+    }
+
+    public function middleware(string $middleware): self
+    {
+        $this->routes[count($this->routes) - 1]['middleware'] = $middleware;
+        return $this;
+    }
+
+    public function fallback(callable $handler): void
+    {
+        $this->fallback = $handler;
+    }
 
     public function dispatch(string $method, string $path): void
     {
-        $routes = $this->routes[$method] ?? [];
-        foreach ($routes as [$regex, $vars, $handler]) {
-            if (preg_match($regex, $path, $matches)) {
+        $path = rtrim($path, '/') ?: '/';
+        foreach ($this->routes as $route) {
+            if ($route['method'] === $method && preg_match($route['regex'], $path, $matches)) {
+                if (isset($route['middleware'])) {
+                    $middlewareClass = "App\\Middleware\\" . $route['middleware'];
+                    if (class_exists($middlewareClass)) {
+                        $middleware = new $middlewareClass();
+                        $middleware->handle();
+                    }
+                }
+
                 $params = [];
-                foreach ($vars as $name) {
+                foreach ($route['vars'] as $name) {
                     $params[$name] = $matches[$name] ?? null;
                 }
-                if (is_array($handler) && count($handler) === 2) {
-                    [$class, $action] = $handler;
-                    $instance = new $class();
-                    $instance->$action(...array_values($params));
-                    return;
-                }
-                if (is_callable($handler)) {
-                    call_user_func_array($handler, array_values($params));
-                    return;
-                }
+
+                [$class, $action] = $route['handler'];
+                $instance = new $class();
+                $instance->$action(...array_values($params));
+                return;
             }
         }
+
         if ($this->fallback) {
             call_user_func($this->fallback);
             return;
         }
+
         http_response_code(404);
         echo '404 Not Found';
     }
@@ -48,7 +67,12 @@ class Router
     private function add(string $method, string $pattern, $handler): void
     {
         [$regex, $vars] = $this->compile($pattern);
-        $this->routes[$method][] = [$regex, $vars, $handler];
+        $this->routes[] = [
+            'method' => $method,
+            'regex' => $regex,
+            'vars' => $vars,
+            'handler' => $handler,
+        ];
     }
 
     private function compile(string $pattern): array
