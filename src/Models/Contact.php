@@ -7,7 +7,7 @@ class Contact extends Model
 {
     public function create(array $data): bool
     {
-        $sql = "INSERT INTO contacts (name, email, subject, message) VALUES (:name, :email, :subject, :message)";
+        $sql = "INSERT INTO contact (name, email, subject, message) VALUES (:name, :email, :subject, :message)";
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([

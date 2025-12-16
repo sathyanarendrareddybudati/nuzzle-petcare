@@ -89,6 +89,7 @@ $userRole = $user['role'] ?? null;
                 <li class="nav-item"><a class="nav-link" href="/caretakers">Find a Caretaker</a></li>
                 <li class="nav-item"><a class="nav-link" href="/aboutus">About Us</a></li>
                 <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="/faq">Faqs</a></li>
             </ul>
 
             <ul class="navbar-nav align-items-center">

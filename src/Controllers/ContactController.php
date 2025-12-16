@@ -20,8 +20,13 @@ class ContactController extends Controller
             $subject = $_POST['subject'] ?? '';
             $message = $_POST['message'] ?? '';
 
-            // Basic validation
-            if (empty($name) || empty($email) || empty($subject) || empty($message) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if (
+                empty($name) ||
+                empty($email) ||
+                empty($subject) ||
+                empty($message) ||
+                !filter_var($email, FILTER_VALIDATE_EMAIL)
+            ) {
                 Session::flash('error', 'Please fill in all fields correctly.');
                 $this->redirect('/contact');
                 return;
@@ -29,31 +34,29 @@ class ContactController extends Controller
 
             $contactModel = new Contact();
             $contactModel->create([
-                'name' => $name,
-                'email' => $email,
+                'name'    => $name,
+                'email'   => $email,
                 'subject' => $subject,
                 'message' => $message,
             ]);
 
-            // Send email to admin
-            $to = 'admin@example.com'; // Replace with your admin email
-            $headers = "From: {$name} <{$email}>" . "\r\n";
-            $headers .= "Reply-To: {$email}" . "\r\n";
+            $to = $_ENV['SMTP_USERNAME'];
+            $headers  = "From: {$name} <{$email}>\r\n";
+            $headers .= "Reply-To: {$email}\r\n";
             $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
-            $emailBody = "<h2>New Contact Form Submission</h2>";
+            $emailBody  = "<h2>New Contact Form Submission</h2>";
             $emailBody .= "<p><strong>Name:</strong> {$name}</p>";
-            $emailBody .= "<p><strong>Email:</strong> {$email}</p>
-            $emailBody .= "<p><strong>Subject:</strong> {$subject}</p>
+            $emailBody .= "<p><strong>Email:</strong> {$email}</p>";
+            $emailBody .= "<p><strong>Subject:</strong> {$subject}</p>";
             $emailBody .= "<p><strong>Message:</strong><br>" . nl2br($message) . "</p>";
 
             mail($to, $subject, $emailBody, $headers);
 
             Session::flash('success', 'Thanks for contacting us! We will get back to you soon.');
             $this->redirect('/contact');
-        } else {
-            // Not a POST request
-            $this->redirect('/contact');
         }
+
+        $this->redirect('/contact');
     }
 }
