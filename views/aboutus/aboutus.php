@@ -166,11 +166,11 @@
             <div class="row g-4 justify-content-center">
                 <?php
                 $team = [
-                    ['img' => 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=60', 'name' => 'Ethan Miller', 'role' => 'Founder & CEO'],
-                    ['img' => 'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?auto=format&fit=crop&w=300&q=60', 'name' => 'Jana Brown', 'role' => 'Product Lead'],
-                    ['img' => 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=300&q=60', 'name' => 'Arjun Rao', 'role' => 'Engineering'],
-                    ['img' => 'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?auto=format&fit=crop&w=300&q=60', 'name' => 'Maya Chen', 'role' => 'Community'],
-                    ['img' => 'https://images.unsplash.com/photo-1554151228-14d9def656e4?auto=format&fit=crop&w=300&q=60', 'name' => 'Leo', 'role' => 'Chief Happiness Officer'],
+                    ['img' => 'blank-profile-picture-973460_640.webp', 'name' => 'Satya', 'role' => 'Project Manager'],
+                    ['img' => 'blank-profile-picture-973460_640.webp', 'name' => 'Anshul', 'role' => 'Frontend Development'],
+                    ['img' => 'blank-profile-picture-973460_640.webp', 'name' => 'Nikhil', 'role' => 'Engineering'],
+                    ['img' => 'blank-profile-picture-973460_640.webp', 'name' => 'Tarun', 'role' => 'Support lead'],
+                    ['img' => 'blank-profile-picture-973460_640.webp', 'name' => 'Meghanath', 'role' => 'Support Team'],
                 ];
                 foreach ($team as $m):
                 ?>
