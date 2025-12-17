@@ -1,5 +1,4 @@
 <?php
-
 use App\Core\Session;
 
 Session::start();
@@ -26,7 +25,6 @@ $userRole = $user['role'] ?? null;
             --light-color: #f8f9fc;
             --font-family-sans-serif: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
-
         body {
             font-family: var(--font-family-sans-serif);
             background-color: var(--light-color);
@@ -34,131 +32,111 @@ $userRole = $user['role'] ?? null;
             flex-direction: column;
             min-height: 100vh;
         }
-
         main {
             flex: 1;
         }
-
         .navbar {
             background-color: #fff;
             box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
             font-weight: 600;
         }
-
         .navbar-brand {
             font-weight: 800;
             font-size: 1.5rem;
             color: var(--primary-color) !important;
         }
-
         .navbar .nav-link {
             color: var(--dark-color) !important;
             padding: 0.5rem 1rem;
             transition: color 0.2s;
         }
-
-        .navbar .nav-link:hover,
-        .navbar .nav-link.active {
+        .navbar .nav-link:hover, .navbar .nav-link.active {
             color: var(--primary-color) !important;
         }
-
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
         }
-
         .btn-primary:hover {
             background-color: #264abf;
             border-color: #264abf;
         }
-
         .footer {
             background: #2c3e50;
             color: white;
             padding: 4rem 0 2rem;
             margin-top: auto;
         }
-
         .dropdown-menu {
-            border: none;
-            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.2);
-            border-radius: 0.5rem;
-            padding: 0.5rem 0;
+            border: none; box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.2);
+            border-radius: 0.5rem; padding: 0.5rem 0;
         }
-
-        .dropdown-item {
-            padding: 0.5rem 1.5rem;
-            font-weight: 500;
-            color: var(--dark-color);
-        }
+        .dropdown-item { padding: 0.5rem 1.5rem; font-weight: 500; color: var(--dark-color); }
     </style>
 </head>
-
 <body>
 
-    <nav class="navbar navbar-expand-lg sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="/"><i class="fas fa-paw me-2"></i>Nuzzle</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/pets">Browse Pets</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/caretakers">Find a Caretaker</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/aboutus">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/faq">Faqs</a></li>
-                </ul>
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="fas fa-paw me-2"></i>Nuzzle</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/pets">Browse Pets</a></li>
+                <li class="nav-item"><a class="nav-link" href="/caretakers">Find a Caretaker</a></li>
+                <li class="nav-item"><a class="nav-link" href="/aboutus">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="/faq">Faqs</a></li>
+            </ul>
 
-                <ul class="navbar-nav align-items-center">
-                    <?php if ($user): ?>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="https://i.pravatar.cc/40?u=<?= e($user['id']) ?>" class="rounded-circle me-2" height="30" alt="User" />
-                                <?= e($user['name'] ?? 'Account') ?>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <?php if ($userRole === 'admin'): ?>
-                                    <li><a class="dropdown-item" href="/admin/dashboard">Admin Panel</a></li>
-                                <?php else: ?>
-                                    <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
-                                    <?php if ($userRole === 'pet_owner'): ?>
-                                        <li><a class="dropdown-item" href="/my-pets">My Pets</a></li>
-                                    <?php endif; ?>
-                                    <?php if ($userRole === 'service_provider'): ?>
-                                        <li><a class="dropdown-item" href="/caretaker/profile">My Profile</a></li>
-                                    <?php endif; ?>
-                                    <li><a class="dropdown-item" href="/messages">Messages</a></li>
+            <ul class="navbar-nav align-items-center">
+                <?php if ($user): ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://i.pravatar.cc/40?u=<?= e($user['id']) ?>" class="rounded-circle me-2" height="30" alt="User"/>
+                            <?= e($user['name'] ?? 'Account') ?>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <?php if ($userRole === 'admin'): ?>
+                                <li><a class="dropdown-item" href="/admin/dashboard">Admin Panel</a></li>
+                            <?php else: ?>
+                                <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+                                <?php if ($userRole === 'pet_owner'): ?>
+                                    <li><a class="dropdown-item" href="/my-pets">My Pets</a></li>
                                 <?php endif; ?>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
-                            </ul>
-                        </li>
-                    <?php else: ?>
-                        <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
-                        <li class="nav-item"><a href="/register" class="btn btn-primary">Register</a></li>
-                    <?php endif; ?>
-                </ul>
-            </div>
+                                <?php if ($userRole === 'service_provider'): ?>
+                                    <li><a class="dropdown-item" href="/caretaker/profile">My Profile</a></li>
+                                <?php endif; ?>
+                                <li><a class="dropdown-item" href="/messages">Messages</a></li>
+                            <?php endif; ?>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
+                        </ul>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+                    <li class="nav-item"><a href="/register" class="btn btn-primary">Register</a></li>
+                <?php endif; ?>
+            </ul>
         </div>
-    </nav>
-
-    <div class="container my-4">
-        <?php if ($m = Session::flash('success')): ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert"><?= $m ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
-        <?php endif; ?>
-        <?php if ($m = Session::flash('error')): ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert"><?= $m ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
-        <?php endif; ?>
     </div>
+</nav>
 
-    <main>
-        <?= $content ?? '' ?>
-    </main>
+<div class="container my-4">
+    <?php if ($m = Session::flash('success')): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert"><?= $m ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+    <?php endif; ?>
+    <?php if ($m = Session::flash('error')): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert"><?= $m ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+    <?php endif; ?>
+</div>
+
+<main>
+    <?= $content ?? '' ?>
+</main>
 
     <footer class="footer py-5">
         <div class="container">
@@ -222,7 +200,6 @@ $userRole = $user['role'] ?? null;
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

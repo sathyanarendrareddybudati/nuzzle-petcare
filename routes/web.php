@@ -19,14 +19,14 @@ $router->get('/', [HomeController::class, 'index']);
 
 // Pet Ads
 $router->get('/pets', [PetAdsController::class, 'index']);
-// $router->get('/my-pets/create', [PetAdsController::class, 'create']); // Changed from /pets/create
-// $router->post('/pets', [PetAdsController::class, 'store']);
-// $router->get('/pets/{id}', [PetAdsController::class, 'show']);
-// $router->get('/pets/{id}/edit', [PetAdsController::class, 'edit']);
-// $router->post('/pets/{id}', [PetAdsController::class, 'update']);
-// $router->post('/pets/{id}/delete', [PetAdsController::class, 'destroy']);
+$router->get('/my-pets/create', [PetAdsController::class, 'create']); // Changed from /pets/create
+$router->post('/pets', [PetAdsController::class, 'store']);
+$router->get('/pets/{id}', [PetAdsController::class, 'show']);
+$router->get('/pets/{id}/edit', [PetAdsController::class, 'edit']);
+$router->post('/pets/{id}', [PetAdsController::class, 'update']);
+$router->post('/pets/{id}/delete', [PetAdsController::class, 'destroy']);
 
-// $router->get('/my-pets', [MyPetsController::class, 'index']);
+$router->get('/my-pets', [MyPetsController::class, 'index']);
 
 $router->get('/caretakers', [CaretakerProfilesController::class, 'index']);
 
@@ -52,19 +52,19 @@ $router->get('/forgot-password', [AuthController::class, 'showForgotPasswordForm
 $router->post('/forgot-password', [AuthController::class, 'handleForgotPasswordRequest']);
 
 // Admin Routes
-// $router->get('/admin', [AdminController::class, 'index'])->middleware('AdminMiddleware');
-// $router->get('/admin/dashboard', [AdminController::class, 'index'])->middleware('AdminMiddleware');
-// $router->get('/admin/users', [AdminController::class, 'users'])->middleware('AdminMiddleware');
-// $router->get('/admin/ads', [AdminController::class, 'ads'])->middleware('AdminMiddleware');
+$router->get('/admin', [AdminController::class, 'index'])->middleware('AdminMiddleware');
+$router->get('/admin/dashboard', [AdminController::class, 'index'])->middleware('AdminMiddleware');
+$router->get('/admin/users', [AdminController::class, 'users'])->middleware('AdminMiddleware');
+$router->get('/admin/ads', [AdminController::class, 'ads'])->middleware('AdminMiddleware');
 
 // Dashboard Route
-// $router->get('/dashboard', [DashboardController::class, 'index']);
-// $router->get('/dashboard/caretaker', [DashboardController::class, 'caretaker']);
+$router->get('/dashboard', [DashboardController::class, 'index']);
+$router->get('/dashboard/caretaker', [DashboardController::class, 'caretaker']);
 
 // Messages
-// $router->get('/messages', [MessageController::class, 'index']);
-// $router->get('/messages/chat', [MessageController::class, 'chat']);
-// $router->post('/messages/send', [MessageController::class, 'send']);
+$router->get('/messages', [MessageController::class, 'index']);
+$router->get('/messages/chat', [MessageController::class, 'chat']);
+$router->post('/messages/send', [MessageController::class, 'send']);
 
 // Caretaker Profile
 $router->get('/caretaker/profile', [CaretakerProfileController::class, 'create']);

@@ -28,14 +28,12 @@
 
               <div class="mb-3">
                 <label class="form-label">Register as</label>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="role_id" id="role_pet_owner" value="2" required>
-                  <label class="form-check-label" for="role_pet_owner">Pet Owner</label>
-                </div>
-                <div class="form-check mb-2">
-                  <input class="form-check-input" type="radio" name="role_id" id="role_service_provider" value="3" required>
-                  <label class="form-check-label" for="role_service_provider">Service Provider</label>
-                </div>
+                <?php foreach ($roles as $role): ?>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="role_id" id="role_<?= e($role['name']) ?>" value="<?= e($role['id']) ?>" required>
+                    <label class="form-check-label" for="role_<?= e($role['name']) ?>"><?= e(ucfirst(str_replace('_', ' ', $role['name']))) ?></label>
+                  </div>
+                <?php endforeach; ?>
               </div>
 
               <div class="mb-3">

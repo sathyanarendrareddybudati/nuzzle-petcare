@@ -1,85 +1,71 @@
 <?php
 namespace App\Models;
 
-use App\Core\Database;
+use App\Core\Model;
 use PDO;
-use Exception;
 
-class User
+class User extends Model
 {
-    private PDO $db;
-    private string $table = 'users';
-
-    public function __construct()
+    // Updated to join with roles table
+    public function verifyCredentials(string $email, string $password): ?array
     {
-        $this->db = Database::pdo();
-    }
-
-    public function create(array $data)
-    {
-        $roleId = (int)($data['role_id'] ?? 0);
-        if (!in_array($roleId, [2, 3], true)) {
-            throw new Exception('Invalid role_id provided');
-        }
-
-        $sql = "INSERT INTO {$this->table} (role_id, name, email, password, phone_number, location_id)
-                VALUES (:role_id, :name, :email, :password, :phone_number, :location_id)";
+        $sql = "SELECT u.*, r.name as role_name 
+                FROM users u 
+                LEFT JOIN roles r ON u.role_id = r.id 
+                WHERE u.email = :email";
         $stmt = $this->db->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $hashed = password_hash($data['password'], PASSWORD_BCRYPT);
-
-        $stmt->execute([
-            ':role_id' => $roleId,
-            ':name' => $data['name'],
-            ':email' => $data['email'],
-            ':password' => $hashed,
-            ':phone_number' => $data['phone'] ?? null,
-            ':location_id' => $data['location_id'] ?? 1,
-        ]);
-
-        return (int)$this->db->lastInsertId();
-    }
-
-    public function getByEmail(string $email): ?array
-    {
-        $sql = "SELECT u.*, r.name as role_name
-                FROM {$this->table} u
-                LEFT JOIN roles r ON u.role_id = r.id
-                WHERE u.email = ?
-                LIMIT 1";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$email]);
-        $row = $stmt->fetch();
-        return $row ?: null;
-    }
-
-    public function getById(int $id): ?array
-    {
-        $sql = "SELECT u.*, r.name as role_name
-                FROM {$this->table} u
-                LEFT JOIN roles r ON u.role_id = r.id
-                WHERE u.id = ?
-                LIMIT 1";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$id]);
-        $row = $stmt->fetch();
-        return $row ?: null;
-    }
-
-    public function verifyCredentials(string $email, string $password)
-    {
-        $user = $this->getByEmail($email);
         if ($user && password_verify($password, $user['password'])) {
-            unset($user['password']);
             return $user;
         }
-        return false;
+        return null;
+    }
+
+    // Renamed from getById for consistency
+    public function findById(int $id): ?array
+    {
+        $sql = "SELECT u.*, r.name as role_name
+                FROM users u
+                LEFT JOIN roles r ON u.role_id = r.id
+                WHERE u.id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $user ?: null;
     }
 
     public function emailExists(string $email): bool
     {
-        $stmt = $this->db->prepare("SELECT id FROM {$this->table} WHERE email = ? LIMIT 1");
-        $stmt->execute([$email]);
-        return (bool)$stmt->fetchColumn();
+        $stmt = $this->db->prepare("SELECT id FROM users WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetch() !== false;
+    }
+
+    public function create(array $data): ?int
+    {
+        $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+
+        $sql = "INSERT INTO users (name, email, password, role_id) VALUES (:name, :email, :password, :role_id)";
+        $stmt = $this->db->prepare($sql);
+        $success = $stmt->execute([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => $hashedPassword,
+            'role_id' => $data['role_id'],
+        ]);
+
+        return $success ? (int)$this->db->lastInsertId() : null;
+    }
+
+    public function getAllUsersWithRoles(): array
+    {
+        $sql = "SELECT u.id, u.name, u.email, r.name as role_name
+                FROM users u
+                LEFT JOIN roles r ON u.role_id = r.id
+                ORDER BY u.id ASC";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
