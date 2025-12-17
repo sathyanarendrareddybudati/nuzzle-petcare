@@ -19,14 +19,17 @@ $router->get('/', [HomeController::class, 'index']);
 
 // Pet Ads
 $router->get('/pets', [PetAdsController::class, 'index']);
-$router->get('/my-pets/create', [PetAdsController::class, 'create']); // Changed from /pets/create
+$router->get('/pets/create', [PetAdsController::class, 'create']);
 $router->post('/pets', [PetAdsController::class, 'store']);
 $router->get('/pets/{id}', [PetAdsController::class, 'show']);
 $router->get('/pets/{id}/edit', [PetAdsController::class, 'edit']);
 $router->post('/pets/{id}', [PetAdsController::class, 'update']);
 $router->post('/pets/{id}/delete', [PetAdsController::class, 'destroy']);
 
+// My Pets (Pet Profile Management)
 $router->get('/my-pets', [MyPetsController::class, 'index']);
+$router->get('/my-pets/create', [MyPetsController::class, 'create']);
+$router->post('/my-pets', [MyPetsController::class, 'store']);
 
 $router->get('/caretakers', [CaretakerProfilesController::class, 'index']);
 
