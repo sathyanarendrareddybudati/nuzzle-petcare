@@ -51,3 +51,7 @@ node_modules/
 uploads/
 storage/
 public/uploads/
+nuzzle-petcare.json
+# Secrets
+*.json
+.env
