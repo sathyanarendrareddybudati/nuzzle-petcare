@@ -24,7 +24,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Update Ad</button>
-                <a href="/my-ads" class="btn btn-secondary">Cancel</a>
+                <a href="/my-pets" class="btn btn-secondary">Cancel</a>
             </form>
         </div>
     </div>

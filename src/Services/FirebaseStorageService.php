@@ -2,30 +2,27 @@
 namespace App\Services;
 
 use Kreait\Firebase\Factory;
-use Kreait\Firebase\ServiceAccount;
 
 class FirebaseStorageService
 {
     private $storage;
-    private $defaultBucket;
+    private $bucketName;
 
     public function __construct()
     {
-        // Path to your Firebase service account JSON file.
-        // It's recommended to store this path in your .env file.
         $serviceAccountPath = $_ENV['FIREBASE_CREDENTIALS'] ?? __DIR__ . '/../../config/firebase_credentials.json';
 
         if (!file_exists($serviceAccountPath)) {
             throw new \Exception("Firebase credentials file not found at: {$serviceAccountPath}");
         }
 
-        $serviceAccount = ServiceAccount::fromValue($serviceAccountPath);
-        $firebase = (new Factory)
-            ->withServiceAccount($serviceAccount)
-            ->create();
+        $this->bucketName = $_ENV['FIREBASE_STORAGE_BUCKET'] ?? null;
+        if (!$this->bucketName) {
+            throw new \Exception("FIREBASE_STORAGE_BUCKET environment variable is not set. Please add it to your configuration.");
+        }
 
-        $this->storage = $firebase->getStorage();
-        $this->defaultBucket = $firebase->getProject_id() . '.appspot.com';
+        $factory = (new Factory)->withServiceAccount($serviceAccountPath);
+        $this->storage = $factory->createStorage();
     }
 
     /**
@@ -37,7 +34,7 @@ class FirebaseStorageService
      */
     public function uploadImage(string $tmpFilePath, string $originalFileName): string
     {
-        $bucket = $this->storage->getBucket($this->defaultBucket);
+        $bucket = $this->storage->getBucket($this->bucketName);
 
         // Create a unique name for the file to avoid conflicts
         $sanitizedFileName = preg_replace("/[^a-zA-Z0-9.\-_]/", "", $originalFileName);
@@ -50,7 +47,26 @@ class FirebaseStorageService
             'predefinedAcl' => 'publicRead' // Make the file publicly accessible
         ]);
 
-        // Return the public URL
         return $object->info()['mediaLink'];
+    }
+
+    /**
+     * Deletes a file from Firebase Storage using its public URL.
+     *
+     * @param string $url The public URL of the file to delete.
+     */
+    public function deleteFileByUrl(string $url): void
+    {
+        $bucket = $this->storage->getBucket($this->bucketName);
+
+        // Extract the object path from the URL.
+        if (preg_match('/\/o\/(.*?)\?alt=media/', $url, $matches)) {
+            $objectPath = urldecode($matches[1]);
+            $object = $bucket->object($objectPath);
+
+            if ($object->exists()) {
+                $object->delete();
+            }
+        }
     }
 }

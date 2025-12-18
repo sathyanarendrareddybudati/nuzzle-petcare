@@ -70,27 +70,15 @@ class MyPetsController extends Controller
             return;
         }
 
+        // This is the block with the corrected method call.
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $file = $_FILES['image'];
-            $uploadDir = 'uploads/pets/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
-            }
-            $fileName = uniqid() . '-' . basename($file['name']);
-            $filePath = $uploadDir . $fileName;
-
-            if (move_uploaded_file($file['tmp_name'], $filePath)) {
-                $storageService = new FirebaseStorageService();
-                try {
-                    $data['image_url'] = $storageService->uploadFile($filePath, "pet_images/{$fileName}");
-                    unlink($filePath); 
-                } catch (\Exception $e) {
-                    Session::flash('error', 'Failed to upload image to cloud storage: ' . $e->getMessage());
-                    $this->redirect('/my-pets/create');
-                    return;
-                }
-            } else {
-                Session::flash('error', 'Failed to move uploaded file.');
+            $storageService = new FirebaseStorageService();
+            try {
+                // Corrected method call: uploadImage()
+                $data['image_url'] = $storageService->uploadImage($file['tmp_name'], $file['name']);
+            } catch (\Exception $e) {
+                Session::flash('error', 'Failed to upload image to cloud storage: ' . $e->getMessage());
                 $this->redirect('/my-pets/create');
                 return;
             }
@@ -172,14 +160,40 @@ class MyPetsController extends Controller
             return;
         }
 
+        $newImageUrl = null;
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            // ... (image upload logic as in store method)
+            $file = $_FILES['image'];
+            $storageService = new FirebaseStorageService();
+            try {
+                $newImageUrl = $storageService->uploadImage($file['tmp_name'], $file['name']);
+                $data['image_url'] = $newImageUrl;
+            } catch (\Exception $e) {
+                Session::flash('error', 'Failed to upload new image: ' . $e->getMessage());
+                $this->redirect("/my-pets/{$id}/edit");
+                return;
+            }
         }
 
         if ($petModel->update((int)$id, $data)) {
+            if ($newImageUrl && $pet['image_url']) {
+                try {
+                    $storageService = new FirebaseStorageService();
+                    $storageService->deleteFileByUrl($pet['image_url']);
+                } catch (\Exception $e) {
+                    error_log('Failed to delete old Firebase Storage file: ' . $pet['image_url']);
+                }
+            }
             Session::flash('success', 'Pet updated successfully!');
             $this->redirect('/my-pets');
         } else {
+            if ($newImageUrl) {
+                try {
+                    $storageService = new FirebaseStorageService();
+                    $storageService->deleteFileByUrl($newImageUrl);
+                } catch (\Exception $e) {
+                    error_log('Failed to delete orphaned new Firebase Storage file: ' . $newImageUrl);
+                }
+            }
             Session::flash('error', 'Failed to update pet.');
             $this->redirect("/my-pets/{$id}/edit");
         }
@@ -202,7 +216,6 @@ class MyPetsController extends Controller
             return;
         }
 
-        // Delete associated image from Firebase Storage
         if ($pet['image_url']) {
             try {
                 $storageService = new FirebaseStorageService();

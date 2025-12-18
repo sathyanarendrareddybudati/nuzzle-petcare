@@ -113,7 +113,7 @@ class PetAdsController extends Controller
         $ad = $petAdModel->find($id);
 
         if (!$ad || $ad['user_id'] !== Session::get('user')['id']) {
-            $this->redirect('/my-ads');
+            $this->redirect('/my-pets');
             return;
         }
 
@@ -130,7 +130,7 @@ class PetAdsController extends Controller
         $ad = $petAdModel->find($id);
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !$ad || $ad['user_id'] !== Session::get('user')['id']) {
-            $this->redirect('/my-ads');
+            $this->redirect('/my-pets');
             return;
         }
 
@@ -141,7 +141,7 @@ class PetAdsController extends Controller
         ];
 
         if ($petAdModel->update($id, $data)) {
-            $this->redirect('/my-ads');
+            $this->redirect('/my-pets');
         } else {
             $this->redirect("/pets/{$id}/edit");
         }
@@ -157,6 +157,6 @@ class PetAdsController extends Controller
             $petAdModel->delete($id);
         }
 
-        $this->redirect('/my-ads');
+        $this->redirect('/my-pets');
     }
 }
