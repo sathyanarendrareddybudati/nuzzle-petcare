@@ -74,8 +74,8 @@
                 <p class="text-muted small">Member since 2023</p>
                 <hr>
                 <div class="d-grid">
-                    <a href="mailto:<?= e($ad['user_email']) ?>" class="btn btn-primary btn-lg">
-                        <i class="fas fa-envelope me-2"></i> Contact Poster
+                    <a href="/bookings/create/<?= (int)$ad['id'] ?>" class="btn btn-primary btn-lg">
+                        <i class="fas fa-calendar-check me-2"></i> Book Now
                     </a>
                 </div>
             </div>

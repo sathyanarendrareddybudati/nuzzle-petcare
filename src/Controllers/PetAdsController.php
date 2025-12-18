@@ -17,15 +17,24 @@ class PetAdsController extends Controller
             'gender' => $_GET['gender'] ?? '',
             'q' => $_GET['q'] ?? '',
             'sort' => $_GET['sort'] ?? 'newest',
+            'service_type' => $_GET['service_type'] ?? '',
+            'location' => $_GET['location'] ?? '',
         ];
 
         $petAdModel = new PetAd();
+        $locationModel = new Location();
+        $serviceModel = new Service();
+
         $pets = $petAdModel->findAllWithFilters($filters);
+        $locations = $locationModel->all();
+        $services = $serviceModel->getAllServices();
 
         $this->render('pet-ads/index', [
             'pets' => $pets,
-            'pageTitle' => 'Browse Pets',
+            'pageTitle' => 'Browse Pet Service Ads',
             'filters' => $filters,
+            'locations' => $locations,
+            'services' => $services,
         ]);
     }
 
