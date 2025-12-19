@@ -55,6 +55,16 @@ class PetAd extends Model
             $params['gender'] = $filters['gender'];
         }
 
+        if (!empty($filters['service'])) {
+            $sql .= " AND s.id = :service";
+            $params['service'] = $filters['service'];
+        }
+
+        if (!empty($filters['location'])) {
+            $sql .= " AND l.id = :location";
+            $params['location'] = $filters['location'];
+        }
+
         $sort = $filters['sort'] ?? 'newest';
         $sql .= match ($sort) {
             'price_asc' => " ORDER BY pa.price ASC",
@@ -127,7 +137,7 @@ class PetAd extends Model
                     price = :price,
                     status = :status,
                     start_date = :start_date,
-                    end_date = :end_date,
+                    end_date =.end_date,
                     location_id = :location_id,
                     ad_type = :ad_type
                 WHERE id = :id";

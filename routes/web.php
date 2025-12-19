@@ -12,6 +12,7 @@ use App\Controllers\CaretakerProfilesController;
 use App\Controllers\MessageController;
 use App\Controllers\MyPetsController;
 use App\Controllers\FaqController;
+use App\Controllers\BookingsController;
 
 /** @var \App\Core\Router $router */
 
@@ -33,6 +34,14 @@ $router->post('/my-pets', [MyPetsController::class, 'store']);
 $router->get('/my-pets/{id}/edit', [MyPetsController::class, 'edit']);
 $router->post('/my-pets/{id}', [MyPetsController::class, 'update']);
 $router->post('/my-pets/{id}/delete', [MyPetsController::class, 'destroy']);
+
+// Bookings
+$router->get('/bookings', [BookingsController::class, 'index']);
+$router->get('/bookings/create/{id}', [BookingsController::class, 'create']);
+$router->get('/bookings/manage/{id}', [BookingsController::class, 'manage']);
+$router->post('/bookings/update/{id}', [BookingsController::class, 'update']);
+$router->post('/bookings/rate/{id}', [BookingsController::class, 'rate']);
+
 
 $router->get('/caretakers', [CaretakerProfilesController::class, 'index']);
 

@@ -60,13 +60,15 @@ class Booking
 
     public function create(array $data): int
     {
-        $sql = "INSERT INTO {$this->table} (pet_ad_id, provider_id, status, notes)
-                VALUES (:pet_ad_id, :provider_id, :status, :notes)";
+        $sql = "INSERT INTO {$this->table} (pet_ad_id, provider_id, status, start_date, end_date, notes)
+                VALUES (:pet_ad_id, :provider_id, :status, :start_date, :end_date, :notes)";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             ':pet_ad_id' => $data['pet_ad_id'],
             ':provider_id' => $data['provider_id'],
             ':status' => $data['status'] ?? 'pending',
+            ':start_date' => $data['start_date'] ?? null,
+            ':end_date' => $data['end_date'] ?? null,
             ':notes' => $data['notes'] ?? null,
         ]);
         return (int)$this->db->lastInsertId();

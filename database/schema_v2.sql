@@ -139,6 +139,8 @@ CREATE TABLE `bookings` (
     `pet_ad_id` INT NOT NULL,
     `provider_id` INT NOT NULL,
     `status` VARCHAR(50) NOT NULL DEFAULT 'pending',
+    `start_date` TIMESTAMP NULL,
+    `end_date` TIMESTAMP NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `rating` INT CHECK (`rating` >= 1 AND `rating` <= 5),
     `notes` TEXT,

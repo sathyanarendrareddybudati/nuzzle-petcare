@@ -50,6 +50,9 @@ class BookingsController extends Controller
             'pet_ad_id' => $adId,
             'provider_id' => Session::get('user')['id'],
             'status' => 'pending',
+            'start_date' => $ad['start_date'],
+            'end_date' => $ad['end_date'],
+            'notes' => 'Booking request for ad #' . $adId,
         ]);
 
         $this->redirect('/bookings');
