@@ -106,7 +106,44 @@ class BookingsController extends Controller
         }
 
         $bookingModel = new Booking();
-        $bookingModel->updateStatus($bookingId, $status);
+        $booking = $bookingModel->getBookingDetailsById($bookingId);
+
+        if (!$booking) {
+            $this->error(404, 'Booking not found');
+            return;
+        }
+
+        $userId = Session::get('user')['id'];
+        $isServiceProvider = ($userId === (int)$booking['provider_id']);
+        $isServiceRequestor = ($userId === (int)$booking['ad_owner_id']);
+
+        $allowed = false;
+
+        // Authorization logic
+        if ($isServiceRequestor) {
+            if ($status === 'confirmed' && $booking['status'] === 'pending') {
+                $allowed = true;
+            }
+            if ($status === 'completed' && $booking['status'] === 'confirmed') {
+                $allowed = true;
+            }
+            if ($status === 'cancelled' && in_array($booking['status'], ['pending', 'confirmed'])) {
+                $allowed = true;
+            }
+        }
+
+        if ($isServiceProvider) {
+            if ($status === 'cancelled' && in_array($booking['status'], ['pending', 'confirmed'])) {
+                $allowed = true;
+            }
+        }
+
+        if ($allowed) {
+            $bookingModel->updateStatus($bookingId, $status);
+        } else {
+            Session::set('flash_message', 'You are not authorized to perform this action.');
+        }
+
 
         $this->redirect("/bookings/manage/{$bookingId}");
     }

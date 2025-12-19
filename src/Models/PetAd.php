@@ -41,8 +41,12 @@ class PetAd extends Model
         $params = [];
 
         if (!empty($filters['q'])) {
-            $sql .= " AND (pa.title LIKE :q OR pa.description LIKE :q OR l.name LIKE :q OR p.name LIKE :q OR p.breed LIKE :q)";
-            $params['q'] = '%' . $filters['q'] . '%';
+            $sql .= " AND (pa.title LIKE :q1 OR pa.description LIKE :q2 OR l.name LIKE :q3 OR p.name LIKE :q4 OR p.breed LIKE :q5)";
+            $params[':q1'] = '%' . $filters['q'] . '%';
+            $params[':q2'] = '%' . $filters['q'] . '%';
+            $params[':q3'] = '%' . $filters['q'] . '%';
+            $params[':q4'] = '%' . $filters['q'] . '%';
+            $params[':q5'] = '%' . $filters['q'] . '%';
         }
 
         if (!empty($filters['species'])) {

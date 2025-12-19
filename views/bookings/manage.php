@@ -46,18 +46,21 @@
 
                         <div class="mt-4">
                             <form method="POST" action="/bookings/update/<?= (int)$booking['id'] ?>">
-                                <!-- Service Provider Actions -->
-                                <?php if ($isServiceProvider): ?>
+                                <!-- Service Requestor Actions -->
+                                <?php if ($isServiceRequestor): ?>
                                     <?php if ($booking['status'] === 'pending'): ?>
                                         <button type="submit" name="status" value="confirmed" class="btn btn-success btn-lg mx-1">Confirm Booking</button>
-                                        <button type="submit" name="status" value="cancelled" class="btn btn-danger btn-lg mx-1">Decline Booking</button>
-                                    <?php elseif ($booking['status'] === 'confirmed'): ?>
+                                    <?php endif; ?>
+                                    <?php if ($booking['status'] === 'confirmed'): ?>
                                         <button type="submit" name="status" value="completed" class="btn btn-primary btn-lg mx-1">Mark as Completed</button>
+                                    <?php endif; ?>
+                                    <?php if (in_array($booking['status'], ['pending', 'confirmed'])): ?>
+                                        <button type="submit" name="status" value="cancelled" class="btn btn-danger btn-lg mx-1">Cancel Booking</button>
                                     <?php endif; ?>
                                 <?php endif; ?>
 
-                                <!-- Service Requestor Actions -->
-                                <?php if ($isServiceRequestor && in_array($booking['status'], ['pending', 'confirmed'])): ?>
+                                <!-- Service Provider Actions -->
+                                <?php if ($isServiceProvider && in_array($booking['status'], ['pending', 'confirmed'])): ?>
                                     <button type="submit" name="status" value="cancelled" class="btn btn-secondary btn-lg mx-1">Cancel Booking</button>
                                 <?php endif; ?>
 
