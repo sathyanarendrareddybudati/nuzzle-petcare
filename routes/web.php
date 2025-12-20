@@ -74,6 +74,7 @@ $router->get('/admin/ads', [AdminController::class, 'ads'])->middleware('AdminMi
 $router->get('/admin/users/edit/{id}', [AdminController::class, 'editUser'])->middleware('AdminMiddleware');
 $router->post('/admin/users/update/{id}', [AdminController::class, 'updateUser'])->middleware('AdminMiddleware');
 $router->post('/admin/users/delete/{id}', [AdminController::class, 'deleteUser'])->middleware('AdminMiddleware');
+$router->get('/admin/content', [AdminController::class, 'content'])->middleware('AdminMiddleware');
 
 // Dashboard Route
 $router->get('/dashboard', [DashboardController::class, 'index']);

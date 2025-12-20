@@ -33,6 +33,7 @@
                             <select class="form-select" id="role" name="role" required>
                                 <option value="user" <?= ($user['role'] === 'user') ? 'selected' : '' ?>>User</option>
                                 <option value="admin" <?= ($user['role'] === 'admin') ? 'selected' : '' ?>>Admin</option>
+                                <option value="caretaker" <?= ($user['role'] === 'caretaker') ? 'selected' : '' ?>>Caretaker</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Update User</button>

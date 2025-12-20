@@ -9,7 +9,7 @@ class User extends Model
     // Updated to join with roles table
     public function verifyCredentials(string $email, string $password): ?array
     {
-        $sql = "SELECT u.*, r.name as role_name 
+        $sql = "SELECT u.*, r.name as role 
                 FROM users u 
                 LEFT JOIN roles r ON u.role_id = r.id 
                 WHERE u.email = :email";
@@ -23,10 +23,9 @@ class User extends Model
         return null;
     }
 
-    // Renamed from getById for consistency
-    public function findById(int $id): ?array
+    public function find(int $id): ?array
     {
-        $sql = "SELECT u.*, r.name as role_name
+        $sql = "SELECT u.*, r.name as role
                 FROM users u
                 LEFT JOIN roles r ON u.role_id = r.id
                 WHERE u.id = :id";
@@ -34,6 +33,12 @@ class User extends Model
         $stmt->execute(['id' => $id]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         return $user ?: null;
+    }
+
+    // Renamed from getById for consistency
+    public function findById(int $id): ?array
+    {
+        return $this->find($id);
     }
 
     public function emailExists(string $email): bool
@@ -61,11 +66,44 @@ class User extends Model
 
     public function getAllUsersWithRoles(): array
     {
-        $sql = "SELECT u.id, u.name, u.email, r.name as role_name
+        $sql = "SELECT u.id, u.name, u.email, r.name as role, u.created_at
                 FROM users u
                 LEFT JOIN roles r ON u.role_id = r.id
                 ORDER BY u.id ASC";
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function update(int $id, array $data): bool
+    {
+        $roleId = null;
+        if (!empty($data['role'])) {
+            $stmt = $this->db->prepare("SELECT id FROM roles WHERE name = :name");
+            $stmt->execute(['name' => $data['role']]);
+            $roleId = $stmt->fetchColumn();
+        }
+
+        $sql = "UPDATE users SET name = :name, email = :email";
+        $params = [
+            ':id' => $id,
+            ':name' => $data['name'],
+            ':email' => $data['email'],
+        ];
+
+        if ($roleId) {
+            $sql .= ", role_id = :role_id";
+            $params[':role_id'] = $roleId;
+        }
+
+        $sql .= " WHERE id = :id";
+
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($params);
+    }
+
+    public function delete(int $id): bool
+    {
+        $stmt = $this->db->prepare('DELETE FROM users WHERE id = ?');
+        return $stmt->execute([$id]);
     }
 }

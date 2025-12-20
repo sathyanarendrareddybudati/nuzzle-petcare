@@ -12,4 +12,7 @@ $current_page = $_SERVER['REQUEST_URI'];
     <a href="/admin/ads" class="list-group-item list-group-item-action <?= (strpos($current_page, '/admin/ads') !== false) ? 'active' : '' ?>">
         <i class="fas fa-ad me-2"></i> Manage Pet Ads
     </a>
+    <a href="/admin/content" class="list-group-item list-group-item-action <?= (strpos($current_page, '/admin/content') !== false) ? 'active' : '' ?>">
+        <i class="fas fa-file-alt me-2"></i> Manage Content
+    </a>
 </div>

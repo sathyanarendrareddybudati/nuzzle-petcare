@@ -79,4 +79,9 @@ class AdminController extends Controller
         $userModel->delete($userId);
         $this->redirect('/admin/users');
     }
+
+    public function content(): void
+    {
+        $this->render('admin/content', ['pageTitle' => 'Manage Content']);
+    }
 }
