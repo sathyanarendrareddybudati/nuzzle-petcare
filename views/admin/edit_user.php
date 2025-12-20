@@ -31,9 +31,9 @@
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>
                             <select class="form-select" id="role" name="role" required>
-                                <option value="user" <?= ($user['role'] === 'user') ? 'selected' : '' ?>>User</option>
+                                <option value="pet_owner" <?= ($user['role'] === 'pet_owner') ? 'selected' : '' ?>>Pet Owner</option>
                                 <option value="admin" <?= ($user['role'] === 'admin') ? 'selected' : '' ?>>Admin</option>
-                                <option value="caretaker" <?= ($user['role'] === 'caretaker') ? 'selected' : '' ?>>Caretaker</option>
+                                <option value="service_provider" <?= ($user['role'] === 'service_provider') ? 'selected' : '' ?>>Service Provider</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Update User</button>
