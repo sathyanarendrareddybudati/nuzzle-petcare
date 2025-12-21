@@ -5,7 +5,7 @@
     </div>
 
     <div class="card p-4 p-md-5 shadow-sm">
-        <form action="/my-ads/store" method="POST">
+        <form action="/my-pets/store" method="POST">
             <div class="mb-4">
                 <label for="title" class="form-label fs-5">Ad Title</label>
                 <input type="text" class="form-control form-control-lg" id="title" name="title" required placeholder="e.g., 'Dog Sitter Needed for Weekend'">

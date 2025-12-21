@@ -29,11 +29,14 @@ class AuthController extends Controller
         $user = $userModel->verifyCredentials($email, $password);
 
         if ($user) {
+            $roleModel = new Role();
+            $roleName = $roleModel->getRoleNameById($user['role_id']);
+
             Session::set('user', [
                 'id' => $user['id'],
                 'name' => $user['name'],
                 'email' => $user['email'],
-                'role' => $user['role_name']
+                'role' => $roleName
             ]);
 
             Session::flash('success', 'Welcome back, ' . e($user['name']) . '!');
@@ -63,11 +66,15 @@ class AuthController extends Controller
         if (empty($name)) $errors[] = 'Name is required.';
         if (empty($email)) $errors[] = 'A valid email is required.';
         if (strlen($password) < 8) $errors[] = 'Password must be at least 8 characters long.';
-
+        
         $roleModel = new Role();
         $roles = $roleModel->getAllRoles();
         $role_ids = array_column($roles, 'id');
-        if (!in_array($role_id, $role_ids)) $errors[] = 'Please select a valid role.';
+
+        if (!in_array($role_id, $role_ids)) {
+            $errors[] = 'Invalid user role.';
+        }
+
 
         $userModel = new User();
         if ($userModel->emailExists($email)) {
@@ -89,11 +96,12 @@ class AuthController extends Controller
 
         if ($userId) {
             $user = $userModel->findById($userId);
+            $roleName = $roleModel->getRoleNameById($user['role_id']);
             Session::set('user', [
                 'id' => $user['id'],
                 'name' => $user['name'],
                 'email' => $user['email'],
-                'role' => $user['role_name']
+                'role' => $roleName
             ]);
 
             Session::flash('success', 'Account created successfully! Welcome!');

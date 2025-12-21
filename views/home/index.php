@@ -141,33 +141,34 @@
 
         <!-- Search Bar -->
         <div class="search-bar-wrapper">
-             <form action="/pets" method="GET">
+            <form action="/pets" method="GET">
                 <div class="row g-3 align-items-center">
-                    <div class="col-lg-4">
+                    <div class="col-lg-5">
                         <div class="input-group">
-                            <span class="input-group-text bg-transparent border-0"><i class="fas fa-map-marker-alt text-muted"></i></span>
-                            <input type="text" name="location" class="form-control border-0" placeholder="Location">
+                            <span class="input-group-text bg-transparent border-0"><i class="fas fa-search text-muted"></i></span>
+                            <input type="text" name="q" class="form-control border-0" placeholder="Search for pets, breeds, or keywords">
                         </div>
                     </div>
                     <div class="col-lg-3">
-                         <div class="input-group">
-                            <span class="input-group-text bg-transparent border-0"><i class="fas fa-calendar-alt text-muted"></i></span>
-                            <input type="text" name="date" class="form-control border-0" placeholder="Date (optional)">
-                        </div>
+                        <select name="location" class="form-select border-0">
+                            <option value="">All Locations</option>
+                            <?php foreach ($locations as $location): ?>
+                                <option value="<?= e($location['id']) ?>"><?= e($location['name']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <select name="service" class="form-select border-0">
-                            <option value="">Select Service Type</option>
-                            <option value="walking">Dog Walking</option>
-                            <option value="sitting">Pet Sitting</option>
-                            <option value="boarding">Boarding</option>
-                            <option value="fostering">Fostering</option>
+                            <option value="">All Services</option>
+                            <?php foreach ($services as $service): ?>
+                                <option value="<?= e($service['id']) ?>"><?= e($service['name']) ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="col-lg-2">
                         <button class="btn btn-primary w-100 btn-lg" type="submit">
                             <i class="fas fa-search me-1"></i> Search
-                        </button>
+                        </button
                     </div>
                 </div>
             </form>
@@ -175,24 +176,28 @@
     </div>
 </section>
 
-<!-- Featured Pets Section -->
+<!-- Featured Ads Section -->
 <section class="featured-pets" id="featured-pets">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="fw-bold">Featured Caretakers & Pets</h2>
-            <p class="text-muted">Meet some of our amazing pets and their caretakers.</p>
+            <h2 class="fw-bold">Featured Pet Ads</h2>
+            <p class="text-muted">Discover opportunities to care for a pet in your area.</p>
         </div>
         <div class="row g-4">
-            <?php if (!empty($pets)):
-                foreach (array_slice($pets, 0, 3) as $pet): ?>
+            <?php if (!empty($ads)):
+                foreach ($ads as $ad): ?>
                     <div class="col-lg-4 col-md-6">
                         <div class="card pet-card h-100">
-                            <img src="<?= e($pet['image_url'] ?? 'https://via.placeholder.com/400x300') ?>" class="card-img-top pet-card-img" alt="<?= e($pet['title'] ?? 'Pet') ?>">
+                            <img src="<?= e($ad['image_url'] ?? 'https://via.placeholder.com/400x300') ?>" 
+                                 class="card-img-top pet-card-img" 
+                                 alt="<?= e($ad['name'] ?? 'Pet') ?>">
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title fw-bold"><?= e($pet['title'] ?? 'Untitled Pet') ?></h5>
-                                <p class="card-text text-muted small mb-2"><i class="fas fa-map-marker-alt me-2"></i><?= e($pet['location'] ?? 'Location unknown') ?></p>
-                                <p class="card-text flex-grow-1"><?= e(substr($pet['description'], 0, 80)) ?>...</p>
-                                <a href="/pets/<?= $pet['id'] ?>" class="btn btn-primary mt-auto">View Profile</a>
+                                <h5 class="card-title fw-bold"><?= e($ad['title'] ?? 'Untitled Ad') ?></h5>
+                                <p class="card-text text-muted small mb-2">
+                                    <i class="fas fa-map-marker-alt me-2"></i><?= e($ad['location_name'] ?? 'Location unknown') ?>
+                                </p>
+                                <p class="card-text flex-grow-1"><?= e(substr($ad['description'], 0, 80)) ?>...</p>
+                                <a href="/pets/<?= $ad['id'] ?>" class="btn btn-primary mt-auto">View Details</a>
                             </div>
                         </div>
                     </div>
@@ -200,12 +205,50 @@
             else:
                 ?>
                 <div class="col">
-                    <p class="text-center text-muted">No featured pets available at the moment.</p>
+                    <p class="text-center text-muted">No featured ads available at the moment.</p>
                 </div>
             <?php endif; ?>
         </div>
         <div class="text-center mt-5">
-            <a href="/pets" class="btn btn-outline-primary btn-lg">Browse All Pets</a>
+            <a href="/pets" class="btn btn-outline-primary btn-lg">Browse All Ads</a>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Caretakers Section -->
+<section class="featured-caretakers bg-light" id="featured-caretakers">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Our Top Caretakers</h2>
+            <p class="text-muted">Meet some of our highly-rated and trusted pet caretakers.</p>
+        </div>
+        <div class="row g-4">
+            <?php if (!empty($caretakers)):
+                foreach ($caretakers as $caretaker): ?>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card pet-card h-100 text-center">
+                             <img src="<?= e($caretaker['photo_url'] ?? 'https://i.pravatar.cc/150?u=' . e($caretaker['user_name'])) ?>" 
+                                 class="card-img-top pet-card-img w-50 h-50 rounded-circle mx-auto mt-4" 
+                                 alt="<?= e($caretaker['user_name']) ?>">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title fw-bold"><?= e($caretaker['user_name']) ?></h5>
+                                <p class="card-text text-muted small mb-2"><?= e($caretaker['title']) ?></p>
+                                <p class="card-text flex-grow-1 small">
+                                    <?php if (!empty($caretaker['bio'])): ?>
+                                        <?= e(substr($caretaker['bio'], 0, 70)) ?>...
+                                    <?php endif; ?>
+                                </p>
+                                <a href="/caretaker/<?= $caretaker['id'] ?>" class="btn btn-outline-primary btn-sm mt-auto">View Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach;
+            else:
+                ?>
+                <div class="col">
+                    <p class="text-center text-muted">No featured caretakers available at the moment.</p>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>

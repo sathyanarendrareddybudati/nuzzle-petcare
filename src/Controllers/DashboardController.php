@@ -19,25 +19,22 @@ class DashboardController extends Controller
         }
 
         $userId = $user['id'];
-        $role = $user['role'];
-        $petAdModel = new PetAd();
+        $role = $user['role'] ?? '';
+        
+        $normalizedRole = strtolower(trim(preg_replace('/[\s_-]+/', '_', $role)));
 
-        switch ($role) {
+        switch ($normalizedRole) {
             case "admin":
                 $this->redirect('/admin');
                 break;
             case "pet_owner":
-                $recentAds = $petAdModel->getRecentAdsByUserId($userId);
-                $this->render('dashboard/owner', [
-                    'pageTitle' => 'Customer Dashboard',
-                    'recentAds' => $recentAds
-                ]);
+                $this->redirect('/my-pets');
                 break;
             case "service_provider":
                 $this->caretaker();
                 break;
             default:
-                Session::flash('error', 'Invalid user role.');
+                Session::flash('error', 'Invalid user role. Detected role: ' . $role);
                 $this->redirect('/');
                 break;
         }
@@ -47,7 +44,10 @@ class DashboardController extends Controller
     {
         Session::start();
         $user = Session::get('user');
-        if (!$user || $user['role'] !== 'service_provider') {
+        $role = $user['role'] ?? '';
+        $normalizedRole = strtolower(trim(preg_replace('/[\s_-]+/', '_', $role)));
+
+        if (!$user || $normalizedRole !== 'service_provider') {
             Session::flash('error', 'You do not have permission to access this page.');
             $this->redirect('/login');
             return;
@@ -55,7 +55,7 @@ class DashboardController extends Controller
 
         $userId = $user['id'];
         $petAdModel = new PetAd();
-        $recentAds = $petAdModel->getRecentAds(); // Or a more specific method for providers
+        $recentAds = $petAdModel->getRecentAds(); 
 
         $profileModel = new CaretakerProfile();
         $profile = $profileModel->getProfileByUserId($userId);

@@ -38,4 +38,11 @@ class Controller
             $this->redirect('/login');
         }
     }
+
+    protected function error(int $code, string $message = ''): void
+    {
+        http_response_code($code);
+        $this->render('errors/' . $code, ['message' => $message]);
+        exit;
+    }
 }

@@ -22,7 +22,10 @@
                             </div>
                             <div>
                                 <a href="/my-pets/<?= $pet['id'] ?>/edit" class="btn btn-outline-secondary btn-sm">Edit</a>
-                                <a href="/my-pets/<?= $pet['id'] ?>/delete" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                                <form action="/my-pets/<?= $pet['id'] ?>/delete" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this pet?');">
+    <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+</form>
+
                             </div>
                         </li>
                     <?php endforeach; ?>
@@ -35,7 +38,7 @@
     <div class="card shadow-sm">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
             <h2 class="h4 mb-0">My Pet Ads</h2>
-            <a href="/my-pets/create" class="btn btn-primary btn-sm">+ Post New Ad</a>
+            <a href="/pets/create" class="btn btn-primary btn-sm">+ Post New Ad</a>
         </div>
         <div class="card-body">
             <?php if (empty($ads)) : ?>

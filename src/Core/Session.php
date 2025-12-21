@@ -55,13 +55,13 @@ class Session
     public static function isAuthenticated(): bool
     {
         self::start();
-        return isset($_SESSION['user_id']);
+        return isset($_SESSION['user']['id']);
     }
 
     public static function getUserRole(): ?string
     {
         self::start();
-        return $_SESSION['user_role'] ?? null;
+        return $_SESSION['user']['role'] ?? null;
     }
 
     public static function isAdmin(): bool

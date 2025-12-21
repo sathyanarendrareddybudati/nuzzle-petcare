@@ -16,6 +16,19 @@
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 1.5rem;
     }
+    .pet-image-container {
+        width: 150px;
+        height: 150px;
+        border-radius: .5rem;
+        overflow: hidden;
+        margin-right: 1.5rem;
+        float: left;
+    }
+    .pet-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 </style>
 
 <div class="container py-5">
@@ -40,6 +53,24 @@
 
                 <hr class="my-4">
 
+                <?php if ($ad['pet_id']): ?>
+                <h5 class="fw-bold mb-3">About the Pet</h5>
+                <div class="d-flex align-items-start mb-4">
+                    <div class="pet-image-container">
+                         <img src="<?= e($ad['image_url'] ?? 'https://via.placeholder.com/150') ?>" 
+                             alt="<?= e($ad['name']) ?>" 
+                             class="pet-image">
+                    </div>
+                    <div>
+                        <h4 class="fw-bold"><?= e($ad['name']) ?></h4>
+                        <p class="mb-1"><strong>Species:</strong> <?= e($ad['species']) ?></p>
+                        <p class="mb-1"><strong>Breed:</strong> <?= e($ad['breed']) ?></p>
+                        <p class="mb-1"><strong>Gender:</strong> <?= e($ad['gender']) ?></p>
+                        <p class="mb-1"><strong>Age:</strong> <?= e($ad['age_years']) ?> years</p>
+                    </div>
+                </div>
+                <?php endif; ?>
+
                 <h5 class="fw-bold mb-3">Service Details</h5>
                 <div class="info-grid mb-4">
                     <div>
@@ -52,7 +83,7 @@
                     </div>
                      <div>
                         <strong class="d-block text-dark"><i class="fas fa-dollar-sign me-2"></i>Compensation</strong>
-                        <span>$<?= e(number_format($ad['cost'], 2)) ?></span>
+                        <span>$<?= e(number_format($ad['price'] ?? 0, 2)) ?></span>
                     </div>
                 </div>
 
@@ -74,8 +105,8 @@
                 <p class="text-muted small">Member since 2023</p>
                 <hr>
                 <div class="d-grid">
-                    <a href="mailto:<?= e($ad['user_email']) ?>" class="btn btn-primary btn-lg">
-                        <i class="fas fa-envelope me-2"></i> Contact Poster
+                    <a href="/bookings/create/<?= (int)$ad['id'] ?>" class="btn btn-primary btn-lg">
+                        <i class="fas fa-calendar-check me-2"></i> Book Now
                     </a>
                 </div>
             </div>
