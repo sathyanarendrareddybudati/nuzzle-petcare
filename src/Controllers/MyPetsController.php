@@ -9,13 +9,19 @@ use App\Services\FirebaseStorageService;
 
 class MyPetsController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        // Protect all methods in this controller
+        if (!Session::isAuthenticated() || Session::getUserRole() !== 'pet_owner') {
+            Session::flash('error', 'You must be logged in as a pet owner to access this page.');
+            $this->redirect('/login');
+            exit;
+        }
+    }
+
     public function index(): void
     {
-        if (!Session::get('user')) {
-            $this->redirect('/login');
-            return;
-        }
-
         $userId = Session::get('user')['id'];
         
         $petModel = new Pet();
@@ -33,11 +39,6 @@ class MyPetsController extends Controller
 
     public function create(): void
     {
-        if (!Session::get('user')) {
-            $this->redirect('/login');
-            return;
-        }
-
         $this->render('my-pets/create', [
             'pageTitle' => 'Add a New Pet'
         ]);
@@ -45,9 +46,8 @@ class MyPetsController extends Controller
 
     public function store(): void
     {
-        Session::start();
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !Session::get('user')) {
-            $this->redirect('/login');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/my-pets');
             return;
         }
 
@@ -70,12 +70,10 @@ class MyPetsController extends Controller
             return;
         }
 
-        // This is the block with the corrected method call.
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $file = $_FILES['image'];
             $storageService = new FirebaseStorageService();
             try {
-                // Corrected method call: uploadImage()
                 $data['image_url'] = $storageService->uploadImage($file['tmp_name'], $file['name']);
             } catch (\Exception $e) {
                 Session::flash('error', 'Failed to upload image to cloud storage: ' . $e->getMessage());
@@ -91,7 +89,6 @@ class MyPetsController extends Controller
             Session::flash('success', 'Pet added successfully!');
             $this->redirect('/my-pets');
         } else {
-            Session::flash('error', 'Failed to add pet.');
             if ($data['image_url']) {
                 try {
                     $storageService = new FirebaseStorageService();
@@ -100,18 +97,13 @@ class MyPetsController extends Controller
                     error_log('Failed to delete orphaned Firebase Storage file: ' . $data['image_url']);
                 }
             }
+            Session::flash('error', 'Failed to add pet.');
             $this->redirect('/my-pets/create');
         }
     }
 
     public function edit($id): void
     {
-        Session::start();
-        if (!Session::get('user')) {
-            $this->redirect('/login');
-            return;
-        }
-
         $petModel = new Pet();
         $pet = $petModel->find((int)$id);
 
@@ -129,9 +121,8 @@ class MyPetsController extends Controller
 
     public function update($id): void
     {
-        Session::start();
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !Session::get('user')) {
-            $this->redirect('/login');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/my-pets');
             return;
         }
 
@@ -201,9 +192,8 @@ class MyPetsController extends Controller
 
     public function destroy($id): void
     {
-        Session::start();
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !Session::get('user')) {
-            $this->redirect('/login');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/my-pets');
             return;
         }
 

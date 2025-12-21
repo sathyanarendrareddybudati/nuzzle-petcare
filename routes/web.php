@@ -28,12 +28,13 @@ $router->post('/pets/{id}', [PetAdsController::class, 'update']);
 $router->post('/pets/{id}/delete', [PetAdsController::class, 'destroy']);
 
 // My Pets (Pet Profile Management)
-$router->get('/my-pets', [MyPetsController::class, 'index']);
-$router->get('/my-pets/create', [MyPetsController::class, 'create']);
-$router->post('/my-pets', [MyPetsController::class, 'store']);
-$router->get('/my-pets/{id}/edit', [MyPetsController::class, 'edit']);
-$router->post('/my-pets/{id}', [MyPetsController::class, 'update']);
-$router->post('/my-pets/{id}/delete', [MyPetsController::class, 'destroy']);
+$router->get('/my-pets', [MyPetsController::class, 'index'])->middleware('PetOwnerMiddleware');
+$router->get('/my-pets/create', [MyPetsController::class, 'create'])->middleware('PetOwnerMiddleware');
+$router->post('/my-pets', [MyPetsController::class, 'store'])->middleware('PetOwnerMiddleware');
+$router->get('/my-pets/{id}/edit', [MyPetsController::class, 'edit'])->middleware('PetOwnerMiddleware');
+$router->post('/my-pets/{id}', [MyPetsController::class, 'update'])->middleware('PetOwnerMiddleware');
+$router->post('/my-pets/{id}/delete', [MyPetsController::class, 'destroy'])->middleware('PetOwnerMiddleware');
+
 
 // Bookings
 $router->get('/bookings', [BookingsController::class, 'index']);
@@ -88,7 +89,6 @@ $router->post('/messages/send', [MessageController::class, 'send']);
 // Caretaker Profile
 $router->get('/caretaker/profile', [CaretakerProfileController::class, 'create']);
 $router->post('/caretaker/profile/store', [CaretakerProfileController::class, 'store']);
-
 
 $router->fallback(function () {
     http_response_code(404);
