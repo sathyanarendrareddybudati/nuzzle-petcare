@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Core\Controller;
@@ -7,47 +8,64 @@ use App\Models\User;
 
 class ProfileController extends Controller
 {
-    public function index()
+    public function index(): void
     {
+        Session::start();
+        $user = Session::get('user');
+
+        if (!$user) {
+            Session::flash('error', 'You must be logged in to view your profile.');
+            $this->redirect('/login');
+            return;
+        }
+
         $this->render('profile/index', [
             'pageTitle' => 'My Profile',
+            'user' => $user
         ]);
     }
 
-    public function updatePassword()
+    public function update(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('/profile');
+        Session::start();
+        $userSession = Session::get('user');
+
+        if (!$userSession) {
+            Session::flash('error', 'You must be logged in to update your profile.');
+            $this->redirect('/login');
             return;
         }
 
-        $userId = Session::get('user')['id'];
-        $userModel = new User();
-        $user = $userModel->find($userId);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = trim($_POST['name']);
+            $email = trim($_POST['email']);
 
-        $currentPassword = $_POST['current_password'];
-        $newPassword = $_POST['new_password'];
-        $confirmPassword = $_POST['confirm_password'];
+            if (empty($name) || empty($email)) {
+                Session::flash('error', 'Name and email cannot be empty.');
+                $this->redirect('/profile');
+                return;
+            }
 
-        if (!password_verify($currentPassword, $user['password'])) {
-            Session::flash('error', 'Incorrect current password.');
+            $userModel = new User();
+            $success = $userModel->update($userSession['id'], [
+                'name' => $name,
+                'email' => $email
+            ]);
+
+            if ($success) {
+                // Update session data
+                $userSession['name'] = $name;
+                $userSession['email'] = $email;
+                Session::set('user', $userSession);
+
+                Session::flash('success', 'Profile updated successfully.');
+            } else {
+                Session::flash('error', 'Failed to update profile.');
+            }
+
             $this->redirect('/profile');
-            return;
-        }
-
-        if ($newPassword !== $confirmPassword) {
-            Session::flash('error', 'New password and confirmation do not match.');
-            $this->redirect('/profile');
-            return;
-        }
-
-        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-        if ($userModel->update($userId, ['password' => $hashedPassword])) {
-            Session::flash('success', 'Password updated successfully.');
         } else {
-            Session::flash('error', 'Failed to update password.');
+            $this->redirect('/profile');
         }
-
-        $this->redirect('/profile');
     }
 }

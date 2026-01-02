@@ -71,6 +71,7 @@ $router->post('/forgot-password', [AuthController::class, 'handleForgotPasswordR
 
 // Profile
 $router->get('/profile', [ProfileController::class, 'index'])->middleware('AuthMiddleware');
+$router->post('/profile/update', [ProfileController::class, 'update'])->middleware('AuthMiddleware');
 $router->post('/profile/update-password', [ProfileController::class, 'updatePassword'])->middleware('AuthMiddleware');
 
 

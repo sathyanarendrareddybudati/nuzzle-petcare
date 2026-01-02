@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
     savePetBtn.addEventListener('click', function () {
         const formData = new FormData(addPetForm);
 
-        fetch('/my-pets/create', {
+        fetch('/my-pets/create-from-ad', {
             method: 'POST',
             body: formData
         })

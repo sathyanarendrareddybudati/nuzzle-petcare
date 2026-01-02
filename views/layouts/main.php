@@ -104,11 +104,12 @@ $userRole = $user['role'] ?? null;
                                 <li><a class="dropdown-item" href="/admin/dashboard">Admin Panel</a></li>
                             <?php else: ?>
                                 <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+                                <li><a class="dropdown-item" href="/profile">My Profile</a></li>
                                 <?php if ($userRole === 'pet_owner'): ?>
                                     <li><a class="dropdown-item" href="/my-pets">My Pets</a></li>
                                 <?php endif; ?>
                                 <?php if ($userRole === 'service_provider'): ?>
-                                    <li><a class="dropdown-item" href="/caretaker/profile">My Profile</a></li>
+                                    <li><a class="dropdown-item" href="/caretaker/profile">My Caretaker Profile</a></li>
                                 <?php endif; ?>
                                 <?php if ($userRole === 'pet_owner' || $userRole === 'service_provider'): ?>
                                     <li><a class="dropdown-item" href="/bookings">My Bookings</a></li>
