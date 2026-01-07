@@ -9,8 +9,7 @@ class CaretakerProfileController extends Controller
 {
     public function create(): void
     {
-        Session::start();
-        $userId = $_SESSION['user_id'] ?? null;
+        $userId = Session::get('user')['id'] ?? null;
 
         if (!$userId) {
             $this->redirect('/login');
@@ -28,8 +27,7 @@ class CaretakerProfileController extends Controller
 
     public function store(): void
     {
-        Session::start();
-        $userId = $_SESSION['user_id'] ?? null;
+        $userId = Session::get('user')['id'] ?? null;
 
         if (!$userId) {
             $this->redirect('/login');

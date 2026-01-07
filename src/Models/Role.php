@@ -8,7 +8,15 @@ class Role extends Model
 {
     public function getAllRoles(): array
     {
-        $stmt = $this->db->query("SELECT id, name FROM roles WHERE name != 'admin'");
+        $stmt = $this->db->query("SELECT id, name FROM roles");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getRoleNameById(int $id): ?string
+    {
+        $stmt = $this->db->prepare("SELECT name FROM roles WHERE id = :id");
+        $stmt->execute([':id' => $id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['name'] ?? null;
     }
 }

@@ -17,15 +17,24 @@ class PetAdsController extends Controller
             'gender' => $_GET['gender'] ?? '',
             'q' => $_GET['q'] ?? '',
             'sort' => $_GET['sort'] ?? 'newest',
+            'service_type' => $_GET['service_type'] ?? '',
+            'location' => $_GET['location'] ?? '',
         ];
 
         $petAdModel = new PetAd();
+        $locationModel = new Location();
+        $serviceModel = new Service();
+
         $pets = $petAdModel->findAllWithFilters($filters);
+        $locations = $locationModel->all();
+        $services = $serviceModel->getAllServices();
 
         $this->render('pet-ads/index', [
             'pets' => $pets,
-            'pageTitle' => 'Browse Pets',
+            'pageTitle' => 'Browse Pet Service Ads',
             'filters' => $filters,
+            'locations' => $locations,
+            'services' => $services,
         ]);
     }
 
@@ -113,7 +122,7 @@ class PetAdsController extends Controller
         $ad = $petAdModel->find($id);
 
         if (!$ad || $ad['user_id'] !== Session::get('user')['id']) {
-            $this->redirect('/my-ads');
+            $this->redirect('/my-pets');
             return;
         }
 
@@ -130,7 +139,7 @@ class PetAdsController extends Controller
         $ad = $petAdModel->find($id);
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !$ad || $ad['user_id'] !== Session::get('user')['id']) {
-            $this->redirect('/my-ads');
+            $this->redirect('/my-pets');
             return;
         }
 
@@ -141,7 +150,7 @@ class PetAdsController extends Controller
         ];
 
         if ($petAdModel->update($id, $data)) {
-            $this->redirect('/my-ads');
+            $this->redirect('/my-pets');
         } else {
             $this->redirect("/pets/{$id}/edit");
         }
@@ -157,6 +166,6 @@ class PetAdsController extends Controller
             $petAdModel->delete($id);
         }
 
-        $this->redirect('/my-ads');
+        $this->redirect('/my-pets');
     }
 }

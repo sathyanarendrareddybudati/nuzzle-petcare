@@ -12,6 +12,7 @@ use App\Controllers\CaretakerProfilesController;
 use App\Controllers\MessageController;
 use App\Controllers\MyPetsController;
 use App\Controllers\FaqController;
+use App\Controllers\BookingsController;
 
 /** @var \App\Core\Router $router */
 
@@ -19,14 +20,29 @@ $router->get('/', [HomeController::class, 'index']);
 
 // Pet Ads
 $router->get('/pets', [PetAdsController::class, 'index']);
-$router->get('/my-pets/create', [PetAdsController::class, 'create']); // Changed from /pets/create
+$router->get('/pets/create', [PetAdsController::class, 'create']);
 $router->post('/pets', [PetAdsController::class, 'store']);
 $router->get('/pets/{id}', [PetAdsController::class, 'show']);
 $router->get('/pets/{id}/edit', [PetAdsController::class, 'edit']);
 $router->post('/pets/{id}', [PetAdsController::class, 'update']);
 $router->post('/pets/{id}/delete', [PetAdsController::class, 'destroy']);
 
-$router->get('/my-pets', [MyPetsController::class, 'index']);
+// My Pets (Pet Profile Management)
+$router->get('/my-pets', [MyPetsController::class, 'index'])->middleware('PetOwnerMiddleware');
+$router->get('/my-pets/create', [MyPetsController::class, 'create'])->middleware('PetOwnerMiddleware');
+$router->post('/my-pets', [MyPetsController::class, 'store'])->middleware('PetOwnerMiddleware');
+$router->get('/my-pets/{id}/edit', [MyPetsController::class, 'edit'])->middleware('PetOwnerMiddleware');
+$router->post('/my-pets/{id}', [MyPetsController::class, 'update'])->middleware('PetOwnerMiddleware');
+$router->post('/my-pets/{id}/delete', [MyPetsController::class, 'destroy'])->middleware('PetOwnerMiddleware');
+
+
+// Bookings
+$router->get('/bookings', [BookingsController::class, 'index']);
+$router->get('/bookings/create/{id}', [BookingsController::class, 'create']);
+$router->get('/bookings/manage/{id}', [BookingsController::class, 'manage']);
+$router->post('/bookings/update/{id}', [BookingsController::class, 'update']);
+$router->post('/bookings/rate/{id}', [BookingsController::class, 'rate']);
+
 
 $router->get('/caretakers', [CaretakerProfilesController::class, 'index']);
 
@@ -56,6 +72,10 @@ $router->get('/admin', [AdminController::class, 'index'])->middleware('AdminMidd
 $router->get('/admin/dashboard', [AdminController::class, 'index'])->middleware('AdminMiddleware');
 $router->get('/admin/users', [AdminController::class, 'users'])->middleware('AdminMiddleware');
 $router->get('/admin/ads', [AdminController::class, 'ads'])->middleware('AdminMiddleware');
+$router->get('/admin/users/edit/{id}', [AdminController::class, 'editUser'])->middleware('AdminMiddleware');
+$router->post('/admin/users/update/{id}', [AdminController::class, 'updateUser'])->middleware('AdminMiddleware');
+$router->post('/admin/users/delete/{id}', [AdminController::class, 'deleteUser'])->middleware('AdminMiddleware');
+$router->get('/admin/content', [AdminController::class, 'content'])->middleware('AdminMiddleware');
 
 // Dashboard Route
 $router->get('/dashboard', [DashboardController::class, 'index']);
@@ -69,7 +89,6 @@ $router->post('/messages/send', [MessageController::class, 'send']);
 // Caretaker Profile
 $router->get('/caretaker/profile', [CaretakerProfileController::class, 'create']);
 $router->post('/caretaker/profile/store', [CaretakerProfileController::class, 'store']);
-
 
 $router->fallback(function () {
     http_response_code(404);

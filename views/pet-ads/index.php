@@ -1,21 +1,40 @@
 <?php
-$filters = $filters ?? ['species'=>'','gender'=>'','q'=>'','sort'=>'newest'];
+$filters = $filters ?? ['species'=>'','gender'=>'','q'=>'','sort'=>'newest', 'service_type' => '', 'location' => ''];
+$locations = $locations ?? [];
+$services = $services ?? [];
+
 function sort_url($key) {
     $q = $_GET; $q['sort'] = $key; return '/pets?' . http_build_query($q);
 }
 ?>
 <section class="hero-section text-center mb-4">
     <div class="container">
-        <h1 class="display-5 fw-bold mb-3">Find Your Perfect Pet</h1>
-        <p class="lead mb-4">Browse pets and refine your search</p>
+        <h1 class="display-5 fw-bold mb-3">Find Your Perfect Pet Service</h1>
+        <p class="lead mb-4">Browse pet service ads and refine your search</p>
         <div class="row justify-content-center">
-            <div class="col-lg-10">
+            <div class="col-lg-12">
                 <form class="row g-3" method="GET" action="/pets">
-                    <div class="col-md-4">
-                        <input type="text" name="q" class="form-control" placeholder="Search name, breed, location"
+                    <div class="col-md-3">
+                        <input type="text" name="q" class="form-control" placeholder="Keyword (e.g. dog walking)"
                                value="<?= e($filters['q']) ?>">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
+                        <select class="form-select" name="service_type">
+                            <option value="" <?= $filters['service_type']===''?'selected':''; ?>>All Services</option>
+                            <?php foreach ($services as $service): ?>
+                                <option value="<?= e($service['id']) ?>" <?= (int)$filters['service_type']===(int)$service['id']?'selected':''; ?>><?= e($service['name']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select" name="location">
+                            <option value="" <?= $filters['location']===''?'selected':''; ?>>All Locations</option>
+                            <?php foreach ($locations as $location): ?>
+                                <option value="<?= e($location['id']) ?>" <?= (int)$filters['location']===(int)$location['id']?'selected':''; ?>><?= e($location['name']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
                         <select class="form-select" name="species">
                             <option value="" <?= $filters['species']===''?'selected':''; ?>>All Species</option>
                             <?php foreach (['Dog','Cat','Bird','Other'] as $sp): ?>
@@ -23,7 +42,7 @@ function sort_url($key) {
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <select class="form-select" name="gender">
                             <option value="" <?= $filters['gender']===''?'selected':''; ?>>Any Gender</option>
                             <?php foreach (['Male','Female','Other'] as $g): ?>
@@ -31,9 +50,9 @@ function sort_url($key) {
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <button type="submit" class="btn btn-primary w-100">
-                            <i class="fas fa-search me-2"></i>Search
+                            <i class="fas fa-search"></i>
                         </button>
                     </div>
                 </form>
@@ -45,7 +64,7 @@ function sort_url($key) {
 <section class="py-2">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0">Available Pets</h2>
+            <h2 class="mb-0">Available Pet Service Ads</h2>
             <div class="dropdown">
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     Sort By: <?= $filters['sort']==='price_asc'?'Price: Low to High':($filters['sort']==='price_desc'?'Price: High to Low':'Newest First') ?>
@@ -102,7 +121,7 @@ function sort_url($key) {
                 <div class="col-12 text-center py-5">
                     <div class="bg-light p-5 rounded">
                         <i class="fas fa-paw fa-3x text-muted mb-4"></i>
-                        <h3>No Pets Found</h3>
+                        <h3>No Ads Found</h3>
                         <p class="text-muted">Try adjusting your filters.</p>
                         <a href="/pets" class="btn btn-primary mt-3"><i class="fas fa-sync me-2"></i>Reset Filters</a>
                     </div>

@@ -26,11 +26,62 @@ class AdminController extends Controller
     public function ads(): void
     {
         $petAdModel = new PetAd();
-        $ads = $petAdModel->findAll(); // You might want to create a more detailed method in your model
+        $ads = $petAdModel->all();
 
         $this->render('admin/ads', [
             'pageTitle' => 'Manage Pet Ads',
             'ads' => $ads
         ]);
+    }
+
+    public function editUser(int $userId): void
+    {
+        $userModel = new User();
+        $user = $userModel->find($userId);
+
+        if (!$user) {
+            $this->error(404, 'User not found');
+            return;
+        }
+
+        $this->render('admin/edit_user', [
+            'pageTitle' => 'Edit User',
+            'user' => $user
+        ]);
+    }
+
+    public function updateUser(int $userId): void
+    {
+        $userModel = new User();
+        $user = $userModel->find($userId);
+
+        if (!$user) {
+            $this->error(404, 'User not found');
+            return;
+        }
+
+        $name = $_POST['name'] ?? $user['name'];
+        $email = $_POST['email'] ?? $user['email'];
+        $role = $_POST['role'] ?? $user['role'];
+
+        $userModel->update($userId, [
+            'name' => $name,
+            'email' => $email,
+            'role' => $role,
+        ]);
+
+        $this->redirect('/admin/users');
+    }
+
+    public function deleteUser(int $userId): void
+    {
+        $userModel = new User();
+        $userModel->delete($userId);
+        $this->redirect('/admin/users');
+    }
+
+    public function content(): void
+    {
+        $this->render('admin/content', ['pageTitle' => 'Manage Content']);
     }
 }

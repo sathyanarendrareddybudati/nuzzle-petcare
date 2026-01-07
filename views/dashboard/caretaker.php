@@ -17,7 +17,7 @@
                                         <?= e($ad['title']) ?>
                                     </a>
                                     <small class="text-muted">
-                                        in <?= e($ad['location']) ?>
+                                        in <?= e($ad['location_name']) ?>
                                     </small>
                                 </li>
                             <?php endforeach; ?>

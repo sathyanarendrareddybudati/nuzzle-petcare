@@ -38,7 +38,6 @@ tmp/
 # ===================================
 # PHP Specific
 # ===================================
-/composer.lock
 phpunit.xml
 phpunit.xml.dist
 coverage/
@@ -51,7 +50,5 @@ node_modules/
 uploads/
 storage/
 public/uploads/
-nuzzle-petcare.json
-# Secrets
-*.json
+
 .env
