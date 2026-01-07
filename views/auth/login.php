@@ -25,7 +25,7 @@
               <div class="mb-3">
                 <div class="d-flex justify-content-between">
                   <label for="password" class="form-label">Password</label>
-                  <a href="#" class="small">Forgot password?</a>
+                  <a href="/forgot-password" class="small">Forgot password?</a>
                 </div>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fas fa-lock"></i></span>
