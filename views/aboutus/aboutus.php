@@ -126,7 +126,7 @@
                 <div class="col-6 col-lg-3">
                     <div class="stat-card p-4 text-center">
                         <div class="stat-value display-6">24/7</div>
-                        <div class="stat-label">Support</div>
+                        <div class="stat-label">Active Support</div>
                     </div>
                 </div>
             </div>
