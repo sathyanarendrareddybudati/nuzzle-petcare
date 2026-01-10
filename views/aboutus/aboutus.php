@@ -119,7 +119,7 @@
                 </div>
                 <div class="col-6 col-lg-3">
                     <div class="stat-card p-4 text-center">
-                        <div class="stat-value display-6">120+</div>
+                        <div class="stat-value display-6">140+</div>
                         <div class="stat-label">Cities Covered</div>
                     </div>
                 </div>
