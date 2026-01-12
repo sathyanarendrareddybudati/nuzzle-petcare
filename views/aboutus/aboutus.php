@@ -162,7 +162,7 @@
     <section class="mb-5">
         <div class="container">
             <h2 class="section-title mb-4 text-center">Meet the Team</h2>
-            <p class="text-muted text-center mb-4">A small team with a big heart.</p>
+            <p class="text-muted text-center mb-4">A small team with a big heart</p>
             <div class="row g-4 justify-content-center">
                 <?php
                 $team = [
