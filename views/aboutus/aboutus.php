@@ -95,7 +95,7 @@
                 <span class="badge badge-accent px-3 py-2 mb-3">About Nuzzle</span>
                 <h1 class="display-5 fw-bold mb-3">We care deeply about pets and their people</h1>
                 <p class="lead mb-0" style="max-width: 720px;">
-                    Our mission is to make exceptional pet care accessible, friendly, and stress-free — wherever you are.
+                    Our mission is to make exceptional pet care accessible, friendly and stress-free — wherever you are.
                 </p>
             </div>
         </div>
@@ -119,14 +119,14 @@
                 </div>
                 <div class="col-6 col-lg-3">
                     <div class="stat-card p-4 text-center">
-                        <div class="stat-value display-6">120+</div>
+                        <div class="stat-value display-6">140+</div>
                         <div class="stat-label">Cities Covered</div>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3">
                     <div class="stat-card p-4 text-center">
                         <div class="stat-value display-6">24/7</div>
-                        <div class="stat-label">Support</div>
+                        <div class="stat-label">Active Support</div>
                     </div>
                 </div>
             </div>
