@@ -92,7 +92,7 @@
     <section class="hero mb-5">
         <div class="content">
             <div class="container">
-                <span class="badge badge-accent px-3 py-2 mb-3">About Nuzzle</span>
+                <span class="badge badge-accent px-3 py-2 mb-3">About Nuzzle Petcare</span>
                 <h1 class="display-5 fw-bold mb-3">We care deeply about pets and their people</h1>
                 <p class="lead mb-0" style="max-width: 720px;">
                     Our mission is to make exceptional pet care accessible, friendly and stress-free — wherever you are.
