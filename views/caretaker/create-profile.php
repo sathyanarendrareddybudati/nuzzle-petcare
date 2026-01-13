@@ -17,8 +17,15 @@
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="location" class="form-label">Location</label>
-                <input type="text" class="form-control" id="location" name="location" value="<?= e($profile['location'] ?? '') ?>">
-                <div class="form-text">The general area where you provide services (e.g., "San Francisco, CA").</div>
+                <select class="form-control" id="location" name="location">
+                    <option value="">Select a location</option>
+                    <?php foreach ($locations ?? [] as $location): ?>
+                        <option value="<?= $location['id'] ?>" <?= ($profile['location'] ?? '') == $location['id'] ? 'selected' : '' ?>>
+                            <?= e($location['name']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <div class="form-text">Select the area where you provide services.</div>
             </div>
             <div class="col-md-6 mb-3">
                 <label for="availability" class="form-label">Availability</label>
