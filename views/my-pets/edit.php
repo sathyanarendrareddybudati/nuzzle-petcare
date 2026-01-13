@@ -48,6 +48,7 @@
                                 <option value="Male" <?= $pet['gender'] == 'Male' ? 'selected' : '' ?>>Male</option>
                                 <option value="Female" <?= $pet['gender'] == 'Female' ? 'selected' : '' ?>>Female</option>
                                 <option value="Unknown" <?= $pet['gender'] == 'Unknown' ? 'selected' : '' ?>>Unknown</option>
+                                 <option value="Other" <?= $pet['gender'] == 'Other' ? 'selected' : '' ?>>Other</option>
                             </select>
                         </div>
 
