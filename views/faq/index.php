@@ -10,11 +10,7 @@
                         <?php echo htmlspecialchars($faq['question']); ?>
                     </button>
                 </h2>
-                <div id="collapse<?php echo $index; ?>" class="accordion-collapse collapse <?php echo $index === 0 ? 'show' : ''; ?>" aria-labelledby="heading<?php echo $index; ?>" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        <?php echo nl2br(htmlspecialchars($faq['answer'])); ?>
-                    </div>
-                </div>
+                <
             </div>
         <?php endforeach; ?>
     </div>
