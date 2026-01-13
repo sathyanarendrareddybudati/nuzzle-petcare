@@ -10,32 +10,57 @@ class CaretakerProfile extends Model
 
     public function getProfileByUserId(int $userId)
     {
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE user_id = :user_id");
+        $stmt = $this->db->prepare(
+            "SELECT cp.*, u.name as user_name, l.name as location_name
+            FROM {$this->table} cp
+            JOIN users u ON cp.user_id = u.id
+            LEFT JOIN locations l ON cp.location = l.id
+            WHERE cp.user_id = :user_id"
+        );
         $stmt->execute(['user_id' => $userId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function find(int $id): ?array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT cp.*, u.name as user_name, l.name as location_name
+            FROM {$this->table} cp
+            JOIN users u ON cp.user_id = u.id
+            LEFT JOIN locations l ON cp.location = l.id
+            WHERE cp.id = :id"
+        );
+        $stmt->execute(['id' => $id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ?: null;
     }
 
     public function createOrUpdate(array $data)
     {
         $profile = $this->getProfileByUserId($data['user_id']);
 
-        // Location is part of the user table, so remove it from this model's responsibility
-        $profileData = $data;
-        unset($profileData['location_id']);
-
         if ($profile) {
             // Update
-            $sql = "UPDATE {$this->table} SET title = :title, bio = :bio, photo_url = :photo_url WHERE user_id = :user_id";
-            // We need to remove location_id from the data array before executing
-            $updateData = $profileData;
-            unset($updateData['location_id']);
-            return $this->db->prepare($sql)->execute($updateData);
+            $sql = "UPDATE {$this->table} SET title = :title, description = :description, location = :location, availability = :availability WHERE user_id = :user_id";
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([
+                ':title' => $data['title'],
+                ':description' => $data['description'],
+                ':location' => $data['location'],
+                ':availability' => $data['availability'],
+                ':user_id' => $data['user_id']
+            ]);
         } else {
             // Create
-            $sql = "INSERT INTO {$this->table} (user_id, title, bio, photo_url) VALUES (:user_id, :title, :bio, :photo_url)";
-            $createData = $profileData;
-            unset($createData['location_id']);
-            return $this->db->prepare($sql)->execute($createData);
+            $sql = "INSERT INTO {$this->table} (user_id, title, description, location, availability) VALUES (:user_id, :title, :description, :location, :availability)";
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([
+                ':user_id' => $data['user_id'],
+                ':title' => $data['title'],
+                ':description' => $data['description'],
+                ':location' => $data['location'],
+                ':availability' => $data['availability']
+            ]);
         }
     }
 
@@ -44,7 +69,7 @@ class CaretakerProfile extends Model
         $sql = "SELECT cp.*, u.name as user_name, l.name as location_name
                 FROM {$this->table} cp
                 JOIN users u ON cp.user_id = u.id
-                LEFT JOIN locations l ON u.location_id = l.id
+                LEFT JOIN locations l ON cp.location = l.id
                 ORDER BY cp.created_at DESC
                 LIMIT :limit";
         $stmt = $this->db->prepare($sql);
@@ -58,13 +83,18 @@ class CaretakerProfile extends Model
         $sql = "SELECT cp.*, u.name as user_name, l.name as location_name
                 FROM {$this->table} cp 
                 JOIN users u ON cp.user_id = u.id
-                LEFT JOIN locations l ON u.location_id = l.id 
+                LEFT JOIN locations l ON cp.location = l.id 
                 WHERE 1=1";
         $params = [];
 
         if (!empty($filters['location'])) {
-            $sql .= " AND u.location_id = :location_id";
-            $params['location_id'] = $filters['location'];
+            $sql .= " AND l.city LIKE :location";
+            $params[':location'] = '%' . $filters['location'] . '%';
+        }
+        
+        if (!empty($filters['availability'])) {
+            $sql .= " AND cp.availability LIKE :availability";
+            $params[':availability'] = '%' . $filters['availability'] . '%';
         }
 
         $sort = $filters['sort'] ?? 'newest';
