@@ -75,7 +75,7 @@
           <i class="fas fa-phone-alt fa-2x text-primary"></i>
         </div>
         <h4>Phone</h4>
-        <p class="text-muted mb-0">+33 78965432<br>Mon - Fri, 9:00 AM - 6:00 PM</p>
+        <p class="text-muted mb-0">+33 789654321<br>Mon - Fri, 9:00 AM - 6:00 PM</p>
       </div>
       <div class="col-md-4 text-center">
         <div class="icon-circle">
