@@ -1,59 +1,70 @@
 <?php
-$filters = $filters ?? ['species'=>'','gender'=>'','q'=>'','sort'=>'newest', 'service_type' => '', 'location' => ''];
+/**
+ * @var array $ads The pet ads to display.
+ * @var array $filters The current filter values.
+ * @var array $locations The list of available locations.
+ * @var array $services The list of available services.
+ * @var array $species The list of available species.
+ * @var string $pageTitle The page title.
+ */
+
+$ads = $ads ?? [];
+$filters = $filters ?? ['q' => '', 'service' => '', 'location' => '', 'species' => '', 'gender' => '', 'sort' => 'newest'];
 $locations = $locations ?? [];
 $services = $services ?? [];
+$species = $species ?? [];
 
-function sort_url($key) {
-    $q = $_GET; $q['sort'] = $key; return '/pets?' . http_build_query($q);
+function sort_url($key, $currentFilters) {
+    $q = $currentFilters; 
+    $q['sort'] = $key; 
+    return '/pets?' . http_build_query(array_filter($q));
 }
 ?>
+
 <section class="hero-section text-center mb-4">
     <div class="container">
-        <h1 class="display-5 fw-bold mb-3">Find Your Perfect Pet Service</h1>
-        <p class="lead mb-4">Browse pet service ads and refine your search</p>
+        <h1 class="display-5 fw-bold mb-3"><?= e($pageTitle ?? 'Find Pet Care Services') ?></h1>
+        <p class="lead mb-4">Browse pet service ads from our community.</p>
         <div class="row justify-content-center">
             <div class="col-lg-12">
                 <form class="row g-3" method="GET" action="/pets">
                     <div class="col-md-3">
-                        <input type="text" name="q" class="form-control" placeholder="Keyword (e.g. dog walking)"
+                        <input type="text" name="q" class="form-control" placeholder="Keyword (e.g., breed, service)"
                                value="<?= e($filters['q']) ?>">
                     </div>
                     <div class="col-md-2">
-                        <select class="form-select" name="service_type">
-                            <option value="" <?= $filters['service_type']===''?'selected':''; ?>>All Services</option>
+                        <select class="form-select" name="service">
+                            <option value="" <?= $filters['service'] === '' ? 'selected' : '' ?>>All Services</option>
                             <?php foreach ($services as $service): ?>
-                                <option value="<?= e($service['id']) ?>" <?= (int)$filters['service_type']===(int)$service['id']?'selected':''; ?>><?= e($service['name']) ?></option>
+                                <option value="<?= e($service['id']) ?>" <?= (int)$filters['service'] === (int)$service['id'] ? 'selected' : '' ?>><?= e($service['name']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="col-md-2">
                         <select class="form-select" name="location">
-                            <option value="" <?= $filters['location']===''?'selected':''; ?>>All Locations</option>
+                            <option value="" <?= $filters['location'] === '' ? 'selected' : '' ?>>All Locations</option>
                             <?php foreach ($locations as $location): ?>
-                                <option value="<?= e($location['id']) ?>" <?= (int)$filters['location']===(int)$location['id']?'selected':''; ?>><?= e($location['name']) ?></option>
+                                <option value="<?= e($location['id']) ?>" <?= (int)$filters['location'] === (int)$location['id'] ? 'selected' : '' ?>><?= e($location['name']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="col-md-2">
                         <select class="form-select" name="species">
-                            <option value="" <?= $filters['species']===''?'selected':''; ?>>All Species</option>
-                            <?php foreach (['Dog','Cat','Bird','Other'] as $sp): ?>
-                                <option value="<?= e($sp) ?>" <?= $filters['species']===$sp?'selected':''; ?>><?= e($sp) ?></option>
+                            <option value="" <?= $filters['species'] === '' ? 'selected' : '' ?>>All Species</option>
+                            <?php foreach ($species as $spec): ?>
+                                <option value="<?= e($spec['id']) ?>" <?= (int)$filters['species'] === (int)$spec['id'] ? 'selected' : '' ?>><?= e($spec['name']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="col-md-2">
                         <select class="form-select" name="gender">
-                            <option value="" <?= $filters['gender']===''?'selected':''; ?>>Any Gender</option>
-                            <?php foreach (['Male','Female','Other'] as $g): ?>
-                                <option value="<?= e($g) ?>" <?= $filters['gender']===$g?'selected':''; ?>><?= e($g) ?></option>
-                            <?php endforeach; ?>
+                            <option value="" <?= $filters['gender'] === '' ? 'selected' : '' ?>>Any Gender</option>
+                            <option value="Male" <?= $filters['gender'] === 'Male' ? 'selected' : '' ?>>Male</option>
+                            <option value="Female" <?= $filters['gender'] === 'Female' ? 'selected' : '' ?>>Female</option>
                         </select>
                     </div>
                     <div class="col-md-1">
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="fas fa-search"></i>
-                        </button>
+                        <button type="submit" class="btn btn-primary w-100"><i class="fas fa-search"></i></button>
                     </div>
                 </form>
             </div>
@@ -64,54 +75,46 @@ function sort_url($key) {
 <section class="py-2">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0">Available Pet Service Ads</h2>
+            <h2 class="mb-0 h4">Available Pet Service Ads (<?= count($ads) ?>)</h2>
             <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    Sort By: <?= $filters['sort']==='price_asc'?'Price: Low to High':($filters['sort']==='price_desc'?'Price: High to Low':'Newest First') ?>
+                <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort By: <?= e(match($filters['sort']) {
+                        'price_asc' => 'Price: Low to High',
+                        'price_desc' => 'Price: High to Low',
+                        default => 'Newest First',
+                    }) ?>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-                    <li><a class="dropdown-item" href="<?= e(sort_url('newest')) ?>">Newest First</a></li>
-                    <li><a class="dropdown-item" href="<?= e(sort_url('price_asc')) ?>">Price: Low to High</a></li>
-                    <li><a class="dropdown-item" href="<?= e(sort_url('price_desc')) ?>">Price: High to Low</a></li>
+                    <li><a class="dropdown-item" href="<?= e(sort_url('newest', $filters)) ?>">Newest First</a></li>
+                    <li><a class="dropdown-item" href="<?= e(sort_url('price_asc', $filters)) ?>">Price: Low to High</a></li>
+                    <li><a class="dropdown-item" href="<?= e(sort_url('price_desc', $filters)) ?>">Price: High to Low</a></li>
                 </ul>
             </div>
         </div>
 
         <div class="row">
-            <?php if (!empty($pets)): ?>
-                <?php foreach ($pets as $pet): ?>
+            <?php if (!empty($ads)): ?>
+                <?php foreach ($ads as $ad): ?>
                     <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="card h-100">
-                            <?php if (!empty($pet['image_url'])): ?>
-                                <img src="<?= e($pet['image_url']) ?>" class="card-img-top" alt="<?= e($pet['name']) ?>">
-                            <?php endif; ?>
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <h5 class="card-title mb-0"><?= e($pet['name']) ?></h5>
-                                    <span class="badge bg-primary"><?= e($pet['species']) ?></span>
-                                </div>
-                                <p class="text-muted mb-2">
-                                    <?= e($pet['breed'] ?? 'Mixed') ?>
-                                    <span class="mx-2">•</span>
-                                    <?= e((string)($pet['age'] ?? 0)) ?> years
-                                    <span class="mx-2">•</span>
-                                    <?= e($pet['gender']) ?>
-                                </p>
-                                <p class="card-text text-muted small mb-3">
-                                    <?php
-                                        $desc = $pet['description'] ?? '';
-                                        $desc = is_string($desc) ? $desc : '';
-                                        echo e(strlen($desc) > 100 ? substr($desc, 0, 100) . '...' : $desc);
-                                    ?>
-                                </p>
-                                <div class="d-flex justify-content-between align-items-center">
+                        <div class="card h-100 shadow-sm border-0 ad-card">
+                            <a href="/pets/<?= (int)$ad['id'] ?>">
+                                <img src="<?= e($ad['image_url'] ?? '/img/placeholder.jpg') ?>" class="card-img-top ad-card-img" alt="<?= e($ad['title']) ?>">
+                            </a>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title"><a href="/pets/<?= (int)$ad['id'] ?>" class="text-decoration-none text-dark stretched-link"><?= e($ad['title']) ?></a></h5>
+                                <small class="text-muted mb-2">Service: <?= e($ad['service_name']) ?></small>
+                                <p class="card-text text-muted small mb-3 flex-grow-1"><?= e(substr($ad['description'], 0, 80)) ?>...</p>
+                                <div class="d-flex justify-content-between align-items-center mt-auto">
                                     <div>
-                                        <div class="pet-price">$<?= number_format((float)($pet['price'] ?? 0), 2) ?></div>
-                                        <?php if (!empty($pet['location'])): ?>
-                                            <div class="pet-location"><i class="fas fa-map-marker-alt me-1"></i><?= e($pet['location']) ?></div>
+                                        <div class="fw-bold fs-5 text-primary">$<?= number_format((float)($ad['price'] ?? 0), 2) ?></div>
+                                        <div class="text-muted small"><i class="fas fa-map-marker-alt me-1"></i><?= e($ad['location_name']) ?></div>
+                                    </div>
+                                    <div class="text-end">
+                                        <small class="text-muted">Posted by <?= e($ad['user_name']) ?></small>
+                                        <?php if($ad['pet_name']): ?>
+                                            <small class="d-block text-muted">For: <?= e($ad['pet_name']) ?></small>
                                         <?php endif; ?>
                                     </div>
-                                    <a href="/pets/<?= (int)$pet['id'] ?>" class="btn btn-sm btn-outline-primary">View Details</a>
                                 </div>
                             </div>
                         </div>
@@ -119,11 +122,11 @@ function sort_url($key) {
                 <?php endforeach; ?>
             <?php else: ?>
                 <div class="col-12 text-center py-5">
-                    <div class="bg-light p-5 rounded">
-                        <i class="fas fa-paw fa-3x text-muted mb-4"></i>
-                        <h3>No Ads Found</h3>
-                        <p class="text-muted">Try adjusting your filters.</p>
-                        <a href="/pets" class="btn btn-primary mt-3"><i class="fas fa-sync me-2"></i>Reset Filters</a>
+                    <div class="bg-light p-5 rounded-3">
+                        <i class="fas fa-paw fa-4x text-muted mb-4"></i>
+                        <h3 class="fw-bold">No Ads Found</h3>
+                        <p class="text-muted">Try adjusting your search filters or check back later.</p>
+                        <a href="/pets" class="btn btn-primary mt-3"><i class="fas fa-sync-alt me-2"></i>Reset Filters</a>
                     </div>
                 </div>
             <?php endif; ?>
