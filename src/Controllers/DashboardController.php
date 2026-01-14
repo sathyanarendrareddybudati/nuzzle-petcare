@@ -55,7 +55,7 @@ class DashboardController extends Controller
 
         $userId = $user['id'];
         $petAdModel = new PetAd();
-        $recentAds = $petAdModel->getRecentAds(); 
+        $recentAds = $petAdModel->getRecentAdsByUserId($userId); 
 
         $profileModel = new CaretakerProfile();
         $profile = $profileModel->getProfileByUserId($userId);

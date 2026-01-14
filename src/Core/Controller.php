@@ -39,6 +39,14 @@ class Controller
         }
     }
 
+    protected function json(array $data, int $statusCode = 200): void
+    {
+        http_response_code($statusCode);
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        exit;
+    }
+
     protected function error(int $code, string $message = ''): void
     {
         http_response_code($code);

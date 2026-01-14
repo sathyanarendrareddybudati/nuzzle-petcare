@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Session;
 use App\Models\CaretakerProfile;
+use App\Models\Location;
 
 class CaretakerProfileController extends Controller
 {
@@ -19,9 +20,13 @@ class CaretakerProfileController extends Controller
         $profileModel = new CaretakerProfile();
         $profile = $profileModel->getProfileByUserId($userId);
 
+        $locationModel = new Location();
+        $locations = $locationModel->all();
+
         $this->render('caretaker/create-profile', [
             'pageTitle' => 'My Caretaker Profile',
             'profile' => $profile,
+            'locations' => $locations,
         ]);
     }
 

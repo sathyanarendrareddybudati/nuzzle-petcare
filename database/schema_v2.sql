@@ -173,25 +173,8 @@ CREATE TABLE `communication_log` (
     CONSTRAINT `fk_comm_recipient` FOREIGN KEY (`recipient_user_id`) REFERENCES `users`(`id`)
 );
 
-CREATE TABLE `documents` (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `user_id` INT NOT NULL,
-    `document_type` ENUM('id_proof', 'address_proof', 'certification', 'other') NOT NULL,
-    `file_name` VARCHAR(255) NOT NULL,
-    `file_path` VARCHAR(255) NOT NULL,
-    `file_size` INT NOT NULL,
-    `file_type` VARCHAR(100) NOT NULL,
-    `is_verified` BOOLEAN NOT NULL DEFAULT FALSE,
-    `verified_by` INT,
-    `verified_at` TIMESTAMP NULL,
-    `uploaded_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `notes` TEXT,
-    CONSTRAINT `fk_doc_user` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk_doc_verified_by` FOREIGN KEY (`verified_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
-);
 
 -- Create indexes for better performance
 CREATE INDEX `idx_pet_ads_status` ON `pet_ads`(`status`);
 CREATE INDEX `idx_bookings_status` ON `bookings`(`status`);
 CREATE INDEX `idx_communication_log_recipient` ON `communication_log`(`recipient_user_id`);
-CREATE INDEX `idx_documents_user` ON `documents`(`user_id`, `document_type`);

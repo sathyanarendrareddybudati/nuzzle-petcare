@@ -24,7 +24,7 @@
                     <i class="fas fa-paw fa-3x text-primary mb-3"></i>
                     <h5 class="card-title">Pet Listings</h5>
                     <p class="card-text">Moderate and manage pet ads.</p>
-                    <a href="/admin/pets" class="btn btn-primary">Manage Pets</a>
+                    <a href="/admin/ads" class="btn btn-primary">Manage Pets</a>
                 </div>
             </div>
         </div>

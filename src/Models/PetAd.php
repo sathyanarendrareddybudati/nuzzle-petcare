@@ -30,43 +30,45 @@ class PetAd extends Model
 
     public function findAllWithFilters(array $filters): array
     {
-        $sql = "SELECT pa.*, p.name, p.gender, p.breed, p.age_years, p.image_url, pc.name as species, s.name as service_name, l.name as location_name, u.name as user_name
+        $sql = "SELECT pa.*, 
+                       p.name as pet_name, p.gender, p.breed, p.age_years, p.image_url, 
+                       pc.name as species, 
+                       s.name as service_name, 
+                       l.name as location_name, 
+                       u.name as user_name
                 FROM pet_ads pa
+                JOIN users u ON pa.user_id = u.id
                 LEFT JOIN pets p ON pa.pet_id = p.id
                 LEFT JOIN pet_categories pc ON p.category_id = pc.id
-                JOIN services s ON pa.service_id = s.id
-                JOIN locations l ON pa.location_id = l.id
-                JOIN users u ON pa.user_id = u.id
-                WHERE 1=1";
+                LEFT JOIN services s ON pa.service_id = s.id
+                LEFT JOIN locations l ON pa.location_id = l.id
+                WHERE (pa.ad_type = 'offer' OR pa.ad_type = 'service' OR pa.ad_type = 'service_request') AND pa.status = 'open'";
+
         $params = [];
 
         if (!empty($filters['q'])) {
-            $sql .= " AND (pa.title LIKE :q1 OR pa.description LIKE :q2 OR l.name LIKE :q3 OR p.name LIKE :q4 OR p.breed LIKE :q5)";
-            $params[':q1'] = '%' . $filters['q'] . '%';
-            $params[':q2'] = '%' . $filters['q'] . '%';
-            $params[':q3'] = '%' . $filters['q'] . '%';
-            $params[':q4'] = '%' . $filters['q'] . '%';
-            $params[':q5'] = '%' . $filters['q'] . '%';
-        }
-
-        if (!empty($filters['species'])) {
-            $sql .= " AND pc.name = :species";
-            $params['species'] = $filters['species'];
-        }
-
-        if (!empty($filters['gender'])) {
-            $sql .= " AND p.gender = :gender";
-            $params['gender'] = $filters['gender'];
+            $sql .= " AND (pa.title LIKE :q OR pa.description LIKE :q OR s.name LIKE :q OR l.name LIKE :q OR p.breed LIKE :q)";
+            $params[':q'] = '%' . $filters['q'] . '%';
         }
 
         if (!empty($filters['service'])) {
             $sql .= " AND s.id = :service";
-            $params['service'] = $filters['service'];
+            $params[':service'] = $filters['service'];
         }
 
         if (!empty($filters['location'])) {
             $sql .= " AND l.id = :location";
-            $params['location'] = $filters['location'];
+            $params[':location'] = $filters['location'];
+        }
+
+        if (!empty($filters['species'])) {
+            $sql .= " AND pc.id = :species";
+            $params[':species'] = $filters['species'];
+        }
+
+        if (!empty($filters['gender'])) {
+            $sql .= " AND p.gender = :gender";
+            $params[':gender'] = $filters['gender'];
         }
 
         $sort = $filters['sort'] ?? 'newest';
@@ -85,8 +87,8 @@ class PetAd extends Model
     {
         $sql = "SELECT pa.*, s.name as service_name, l.name as location_name
                 FROM pet_ads pa
-                JOIN services s ON pa.service_id = s.id
-                JOIN locations l ON pa.location_id = l.id
+                LEFT JOIN services s ON pa.service_id = s.id
+                LEFT JOIN locations l ON pa.location_id = l.id
                 WHERE pa.user_id = :user_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['user_id' => $userId]);
@@ -95,12 +97,12 @@ class PetAd extends Model
 
     public function getAdById(int $adId): ?array
     {
-        $sql = "SELECT pa.*, p.name, p.gender, p.breed, p.age_years, p.image_url, pc.name as species, s.name as service_name, l.name as location_name, u.name as user_name, u.email as user_email
+        $sql = "SELECT pa.*, p.name as pet_name, p.gender, p.breed, p.age_years, p.image_url, pc.name as species, s.name as service_name, l.name as location_name, u.name as user_name, u.email as user_email, u.id as user_id
                 FROM pet_ads pa
                 LEFT JOIN pets p ON pa.pet_id = p.id
                 LEFT JOIN pet_categories pc ON p.category_id = pc.id
-                JOIN services s ON pa.service_id = s.id
-                JOIN locations l ON pa.location_id = l.id
+                LEFT JOIN services s ON pa.service_id = s.id
+                LEFT JOIN locations l ON pa.location_id = l.id
                 JOIN users u ON pa.user_id = u.id
                 WHERE pa.id = :ad_id";
         $stmt = $this->db->prepare($sql);
@@ -121,7 +123,7 @@ class PetAd extends Model
             'title' => $data['title'],
             'description' => $data['description'],
             'price' => $data['price'],
-            'status' => $data['status'] ?? 'pending',
+            'status' => $data['status'] ?? 'open',
             'start_date' => $data['start_date'],
             'end_date' => $data['end_date'],
             'location_id' => $data['location_id'],
@@ -139,9 +141,8 @@ class PetAd extends Model
                     title = :title,
                     description = :description,
                     price = :price,
-                    status = :status,
                     start_date = :start_date,
-                    end_date =.end_date,
+                    end_date = :end_date,
                     location_id = :location_id,
                     ad_type = :ad_type
                 WHERE id = :id";
@@ -152,7 +153,6 @@ class PetAd extends Model
             ':title' => $data['title'],
             ':description' => $data['description'],
             ':price' => $data['price'],
-            ':status' => $data['status'] ?? 'pending',
             ':start_date' => $data['start_date'],
             ':end_date' => $data['end_date'],
             ':location_id' => $data['location_id'],
@@ -172,8 +172,8 @@ class PetAd extends Model
     {
         $sql = "SELECT pa.*, s.name as service_name, l.name as location
                 FROM pet_ads pa
-                JOIN services s ON pa.service_id = s.id
-                JOIN locations l ON pa.location_id = l.id
+                LEFT JOIN services s ON pa.service_id = s.id
+                LEFT JOIN locations l ON pa.location_id = l.id
                 WHERE pa.user_id = :user_id
                 ORDER BY pa.created_at DESC
                 LIMIT :limit";
@@ -188,8 +188,8 @@ class PetAd extends Model
     {
         $sql = "SELECT pa.*, s.name AS service_name, l.name AS location_name, p.name AS pet_name, c.name AS species
                 FROM pet_ads pa
-                JOIN services s ON pa.service_id = s.id
-                JOIN locations l ON pa.location_id = l.id
+                LEFT JOIN services s ON pa.service_id = s.id
+                LEFT JOIN locations l ON pa.location_id = l.id
                 LEFT JOIN pets p ON pa.pet_id = p.id
                 LEFT JOIN pet_categories c ON p.category_id = c.id
                 ORDER BY pa.created_at DESC

@@ -38,6 +38,11 @@ class Pet
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function findAllByOwner(int $ownerId): array
+    {
+        return $this->getPetsByUserId($ownerId);
+    }
+
     public function create(array $data): int
     {
         $sql = 'INSERT INTO pets (user_id, category_id, name, breed, age_years, age_months, gender, description, image_url)

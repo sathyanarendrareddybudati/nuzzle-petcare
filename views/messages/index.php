@@ -13,7 +13,7 @@
                         </div>
                     <?php else: ?>
                         <?php foreach ($conversations as $conversation): ?>
-                            <a href="/messages/chat?participant_id=<?= e($conversation['participant_id']) ?>" class="list-group-item list-group-item-action">
+                            <a href="/messages/<?= e($conversation['participant_id']) ?>" class="list-group-item list-group-item-action">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1"><?= e($conversation['participant_name']) ?></h5>
                                     <small><?= e(date('d M Y', strtotime($conversation['last_message_date']))) ?></small>
