@@ -171,6 +171,7 @@
                    ['img' => 'blank_dp.webp', 'name' => 'Nikhil', 'role' => 'Engineering'],
                    ['img' => 'blank_dp.webp', 'name' => 'Tarun', 'role' => 'Support lead'],
                    ['img' => 'blank_dp.webp', 'name' => 'Meghanath', 'role' => 'Support Team'],
+                    ];
                 foreach ($team as $m):
                 ?>
                     <div class="col-6 col-md-4 col-lg-3">
