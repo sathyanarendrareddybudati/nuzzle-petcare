@@ -105,10 +105,10 @@ class PetAdsController extends Controller
 
         if ($adId) {
             Session::flash('success', 'Pet ad created successfully!');
-            $this->redirect('/pet-ads');
+            $this->redirect('/pets');
         } else {
             Session::flash('error', 'Failed to create ad.');
-            $this->redirect('/pet-ads/create');
+            $this->redirect('/pets/create');
         }
     }
 
