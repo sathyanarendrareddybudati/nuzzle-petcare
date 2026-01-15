@@ -166,12 +166,11 @@
             <div class="row g-4 justify-content-center">
                 <?php
                 $team = [
-                    ['img' => 'blank-profile-picture-973460_640.webp', 'name' => 'Satya', 'role' => 'Project Manager'],
-                    ['img' => 'blank-profile-picture-973460_640.webp', 'name' => 'Anshul', 'role' => 'Frontend Development'],
-                    ['img' => 'blank-profile-picture-973460_640.webp', 'name' => 'Nikhil', 'role' => 'Engineering'],
-                    ['img' => 'blank-profile-picture-973460_640.webp', 'name' => 'Tarun', 'role' => 'Support lead'],
-                    ['img' => 'blank-profile-picture-973460_640.webp', 'name' => 'Meghanath', 'role' => 'Support Team'],
-                ];
+                   ['img' => 'blank_dp.webp', 'name' => 'Satya', 'role' => 'Project Manager'],
+                   ['img' => 'blank_dp.webp', 'name' => 'Anshul', 'role' => 'Frontend Development'],
+                   ['img' => 'blank_dp.webp', 'name' => 'Nikhil', 'role' => 'Engineering'],
+                   ['img' => 'blank_dp.webp', 'name' => 'Tarun', 'role' => 'Support lead'],
+                   ['img' => 'blank_dp.webp', 'name' => 'Meghanath', 'role' => 'Support Team'],
                 foreach ($team as $m):
                 ?>
                     <div class="col-6 col-md-4 col-lg-3">
