@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Optional: remove the element after the transition
                 alert.addEventListener('transitionend', () => alert.remove());
             }
-        }, 3000);
+        }, 6000);
     });
 });
 
