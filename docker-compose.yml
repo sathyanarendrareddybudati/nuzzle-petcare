@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  # PHP Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nuzzle-petcare-app
+    ports:
+      - "10000:10000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_URL=http://localhost:10000
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=nuzzle_petcare
+      - DB_USERNAME=nuzzle
+      - DB_PASSWORD=password123
+      - APP_KEY=base64:YourGeneratedKeyHere
+    volumes:
+      - .:/app
+      - ./storage:/app/storage
+      - ./uploads:/app/uploads
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - nuzzle-network
+    restart: unless-stopped
+
+  # MySQL Database Service
+  mysql:
+    image: mysql:8.0
+    container_name: nuzzle-petcare-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword123
+      - MYSQL_DATABASE=nuzzle_petcare
+      - MYSQL_USER=nuzzle
+      - MYSQL_PASSWORD=password123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./database/seeders/seed_data.sql:/docker-entrypoint-initdb.d/02-seed_data.sql
+    networks:
+      - nuzzle-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "nuzzle", "-ppassword123"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+
+
+  # Nginx Proxy (Optional - for production-like setup)
+  nginx:
+    image: nginx:alpine
+    container_name: nuzzle-petcare-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./public:/var/www/html/public
+    depends_on:
+      - app
+    networks:
+      - nuzzle-network
+    restart: unless-stopped
+    profiles:
+      - production
+
+# Volumes
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+# Networks
+networks:
+  nuzzle-network:
+    driver: bridge
+
+# Development override file
+# Create docker-compose.override.yml for development-specific settings

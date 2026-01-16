@@ -75,9 +75,11 @@ $router->get('/privacy-policy', [PrivacyPolicyController::class, 'index']);
 // FAQ Page
 $router->get('/faq', [FaqController::class, 'index']);
 
-// Forgot Password
+// Forgot Password & Reset Password
 $router->get('/forgot-password', [AuthController::class, 'showForgotPasswordForm']);
 $router->post('/forgot-password', [AuthController::class, 'handleForgotPasswordRequest']);
+$router->get('/reset-password', [AuthController::class, 'showResetPasswordForm']);
+$router->post('/reset-password', [AuthController::class, 'handleResetPassword']);
 
 // Profile
 $router->get('/profile', [ProfileController::class, 'index'])->middleware('AuthMiddleware');
