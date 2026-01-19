@@ -14,8 +14,33 @@ class PetAdsController extends Controller
 {
     public function index(): void
     {
+        $petAdModel = new PetAd();
+        $serviceModel = new Service();
+        $locationModel = new Location();
+        $categoryModel = new PetCategory();
+
+        $filters = [
+            'q' => $_GET['q'] ?? null,
+            'service' => $_GET['service'] ?? null,
+            'location' => $_GET['location'] ?? null,
+            'species' => $_GET['species'] ?? null,
+            'breed' => $_GET['breed'] ?? null,
+            'gender' => $_GET['gender'] ?? null,
+            'sort' => $_GET['sort'] ?? 'newest',
+        ];
+
+        $ads = $petAdModel->findAllWithFilters($filters);
+        $services = $serviceModel->all();
+        $locations = $locationModel->all();
+        $species = $categoryModel->all();
+
         $this->render('pet-ads/index', [
-            'pageTitle' => 'Find Pet Care Services'
+            'pageTitle' => 'Find Pet Care Services',
+            'ads' => $ads,
+            'services' => $services,
+            'locations' => $locations,
+            'species' => $species,
+            'filters' => $filters,
         ]);
     }
 
@@ -56,7 +81,8 @@ class PetAdsController extends Controller
         Session::start();
         $user = Session::get('user');
         if (!$user) {
-            $this->json(['success' => false, 'message' => 'Authentication required.']);
+            Session::flash('error', 'Authentication required.');
+            $this->redirect('/login');
             return;
         }
 
@@ -78,9 +104,11 @@ class PetAdsController extends Controller
         $adId = $petAdModel->create($data);
 
         if ($adId) {
-            $this->json(['success' => true, 'ad_id' => $adId]);
+            Session::flash('success', 'Pet ad created successfully!');
+            $this->redirect('/pets');
         } else {
-            $this->json(['success' => false, 'message' => 'Failed to create ad.']);
+            Session::flash('error', 'Failed to create ad.');
+            $this->redirect('/pets/create');
         }
     }
 
@@ -99,5 +127,91 @@ class PetAdsController extends Controller
             'pageTitle' => $ad['title'],
             'ad' => $ad
         ]);
+    }
+
+    public function edit(int $id): void
+    {
+        Session::start();
+        $user = Session::get('user');
+        if (!$user) {
+            Session::flash('error', 'You must be logged in to edit an ad.');
+            $this->redirect('/login');
+            return;
+        }
+
+        $petAdModel = new PetAd();
+        $ad = $petAdModel->getAdById($id);
+
+        if (!$ad) {
+            $this->error(404, 'Ad not found.');
+            return;
+        }
+
+        if ((int)$ad['user_id'] !== (int)$user['id']) {
+            Session::flash('error', 'You are not authorized to edit this ad.');
+            $this->redirect('/pets/' . $id);
+            return;
+        }
+
+        $petModel = new Pet();
+        $pets = $petModel->getPetsByUserId($user['id']);
+
+        $serviceModel = new Service();
+        $services = $serviceModel->all();
+
+        $locationModel = new Location();
+        $locations = $locationModel->all();
+
+        $categoryModel = new PetCategory();
+        $categories = $categoryModel->all();
+
+        $this->render('pet-ads/edit', [
+            'pageTitle' => 'Edit Pet Ad',
+            'ad' => $ad,
+            'pets' => $pets,
+            'services' => $services,
+            'locations' => $locations,
+            'categories' => $categories
+        ]);
+    }
+
+    public function update(int $id): void
+    {
+        Session::start();
+        $user = Session::get('user');
+        if (!$user) {
+            Session::flash('error', 'Authentication required.');
+            $this->redirect('/login');
+            return;
+        }
+
+        $petAdModel = new PetAd();
+        $ad = $petAdModel->getAdById($id);
+
+        if (!$ad || (int)$ad['user_id'] !== (int)$user['id']) {
+            Session::flash('error', 'You are not authorized to perform this action.');
+            $this->redirect('/');
+            return;
+        }
+
+        $data = [
+            'ad_type' => $_POST['ad_type'],
+            'title' => $_POST['title'],
+            'description' => $_POST['description'],
+            'pet_id' => $_POST['pet_id'] ?? null,
+            'service_id' => $_POST['service_id'] ?? null,
+            'price' => $_POST['price'],
+            'location_id' => $_POST['location_id'],
+            'start_date' => $_POST['start_date'] ?? null,
+            'end_date' => $_POST['end_date'] ?? null,
+        ];
+
+        if ($petAdModel->update($id, $data)) {
+            Session::flash('success', 'Ad updated successfully.');
+            $this->redirect('/pets/' . $id);
+        } else {
+            Session::flash('error', 'Failed to update ad.');
+            $this->redirect('/pets/' . $id . '/edit');
+        }
     }
 }

@@ -58,11 +58,11 @@
                 <div class="d-flex align-items-start mb-4">
                     <div class="pet-image-container">
                          <img src="<?= e($ad['image_url'] ?? 'https://via.placeholder.com/150') ?>" 
-                             alt="<?= e($ad['name']) ?>" 
+                             alt="<?= e($ad['pet_name'] ?? 'Pet') ?>" 
                              class="pet-image">
                     </div>
                     <div>
-                        <h4 class="fw-bold"><?= e($ad['name']) ?></h4>
+                        <h4 class="fw-bold"><?= e($ad['pet_name'] ?? 'No Name') ?></h4>
                         <p class="mb-1"><strong>Species:</strong> <?= e($ad['species']) ?></p>
                         <p class="mb-1"><strong>Breed:</strong> <?= e($ad['breed']) ?></p>
                         <p class="mb-1"><strong>Gender:</strong> <?= e($ad['gender']) ?></p>
@@ -104,9 +104,12 @@
                 <h5 class="fw-bold mb-1"><?= e($ad['user_name']) ?></h5>
                 <p class="text-muted small">Member since 2023</p>
                 <hr>
-                <div class="d-grid">
+                <div class="d-grid gap-2">
                     <a href="/bookings/create/<?= (int)$ad['id'] ?>" class="btn btn-primary btn-lg">
                         <i class="fas fa-calendar-check me-2"></i> Book Now
+                    </a>
+                    <a href="/messages/create/<?= (int)$ad['user_id'] ?>" class="btn btn-outline-primary">
+                        <i class="fas fa-envelope me-2"></i> Send Message
                     </a>
                 </div>
             </div>

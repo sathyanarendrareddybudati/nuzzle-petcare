@@ -49,7 +49,7 @@
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="price" class="form-label">Price / Fee</label>
+                                <label for="price" class="form-label">Price / Fees</label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
                                     <input type="number" class="form-control" id="price" name="price" min="0" step="0.01" required>

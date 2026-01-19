@@ -23,7 +23,7 @@
                         <div class="col-md-6">
                             <h5 class="fw-bold">Ad Details</h5>
                             <p class="mb-1"><strong>Title:</strong> <a href="/pets/<?= (int)$booking['pet_ad_id'] ?>"><?= e($booking['ad_title']) ?></a></p>
-                            <p class="mb-1"><strong>Owner:</strong> <?= e($booking['ad_owner_name']) ?></p>
+                            <p class="mb-1"><strong>Owner:</strong> <?= e($booking['owner_name']) ?></p>
                         </div>
                         <div class="col-md-6">
                             <h5 class="fw-bold">Provider Details</h5>
@@ -45,12 +45,19 @@
                         }) ?>"><?= e(ucfirst($booking['status'] ?? '')) ?></span></p>
 
                         <div class="mt-4">
-                            <form method="POST" action="/bookings/update/<?= (int)$booking['id'] ?>">
-                                <!-- Service Requestor Actions -->
-                                <?php if ($isServiceRequestor): ?>
+                            <form method="POST" action="/bookings/update/<?= (int)$booking['id'] ?>" class="d-inline">
+                                <!-- Service Provider Actions -->
+                                <?php if ($isServiceProvider): ?>
                                     <?php if ($booking['status'] === 'pending'): ?>
                                         <button type="submit" name="status" value="confirmed" class="btn btn-success btn-lg mx-1">Confirm Booking</button>
                                     <?php endif; ?>
+                                    <?php if (in_array($booking['status'], ['pending', 'confirmed'])): ?>
+                                        <button type="submit" name="status" value="cancelled" class="btn btn-danger btn-lg mx-1">Cancel Booking</button>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+
+                                <!-- Service Requestor Actions -->
+                                <?php if ($isServiceRequestor): ?>
                                     <?php if ($booking['status'] === 'confirmed'): ?>
                                         <button type="submit" name="status" value="completed" class="btn btn-primary btn-lg mx-1">Mark as Completed</button>
                                     <?php endif; ?>
@@ -58,17 +65,12 @@
                                         <button type="submit" name="status" value="cancelled" class="btn btn-danger btn-lg mx-1">Cancel Booking</button>
                                     <?php endif; ?>
                                 <?php endif; ?>
-
-                                <!-- Service Provider Actions -->
-                                <?php if ($isServiceProvider && in_array($booking['status'], ['pending', 'confirmed'])): ?>
-                                    <button type="submit" name="status" value="cancelled" class="btn btn-secondary btn-lg mx-1">Cancel Booking</button>
-                                <?php endif; ?>
-
-                                <!-- Rating Action -->
-                                <?php if ($isServiceRequestor && $booking['status'] === 'completed' && empty($booking['rating'])): ?>
-                                    <button type="button" class="btn btn-warning btn-lg mx-1" data-bs-toggle="modal" data-bs-target="#ratingModal">Leave a Rating</button>
-                                <?php endif; ?>
                             </form>
+
+                            <!-- Rating Action -->
+                            <?php if ($isServiceRequestor && $booking['status'] === 'completed' && empty($booking['rating'])): ?>
+                                <button type="button" class="btn btn-warning btn-lg mx-1" data-bs-toggle="modal" data-bs-target="#ratingModal">Leave a Rating</button>
+                            <?php endif; ?>
                         </div>
                     </div>
 

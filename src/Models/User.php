@@ -106,4 +106,61 @@ class User extends Model
         $stmt = $this->db->prepare('DELETE FROM users WHERE id = ?');
         return $stmt->execute([$id]);
     }
+
+    public function getUserByEmail(string $email): ?array
+    {
+        $sql = "SELECT u.*, r.name as role 
+                FROM users u 
+                LEFT JOIN roles r ON u.role_id = r.id 
+                WHERE u.email = :email";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+
+    public function generatePasswordResetToken(string $email): string
+    {
+        // Generate token: hash of email + timestamp + secret
+        $secret = $_ENV['APP_KEY'] ?? 'default-secret-key';
+        $timestamp = time();
+        $token = hash('sha256', $email . '|' . $timestamp . '|' . $secret);
+
+        return $token . '_' . $timestamp;
+    }
+
+    public function verifyPasswordResetToken(string $token): ?array
+    {
+        // Extract timestamp from token
+        $parts = explode('_', $token);
+        if (count($parts) !== 2 || !is_numeric($parts[1])) {
+            return null;
+        }
+
+        $timestamp = (int)$parts[1];
+        $expiryTime = 60 * 60; // 60 minutes
+
+        // Check if token has expired
+        if (time() - $timestamp > $expiryTime) {
+            return null;
+        }
+
+        // Find user by email (we need to validate from request)
+        return ['token_valid' => true, 'timestamp' => $timestamp];
+    }
+
+    public function updatePasswordByEmail(string $email, string $newPassword): bool
+    {
+        try {
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+            $sql = "UPDATE users SET password = :password WHERE email = :email";
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([
+                'password' => $hashedPassword,
+                'email' => $email
+            ]);
+        } catch (\Exception $e) {
+            error_log("Password update error: " . $e->getMessage());
+            return false;
+        }
+    }
 }

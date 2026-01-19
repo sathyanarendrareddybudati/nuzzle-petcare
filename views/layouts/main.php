@@ -5,6 +5,10 @@ Session::start();
 
 $user = Session::get('user');
 $userRole = $user['role'] ?? null;
+
+function is_current_path($path) {
+    return parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) === $path;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,19 +88,23 @@ $userRole = $user['role'] ?? null;
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/pets">Browse Pets</a></li>
-                <li class="nav-item"><a class="nav-link" href="/caretakers">Find a Caretaker</a></li>
-                <li class="nav-item"><a class="nav-link" href="/aboutus">About Us</a></li>
-                <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
-                <li class="nav-item"><a class="nav-link" href="/faq">Faqs</a></li>
+                <li class="nav-item"><a class="nav-link <?= is_current_path('/') ? 'active' : '' ?>" href="/">Home</a></li>
+                <?php if (!$user || $userRole === 'service_provider'): ?>
+                    <li class="nav-item"><a class="nav-link <?= is_current_path('/pets') ? 'active' : '' ?>" href="/pets">Browse Pets</a></li>
+                <?php endif; ?>
+                <?php if (!$user || $userRole === 'pet_owner'): ?>
+                    <li class="nav-item"><a class="nav-link <?= is_current_path('/caretakers') ? 'active' : '' ?>" href="/caretakers">Find a Caretaker</a></li>
+                <?php endif; ?>
+                <li class="nav-item"><a class="nav-link <?= is_current_path('/aboutus') ? 'active' : '' ?>" href="/aboutus">About Us</a></li>
+                <li class="nav-item"><a class="nav-link <?= is_current_path('/contact') ? 'active' : '' ?>" href="/contact">Contact</a></li>
+                <li class="nav-item"><a class="nav-link <?= is_current_path('/faq') ? 'active' : '' ?>" href="/faq">Faqs</a></li>
             </ul>
 
             <ul class="navbar-nav align-items-center">
                 <?php if ($user): ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://i.pravatar.cc/40?u=<?= e($user['id']) ?>" class="rounded-circle me-2" height="30" alt="User"/>
+                            <img src="<?= e($user['avatar_url'] ?? 'https://i.pravatar.cc/40?u=' . e($user['id'])) ?>" class="rounded-circle me-2" height="30" width="30" alt="User"/>
                             <?= e($user['name'] ?? 'Account') ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
@@ -105,9 +113,9 @@ $userRole = $user['role'] ?? null;
                             <?php else: ?>
                                 <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
                                 <li><a class="dropdown-item" href="/profile">My Profile</a></li>
-                                <?php if ($userRole === 'pet_owner'): ?>
+                                <!-- <?php if ($userRole === 'pet_owner'): ?>
                                     <li><a class="dropdown-item" href="/my-pets">My Pets</a></li>
-                                <?php endif; ?>
+                                <?php endif; ?> -->
                                 <?php if ($userRole === 'service_provider'): ?>
                                     <li><a class="dropdown-item" href="/caretaker/profile">My Caretaker Profile</a></li>
                                 <?php endif; ?>
@@ -122,7 +130,7 @@ $userRole = $user['role'] ?? null;
                     </li>
                 <?php else: ?>
                     <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
-                    <li class="nav-item"><a href="/register" class="btn btn-primary">Register</a></li>
+                    <li class="nav-item"><a href="/register" class="btn btn-primary ms-2">Register</a></li>
                 <?php endif; ?>
             </ul>
         </div>
@@ -131,14 +139,14 @@ $userRole = $user['role'] ?? null;
 
 <div class="container my-4">
     <?php if ($m = Session::flash('success')): ?>
-        <div class="alert alert-success alert-dismissible fade show" role="alert"><?= $m ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert"><?= e($m) ?><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
     <?php endif; ?>
     <?php if ($m = Session::flash('error')): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert"><?= $m ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert"><?= e($m) ?><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
     <?php endif; ?>
 </div>
 
-<main>
+<main class="flex-shrink-0">
     <?= $content ?? '' ?>
 </main>
 
@@ -193,11 +201,11 @@ $userRole = $user['role'] ?? null;
                 </div>
                 <div class_name="col-md-6 text-center text-md-end">
                     <ul class="list-inline mb-0">
-                        <li class="list-inline-item"><a href="#" class="text-decoration-none small">Privacy Policy</a></li>
+                        <li class="list-inline-item"><a href="/privacy-policy" class="text-decoration-none small">Privacy Policy</a></li>
                         <li class="list-inline-item"><span class="mx-2">•</span></li>
-                        <li class="list-inline-item"><a href="#" class="text-decoration-none small">Terms of Service</a></li>
-                        <li class="list-inline-item"><span class="mx-2">•</span></li>
-                        <li class="list-inline-item"><a href="#" class="text-decoration-none small">Sitemap</a></li>
+                        <li class="list-inline-item"><a href="/terms-of-service" class="text-decoration-none small">Terms of Service</a></li>
+                        <!-- <li class="list-inline-item"><span class="mx-2">•</span></li>
+                        <li class="list-inline-item"><a href="#" class="text-decoration-none small">Sitemap</a></li> -->
                     </ul>
                 </div>
             </div>
@@ -205,5 +213,6 @@ $userRole = $user['role'] ?? null;
     </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/main.js"></script>
 </body>
 </html>

@@ -3,6 +3,7 @@
 DROP TABLE IF EXISTS `documents`;
 DROP TABLE IF EXISTS `communication_log`;
 DROP TABLE IF EXISTS `faqs`;
+DROP TABLE IF EXISTS `password_reset_tokens`;
 DROP TABLE IF EXISTS `bookings`;
 DROP TABLE IF EXISTS `caretaker_profiles`;
 DROP TABLE IF EXISTS `pet_ads`;
@@ -173,25 +174,20 @@ CREATE TABLE `communication_log` (
     CONSTRAINT `fk_comm_recipient` FOREIGN KEY (`recipient_user_id`) REFERENCES `users`(`id`)
 );
 
-CREATE TABLE `documents` (
+CREATE TABLE `password_reset_tokens` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT NOT NULL,
-    `document_type` ENUM('id_proof', 'address_proof', 'certification', 'other') NOT NULL,
-    `file_name` VARCHAR(255) NOT NULL,
-    `file_path` VARCHAR(255) NOT NULL,
-    `file_size` INT NOT NULL,
-    `file_type` VARCHAR(100) NOT NULL,
-    `is_verified` BOOLEAN NOT NULL DEFAULT FALSE,
-    `verified_by` INT,
-    `verified_at` TIMESTAMP NULL,
-    `uploaded_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `notes` TEXT,
-    CONSTRAINT `fk_doc_user` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk_doc_verified_by` FOREIGN KEY (`verified_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
+    `token` VARCHAR(255) UNIQUE NOT NULL,
+    `expires_at` TIMESTAMP NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `used_at` TIMESTAMP NULL,
+    CONSTRAINT `fk_reset_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 );
 
 -- Create indexes for better performance
 CREATE INDEX `idx_pet_ads_status` ON `pet_ads`(`status`);
 CREATE INDEX `idx_bookings_status` ON `bookings`(`status`);
 CREATE INDEX `idx_communication_log_recipient` ON `communication_log`(`recipient_user_id`);
-CREATE INDEX `idx_documents_user` ON `documents`(`user_id`, `document_type`);
+CREATE INDEX `idx_password_reset_token` ON `password_reset_tokens` (`token`);
+
+CREATE INDEX `idx_password_reset_user` ON `password_reset_tokens` (`user_id`);

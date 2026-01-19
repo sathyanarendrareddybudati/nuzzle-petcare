@@ -19,6 +19,12 @@ class Router
         return $this;
     }
 
+    public function delete(string $pattern, $handler): self
+    {
+        $this->add('DELETE', $pattern, $handler);
+        return $this;
+    }
+
     public function middleware(string $middleware): self
     {
         $this->routes[count($this->routes) - 1]['middleware'] = $middleware;
@@ -32,6 +38,10 @@ class Router
 
     public function dispatch(string $method, string $path): void
     {
+        if ($method === 'POST' && isset($_POST['_method'])) {
+            $method = strtoupper($_POST['_method']);
+        }
+        
         $path = rtrim($path, '/') ?: '/';
         foreach ($this->routes as $route) {
             if ($route['method'] === $method && preg_match($route['regex'], $path, $matches)) {

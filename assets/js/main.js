@@ -41,22 +41,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Close alert messages when close button is clicked
-    const closeButtons = document.querySelectorAll('.btn-close');
-    closeButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
-            this.closest('.alert').style.display = 'none';
-        });
+    // Auto-hide alerts after 3 seconds
+    const alerts = document.querySelectorAll('.alert-dismissible');
+    alerts.forEach(function(alert) {
+        setTimeout(function() {
+            // Use Bootstrap's built-in close method if available
+            if (window.bootstrap && bootstrap.Alert) {
+                const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                if (bsAlert) {
+                    bsAlert.close();
+                }
+            } else {
+                // Fallback for manual dismissal
+                alert.classList.remove('show');
+                // Optional: remove the element after the transition
+                alert.addEventListener('transitionend', () => alert.remove());
+            }
+        }, 6000);
     });
 });
-
-// Auto-hide alerts after 5 seconds
-setTimeout(function() {
-    const alerts = document.querySelectorAll('.alert');
-    alerts.forEach(function(alert) {
-        alert.style.display = 'none';
-    });
-}, 5000);
 
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -68,7 +71,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const targetElement = document.querySelector(targetId);
         if (targetElement) {
             window.scrollTo({
-                top: targetElement.offsetTop - 80, // Adjust for fixed header
+                top: targetElement.offsetTop - 80,
                 behavior: 'smooth'
             });
             
