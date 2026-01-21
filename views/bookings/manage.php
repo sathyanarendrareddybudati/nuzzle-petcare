@@ -21,8 +21,9 @@
                     <!-- Ad and User Details -->
                     <div class="row mb-4">
                         <div class="col-md-6">
-                            <h5 class="fw-bold">Ad Details</h5>
-                            <p class="mb-1"><strong>Title:</strong> <a href="/pets/<?= (int)$booking['pet_ad_id'] ?>"><?= e($booking['ad_title']) ?></a></p>
+                            <h5 class="fw-bold">Booking Details</h5>
+                            <p class="mb-1"><strong>Service:</strong> <?= e($booking['service_name']) ?></p>
+                            <p class="mb-1"><strong>For Pet:</strong> <?= e($booking['pet_name'] ?? 'N/A') ?></p>
                             <p class="mb-1"><strong>Owner:</strong> <?= e($booking['owner_name']) ?></p>
                         </div>
                         <div class="col-md-6">
@@ -46,24 +47,33 @@
 
                         <div class="mt-4">
                             <form method="POST" action="/bookings/update/<?= (int)$booking['id'] ?>" class="d-inline">
-                                <!-- Service Provider Actions -->
-                                <?php if ($isServiceProvider): ?>
-                                    <?php if ($booking['status'] === 'pending'): ?>
-                                        <button type="submit" name="status" value="confirmed" class="btn btn-success btn-lg mx-1">Confirm Booking</button>
-                                    <?php endif; ?>
-                                    <?php if (in_array($booking['status'], ['pending', 'confirmed'])): ?>
-                                        <button type="submit" name="status" value="cancelled" class="btn btn-danger btn-lg mx-1">Cancel Booking</button>
-                                    <?php endif; ?>
+                                <?php 
+                                    // Robust check for ad type
+                                    $adType = $booking['ad_type'] ?? '';
+                                    $isServiceRequest = ($adType === 'service_request');
+                                    
+                                    // Determine who is allowed to confirm this booking:
+                                    // 1. If it's a response to a service request (provider offering to owner), the owner (client) confirms.
+                                    // 2. Otherwise (normal booking of a caretaker), the provider (caretaker) confirms.
+                                    if ($isServiceRequest) {
+                                        $canConfirm = $isServiceRequestor;
+                                    } else {
+                                        $canConfirm = $isServiceProvider;
+                                    }
+                                ?>
+
+                                <?php if ($canConfirm && $booking['status'] === 'pending'): ?>
+                                    <button type="submit" name="status" value="confirmed" class="btn btn-success btn-lg mx-1">
+                                        <i class="fas fa-check me-2"></i> Confirm Booking
+                                    </button>
                                 <?php endif; ?>
 
-                                <!-- Service Requestor Actions -->
-                                <?php if ($isServiceRequestor): ?>
-                                    <?php if ($booking['status'] === 'confirmed'): ?>
-                                        <button type="submit" name="status" value="completed" class="btn btn-primary btn-lg mx-1">Mark as Completed</button>
-                                    <?php endif; ?>
-                                    <?php if (in_array($booking['status'], ['pending', 'confirmed'])): ?>
-                                        <button type="submit" name="status" value="cancelled" class="btn btn-danger btn-lg mx-1">Cancel Booking</button>
-                                    <?php endif; ?>
+                                <?php if (($isServiceProvider || $isServiceRequestor) && in_array($booking['status'], ['pending', 'confirmed'])): ?>
+                                    <button type="submit" name="status" value="cancelled" class="btn btn-danger btn-lg mx-1">Cancel Booking</button>
+                                <?php endif; ?>
+
+                                <?php if ($isServiceRequestor && $booking['status'] === 'confirmed'): ?>
+                                    <button type="submit" name="status" value="completed" class="btn btn-primary btn-lg mx-1">Mark as Completed</button>
                                 <?php endif; ?>
                             </form>
 

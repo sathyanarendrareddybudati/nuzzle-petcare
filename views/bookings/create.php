@@ -7,7 +7,13 @@
 ?>
 
 <div class="container my-5">
-    <h1 class="mb-4 text-center">Book a Service with <?= e($provider['name']) ?></h1>
+    <h1 class="mb-4 text-center">
+        <?php if (isset($ad) && $ad['ad_type'] === 'service_request'): ?>
+            Apply for Service Request from <?= e($provider['name']) ?>
+        <?php else: ?>
+            Book a Service with <?= e($provider['name']) ?>
+        <?php endif; ?>
+    </h1>
 
     <div class="row justify-content-center">
         <div class="col-lg-6">
@@ -19,7 +25,10 @@
                         </div>
                     <?php else : ?>
                         <form action="/bookings" method="post">
-                            <input type="hidden" name="provider_id" value="<?= e($provider['id']) ?>">
+                            <input type="hidden" name="provider_id" value="<?= e($provider['id'] ?? '') ?>">
+                            <?php if (isset($ad) && $ad): ?>
+                                <input type="hidden" name="ad_id" value="<?= e($ad['id']) ?>">
+                            <?php endif; ?>
 
                             <div class="mb-3">
                                 <label for="pet_id" class="form-label">Select Your Pet</label>

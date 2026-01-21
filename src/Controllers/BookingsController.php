@@ -6,6 +6,7 @@ use App\Core\Session;
 use App\Models\Booking;
 use App\Models\CaretakerProfile;
 use App\Models\Pet;
+use App\Models\PetAd;
 use App\Models\Service;
 use App\Models\User;
 
@@ -22,48 +23,75 @@ class BookingsController extends Controller
         $userId = Session::get('user')['id'];
         $bookingModel = new Booking();
 
-        // Data for when the user is a service PROVIDER
+        // Data for when the user is a service PROVIDER or responding to requests
         $bookedServices = $bookingModel->getBookedServicesByUserId($userId);
         $serviceRequests = $bookingModel->getServiceRequestsForUserId($userId);
+        $sentOffers = $bookingModel->getSentOffersByUserId($userId);
 
-        // Data for when the user is a CLIENT
+        // Data for when the user is a CLIENT (hiring someone)
         $clientBookings = $bookingModel->getBookingsByClientId($userId);
 
         $this->render('bookings/index', [
             'pageTitle' => 'My Bookings',
             'bookedServices' => $bookedServices,
             'serviceRequests' => $serviceRequests,
+            'sentOffers' => $sentOffers,
             'clientBookings' => $clientBookings,
         ]);
     }
 
-    public function create(int $providerId): void
+    public function create(int $id): void
     {
         Session::start();
-        if (!Session::get('user')) {
+        $user = Session::get('user');
+        if (!$user) {
             $this->redirect('/login');
             return;
         }
 
         $userModel = new User();
-        $provider = $userModel->find($providerId);
-
-        if (!$provider) {
-            $this->error(404, 'Service provider not found');
-            return;
+        
+        $adId = !empty($_GET['ad_id']) ? (int)$_GET['ad_id'] : null;
+        $ad = null;
+        if ($adId) {
+            $petAdModel = new PetAd();
+            $ad = $petAdModel->getAdById($adId);
         }
 
-        $petModel = new Pet();
-        $pets = $petModel->getPetsByUserId(Session::get('user')['id']);
+        $pets = [];
+        $services = [];
+        $displayProvider = null;
+
+        if ($ad && $ad['ad_type'] === 'service_request') {
+            // Logged-in user is the provider, ad poster is the client
+            $displayProvider = $ad; // Use ad poster's info
+            $displayProvider['name'] = $ad['user_name'];
+            
+            // For a service request, the pet is already determined
+            $pets = [
+                ['id' => $ad['pet_id'], 'name' => $ad['pet_name'] . ' (from Ad)']
+            ];
+        } else {
+            // Normal flow: Logged-in user is the client, $id is the provider
+            $displayProvider = $userModel->find($id);
+            if (!$displayProvider) {
+                $this->error(404, 'Service provider not found');
+                return;
+            }
+
+            $petModel = new Pet();
+            $pets = $petModel->getPetsByUserId($user['id']);
+        }
 
         $serviceModel = new Service();
         $services = $serviceModel->all();
 
         $this->render('bookings/create', [
-            'pageTitle' => 'Book ' . $provider['name'],
-            'provider' => $provider,
+            'pageTitle' => 'Book ' . ($displayProvider['name'] ?? 'Service'),
+            'provider' => $displayProvider,
             'pets' => $pets,
             'services' => $services,
+            'ad' => $ad
         ]);
     }
 
@@ -77,35 +105,62 @@ class BookingsController extends Controller
         }
         $userId = $sessionUser['id'];
 
-        $providerId = $_POST['provider_id'];
-        $petId = $_POST['pet_id'];
-        $serviceId = $_POST['service_id'];
+        $adId = !empty($_POST['ad_id']) ? (int)$_POST['ad_id'] : null;
+        $ad = null;
+        if ($adId) {
+            $petAdModel = new PetAd();
+            $ad = $petAdModel->getAdById($adId);
+        }
+
+        if ($ad && $ad['ad_type'] === 'service_request') {
+            // Scenario: Caretaker is BOOKING an Owner's request
+            $providerId = $userId; // The person doing the booking is the provider
+            $clientId = $ad['user_id']; // The owner is the ad poster
+            $petId = $ad['pet_id'];
+            $serviceId = $ad['service_id'] ?? $_POST['service_id'];
+            $locationId = $ad['location_id'];
+        } else {
+            // Scenario: Owner is BOOKING a Caretaker (or no specific ad)
+            $providerId = $_POST['provider_id'];
+            $clientId = $userId;
+            $petId = $_POST['pet_id'];
+            $serviceId = $_POST['service_id'];
+
+            // Get location from caretaker profile
+            $caretakerProfileModel = new CaretakerProfile();
+            $caretakerProfile = $caretakerProfileModel->getProfileByUserId($providerId);
+            $locationId = $caretakerProfile['location'] ?? null;
+        }
+
+        if (empty($locationId)) {
+            Session::flash('error', 'Location information is missing. Cannot create booking.');
+            $this->redirect($adId ? "/pets/{$adId}" : "/bookings");
+            return;
+        }
+
         $startDate = $_POST['start_date'];
         $endDate = $_POST['end_date'];
         $notes = $_POST['notes'];
 
-        $caretakerProfileModel = new CaretakerProfile();
-        $caretakerProfile = $caretakerProfileModel->getProfileByUserId($providerId);
-        $locationId = $caretakerProfile['location'] ?? null;
-
-        if (empty($locationId)) {
-            Session::flash('error', 'The service provider does not have a location set. Cannot create booking.');
-            $this->redirect("/bookings/create/{$providerId}");
-            return;
-        }
-
         $bookingModel = new Booking();
-        $bookingId = $bookingModel->create([
+        $bookingData = [
             'pet_id' => $petId,
             'provider_id' => $providerId,
-            'client_id' => $userId,
+            'client_id' => $clientId,
             'service_id' => $serviceId,
             'location_id' => $locationId,
             'start_date' => $startDate,
             'end_date' => $endDate,
             'status' => 'pending',
             'notes' => $notes,
-        ]);
+        ];
+        
+        // Only add pet_ad_id if it's a valid integer
+        if ($adId && $adId > 0) {
+            $bookingData['pet_ad_id'] = $adId;
+        }
+        
+        $bookingId = $bookingModel->create($bookingData);
 
         if ($bookingId) {
             Session::flash('success', 'Your booking request has been sent!');
@@ -175,15 +230,24 @@ class BookingsController extends Controller
         $userId = $user['id'];
         $isServiceProvider = ($userId === (int)$booking['provider_id']);
         $isServiceRequestor = ($userId === (int)$booking['owner_id']);
+        $isServiceRequestAd = (($booking['ad_type'] ?? '') === 'service_request');
 
         $allowed = false;
 
-        if ($isServiceProvider) {
-            if ($status === 'confirmed' && $booking['status'] === 'pending') $allowed = true;
-            if ($status === 'cancelled' && in_array($booking['status'], ['pending', 'confirmed'])) $allowed = true;
-        } elseif ($isServiceRequestor) {
-            if ($status === 'completed' && $booking['status'] === 'confirmed') $allowed = true;
-            if ($status === 'cancelled' && in_array($booking['status'], ['pending', 'confirmed'])) $allowed = true;
+        if ($status === 'cancelled' && in_array($booking['status'], ['pending', 'confirmed'])) {
+            if ($isServiceProvider || $isServiceRequestor) $allowed = true;
+        }
+
+        if ($status === 'confirmed' && $booking['status'] === 'pending') {
+            if ($isServiceRequestAd) {
+                if ($isServiceRequestor) $allowed = true; // Owner confirms the caretaker's offer
+            } else {
+                if ($isServiceProvider) $allowed = true; // Caretaker confirms the owner's booking
+            }
+        }
+
+        if ($status === 'completed' && $booking['status'] === 'confirmed') {
+            if ($isServiceRequestor) $allowed = true; // Owner marks as completed
         }
 
         if ($allowed) {

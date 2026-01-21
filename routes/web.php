@@ -102,7 +102,7 @@ $router->get('/admin/faq', [FaqController::class, 'adminIndex'])->middleware('Ad
 $router->get('/admin/faq/create', [FaqController::class, 'create'])->middleware('AdminMiddleware');
 $router->post('/admin/faq', [FaqController::class, 'store'])->middleware('AdminMiddleware');
 $router->get('/admin/faq/edit/{id}', [FaqController::class, 'edit'])->middleware('AdminMiddleware');
-$router->post(' /admin/faq/update/{id}', [FaqController::class, 'update'])->middleware('AdminMiddleware');
+$router->post('/admin/faq/update/{id}', [FaqController::class, 'update'])->middleware('AdminMiddleware');
 $router->post('/admin/faq/delete/{id}', [FaqController::class, 'destroy'])->middleware('AdminMiddleware');
 
 

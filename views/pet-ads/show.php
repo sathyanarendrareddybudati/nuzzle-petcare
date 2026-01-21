@@ -105,7 +105,7 @@
                 <p class="text-muted small">Member since 2023</p>
                 <hr>
                 <div class="d-grid gap-2">
-                    <a href="/bookings/create/<?= (int)$ad['id'] ?>" class="btn btn-primary btn-lg">
+                    <a href="/bookings/create/<?= (int)$ad['user_id'] ?>?ad_id=<?= (int)$ad['id'] ?>" class="btn btn-primary btn-lg">
                         <i class="fas fa-calendar-check me-2"></i> Book Now
                     </a>
                     <a href="/messages/create/<?= (int)$ad['user_id'] ?>" class="btn btn-outline-primary">
